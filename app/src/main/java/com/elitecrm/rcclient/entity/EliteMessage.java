@@ -26,13 +26,13 @@ public class EliteMessage extends MessageContent {
     private static final String TAG = "EliteMessage";
     private String message;
     protected String extra;
-    public static final Creator<io.rong.message.InformationNotificationMessage> CREATOR = new Creator() {
-        public io.rong.message.InformationNotificationMessage createFromParcel(Parcel source) {
-            return new io.rong.message.InformationNotificationMessage(source);
+    public static final Creator<EliteMessage> CREATOR = new Creator() {
+        public EliteMessage createFromParcel(Parcel source) {
+            return new EliteMessage(source);
         }
 
-        public io.rong.message.InformationNotificationMessage[] newArray(int size) {
-            return new io.rong.message.InformationNotificationMessage[size];
+        public EliteMessage[] newArray(int size) {
+            return new EliteMessage[size];
         }
     };
 
@@ -52,7 +52,7 @@ public class EliteMessage extends MessageContent {
                 jsonObj.putOpt("user", this.getJSONUserInfo());
             }
         } catch (JSONException var4) {
-            RLog.e("InformationNotificationMessage", "JSONException " + var4.getMessage());
+            RLog.e(TAG, "JSONException " + var4.getMessage());
         }
 
         try {
@@ -95,7 +95,7 @@ public class EliteMessage extends MessageContent {
                 this.setUserInfo(this.parseJsonToUserInfo(e.getJSONObject("user")));
             }
         } catch (JSONException var4) {
-            RLog.e("InformationNotificationMessage", "JSONException " + var4.getMessage());
+            RLog.e(TAG, "JSONException " + var4.getMessage());
         }
 
     }

@@ -8,6 +8,7 @@ public class Request {
     private long id;
     private int queueId;
     private String fromUserId;
+    private int status;
 
     public Request(){
 
@@ -38,5 +39,13 @@ public class Request {
 
     public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

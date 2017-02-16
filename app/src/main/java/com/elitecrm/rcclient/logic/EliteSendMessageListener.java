@@ -27,34 +27,40 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
         if(message != null) {
             MessageContent messageContent = message.getContent();
             try {
-                JSONObject messageExtraJSON = new JSONObject();
-                messageExtraJSON.put("token", Chat.getInstance().getToken());
-                if(Chat.getInstance().getSession() != null){
-                    messageExtraJSON.put("sessionId", Chat.getInstance().getSession().getId());
-                } else if (Chat.getInstance().getRequest() != null){
-                    messageExtraJSON.put("requestId", Chat.getInstance().getRequest().getId());
-                } else {
-                    MessageUtils.sendChatRequest(Chat.getInstance().getRequest().getQueueId(), "APP");
-                    Chat.addUnsendMessage(message);
-                    return null;
-                }
+                if(messageContent instanceof TextMessage ||
+                        messageContent instanceof VoiceMessage ||
+                        messageContent instanceof LocationMessage ||
+                        messageContent instanceof ImageMessage ||
+                        messageContent instanceof FileMessage) {
+                    JSONObject messageExtraJSON = new JSONObject();
+                    messageExtraJSON.put("token", Chat.getInstance().getToken());
+                    if(Chat.isSessionAvailable()){ // 有session时候
+                        messageExtraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+                    } else if (Chat.isRequestInWaiting()){ // 请求id合法切请求状态是等待中时候
+                        messageExtraJSON.put("requestId", Chat.getInstance().getRequest().getId());
+                    } else {
+                        MessageUtils.sendChatRequest(Chat.getInstance().getRequest().getQueueId(), "APP");
+                        Chat.addUnsendMessage(message);
+                        //return null;
+                    }
 
-                if(messageContent instanceof TextMessage) {
-                    TextMessage textMessage = (TextMessage) messageContent;
-                    textMessage.setExtra(messageExtraJSON.toString());
-                } else if (messageContent instanceof VoiceMessage) {
-                    VoiceMessage voiceMessage = (VoiceMessage)messageContent;
-                    messageExtraJSON.put("length", voiceMessage.getDuration());
-                    voiceMessage.setExtra(messageExtraJSON.toString());
-                } else if (messageContent instanceof LocationMessage) {
-                    LocationMessage locationMessage = (LocationMessage)messageContent;
-                    locationMessage.setExtra(messageExtraJSON.toString());
-                } else if (messageContent instanceof ImageMessage) {
-                    ImageMessage imageMessage = (ImageMessage)messageContent;
-                    imageMessage.setExtra(messageExtraJSON.toString());
-                } else if (messageContent instanceof FileMessage) {
-                    FileMessage fileMessage = (FileMessage)messageContent;
-                    fileMessage.setExtra(messageExtraJSON.toString());
+                    if(messageContent instanceof TextMessage) {
+                        TextMessage textMessage = (TextMessage) messageContent;
+                        textMessage.setExtra(messageExtraJSON.toString());
+                    } else if (messageContent instanceof VoiceMessage) {
+                        VoiceMessage voiceMessage = (VoiceMessage)messageContent;
+                        messageExtraJSON.put("length", voiceMessage.getDuration());
+                        voiceMessage.setExtra(messageExtraJSON.toString());
+                    } else if (messageContent instanceof LocationMessage) {
+                        LocationMessage locationMessage = (LocationMessage)messageContent;
+                        locationMessage.setExtra(messageExtraJSON.toString());
+                    } else if (messageContent instanceof ImageMessage) {
+                        ImageMessage imageMessage = (ImageMessage)messageContent;
+                        imageMessage.setExtra(messageExtraJSON.toString());
+                    } else if (messageContent instanceof FileMessage) {
+                        FileMessage fileMessage = (FileMessage)messageContent;
+                        fileMessage.setExtra(messageExtraJSON.toString());
+                    }
                 }
             } catch (Exception e) {
                 Log.e(Constants.LOG_TAG, e.getMessage());
