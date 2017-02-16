@@ -22,7 +22,6 @@ import javax.net.ssl.X509TrustManager;
  */
 
 public class HttpUtil {
-
     private static SSLContext sslCtx = null;
     static {
         try {
