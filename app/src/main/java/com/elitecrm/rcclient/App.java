@@ -1,0 +1,63 @@
+package com.elitecrm.rcclient;
+
+import android.app.ActivityManager;
+import android.app.Application;
+import android.content.Context;
+
+import com.elitecrm.rcclient.entity.EliteMessage;
+import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
+import com.elitecrm.rcclient.logic.EliteExtensionModule;
+
+import java.util.List;
+
+import io.rong.imkit.IExtensionModule;
+import io.rong.imkit.RongExtensionManager;
+import io.rong.imkit.RongIM;
+
+/**
+ * Created by Loriling on 2017/2/3.
+ */
+
+public class App extends Application{
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        /**
+         * OnCreate 会被多个进程重入，这段保护代码，确保只有您需要使用 RongIMClient 的进程和 Push 进程执行了 init。
+         * io.rong.push 为融云 push 进程名称，不可修改。
+         */
+        if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext())) ||
+                "io.rong.push".equals(getCurProcessName(getApplicationContext()))) {
+            //初始化融云
+            RongIM.init(this);
+            //注册接收消息监听器
+            RongIM.setOnReceiveMessageListener(new EliteReceiveMessageListener());
+            //注册自定义消息
+            RongIM.registerMessageType(EliteMessage.class);
+
+            //注册自定义扩展模块，先去除默认扩展，再注册自定义扩展
+            List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();
+            for(IExtensionModule extensionModule : extensionModules) {
+                RongExtensionManager.getInstance().unregisterExtensionModule(extensionModule);
+            }
+            RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule());
+        }
+    }
+
+    public static String getCurProcessName(Context context) {
+
+        int pid = android.os.Process.myPid();
+
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+
+        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+                .getRunningAppProcesses()) {
+
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
+        }
+        return null;
+    }
+}
