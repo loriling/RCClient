@@ -18,9 +18,13 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
 import io.rong.imlib.model.UserInfo;
+import io.rong.message.FileMessage;
+import io.rong.message.ImageMessage;
 import io.rong.message.InformationNotificationMessage;
+import io.rong.message.LocationMessage;
 import io.rong.message.ProfileNotificationMessage;
 import io.rong.message.TextMessage;
+import io.rong.message.VoiceMessage;
 
 /**
  * Created by Loriling on 2017/2/3.
@@ -74,6 +78,31 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                 } else if (type == Constants.RequestType.RATE_SESSION) {
 
                 } else if (type == Constants.RequestType.SEND_CHAT_MESSAGE) {
+                    int result = contentJSON.getInt("result");
+                    // 当收到发送的消息返回session不合法时候，认为服务端会话已经关闭了，而客户端由于某些原因没能收到关闭信息
+                    // 这时候也去清空会话，并且把原始消息缓存起来，同时发出聊天排队请求
+                    if(result == Constants.Result.INVAILD_CHAT_SESSION_ID) {
+                        Chat.clearRequestAndSession();
+                        JSONObject originalMessage = contentJSON.getJSONObject("originalMessage");
+                        String objectName = originalMessage.getString("objectName");
+                        MessageContent messageContent = null;
+                        if(objectName.equals(Constants.ObjectName.TXT_MSG)) {
+                            messageContent = new TextMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        } else if (objectName.equals(Constants.ObjectName.IMG_MSG)) {
+                            messageContent = new ImageMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        } else if (objectName.equals(Constants.ObjectName.FILE_MSG)) {
+                            messageContent = new FileMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        } else if (objectName.equals(Constants.ObjectName.LBS_MSG)) {
+                            messageContent = new LocationMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        } else if (objectName.equals(Constants.ObjectName.VC_MSG)) {
+                            messageContent = new VoiceMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        }
+                        if(messageConetent != null){
+                            Message unsendMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.PRIVATE, messageContent);
+                            Chat.addUnsendMessage(unsendMessage);
+                        }
+                        Chat.sendChatRequest();
+                    }
 
                 } else if (type == Constants.RequestType.SEND_PRE_CHAT_MESSAGE) {
 

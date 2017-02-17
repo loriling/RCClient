@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.util.Constants;
-import com.elitecrm.rcclient.util.MessageUtils;
 
 import org.json.JSONObject;
 
@@ -39,9 +38,9 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                     } else if (Chat.isRequestInWaiting()){ // 请求id合法切请求状态是等待中时候
                         messageExtraJSON.put("requestId", Chat.getInstance().getRequest().getId());
                     } else {
-                        MessageUtils.sendChatRequest(Chat.getInstance().getRequest().getQueueId(), "APP");
-                        Chat.addUnsendMessage(message);
-                        //return null;
+                        //Chat.sendChatRequest();
+                        //Chat.addUnsendMessage(message);
+                        //return message;
                     }
 
                     if(messageContent instanceof TextMessage) {

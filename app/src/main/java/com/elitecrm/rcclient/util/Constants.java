@@ -92,4 +92,16 @@ public class Constants {
         int INVITE_NOTICE = 10;
         int TRANSFER_NOTICE = 11;
     }
+    public interface ObjectName {
+        String TXT_MSG = "RC:TxtMsg";
+        String INFO_NTF = "RC:InfoNtf";
+        String PROFILE_NTF = "RC:ProfileNtf";
+        String CS_HS = "RC:CsHs";
+        String VC_MSG = "RC:VcMsg";
+        String LBS_MSG = "RC:LBSMsg";
+        String IMG_MSG = "RC:ImgMsg";
+        String FILE_MSG = "RC:FileMsg";
+        String ELITE_MSG = "E:Msg";
+    }
+
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
 import com.elitecrm.rcclient.util.Constants;
+import com.elitecrm.rcclient.util.MessageUtils;
 
 import org.json.JSONObject;
 
@@ -14,7 +15,11 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
+import io.rong.message.FileMessage;
+import io.rong.message.ImageMessage;
+import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
+import io.rong.message.VoiceMessage;
 
 /**
  * Created by Loriling on 2017/2/9.
@@ -110,6 +115,10 @@ public class Chat {
         Chat.getInstance().unsendMessages.add(message);
     }
 
+    public static void sendChatRequest(){
+        MessageUtils.sendChatRequest(Chat.getInstance().getRequest().getQueueId(), "APP");
+    }
+
     public static List<Message> getUnsendMessages(){
         return Chat.getInstance().unsendMessages;
     }
@@ -122,22 +131,54 @@ public class Chat {
         if(messages.size() > 0) {
             for(Message message : messages) {
                 MessageContent messageContent = message.getContent();
-                if(messageContent instanceof TextMessage) {
-                    try {
-                        TextMessage textMessage = (TextMessage)messageContent;
+                try {
+                    if(messageContent instanceof TextMessage ||
+                            messageContent instanceof VoiceMessage ||
+                            messageContent instanceof ImageMessage ||
+                            messageContent instanceof FileMessage ||
+                            messageContent instanceof LocationMessage){
                         EliteMessage eliteMessage = new EliteMessage();
-                        eliteMessage.setMessage(textMessage.getContent());
                         JSONObject extraJSON = new JSONObject();
                         extraJSON.put("token", Chat.getInstance().getToken());
                         extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                         extraJSON.put("type", Constants.RequestType.SEND_CHAT_MESSAGE);
-                        extraJSON.put("messageType", Constants.MessageType.TEXT);
+                        if(messageContent instanceof TextMessage) {
+                            TextMessage textMessage = (TextMessage)messageContent;
+                            eliteMessage.setMessage(textMessage.getContent());
+                            extraJSON.put("messageType", Constants.MessageType.TEXT);
+                        } else if (messageContent instanceof VoiceMessage) {
+                            VoiceMessage voiceMessage = (VoiceMessage)messageContent;
+                            eliteMessage.setMessage(voiceMessage.getBase64());
+                            extraJSON.put("length", voiceMessage.getDuration());
+                            extraJSON.put("messageType", Constants.MessageType.VOICE);
+                        } else if (messageContent instanceof LocationMessage) {
+                            LocationMessage locationMessage = (LocationMessage)messageContent;
+                            eliteMessage.setMessage(locationMessage.getBase64());
+                            extraJSON.put("latitude", locationMessage.getLat());
+                            extraJSON.put("longitude", locationMessage.getLng());
+                            extraJSON.put("poi", locationMessage.getPoi());
+                            extraJSON.put("imgUri", locationMessage.getImgUri());
+                            extraJSON.put("messageType", Constants.MessageType.LOCATION);
+                        } else if (messageContent instanceof ImageMessage) {
+                            ImageMessage imageMessage = (ImageMessage)messageContent;
+                            eliteMessage.setMessage(imageMessage.getBase64());
+                            extraJSON.put("imageUri", imageMessage.getRemoteUri().toString());
+                            extraJSON.put("messageType", Constants.MessageType.IMG);
+                        } else if (messageContent instanceof FileMessage) {
+                            FileMessage fileMessage = (FileMessage)messageContent;
+                            extraJSON.put("fileName", fileMessage.getName());
+                            extraJSON.put("fileSize", fileMessage.getSize());
+                            extraJSON.put("fileType", fileMessage.getType());
+                            extraJSON.put("fileUrl", fileMessage.getFileUrl().toString());
+                            extraJSON.put("messageType", Constants.MessageType.FILE);
+                        }
                         eliteMessage.setExtra(extraJSON.toString());
                         Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
                         RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
-                    } catch (Exception e) {
-                        Log.e(Constants.LOG_TAG, e.getMessage());
                     }
+
+                } catch (Exception e) {
+                    Log.e(Constants.LOG_TAG, e.getMessage());
                 }
             }
             messages.clear();

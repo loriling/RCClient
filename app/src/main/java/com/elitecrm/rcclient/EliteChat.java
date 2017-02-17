@@ -8,7 +8,6 @@ import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.logic.EliteSendMessageListener;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.HttpUtil;
-import com.elitecrm.rcclient.util.MessageUtils;
 
 import org.json.JSONObject;
 
@@ -66,7 +65,7 @@ public class EliteChat {
 
         if(initialized) {
             //发出聊天排队请求
-            MessageUtils.sendChatRequest(queueId, "APP");
+            Chat.sendChatRequest();
             //启动聊天会话界面
             RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, CHAT_TITLE);
         }
@@ -136,7 +135,7 @@ public class EliteChat {
                     initialized = true;
                     if (startChatReady) {
                         //发出聊天排队请求
-                        MessageUtils.sendChatRequest(Chat.getInstance().getRequest().getQueueId(), "APP");
+                        Chat.sendChatRequest();
                         //启动聊天会话界面
                         RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, CHAT_TITLE);
                     }

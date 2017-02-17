@@ -37,8 +37,10 @@ public class App extends Application{
 
             //注册自定义扩展模块，先去除默认扩展，再注册自定义扩展
             List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();
-            for(IExtensionModule extensionModule : extensionModules) {
-                RongExtensionManager.getInstance().unregisterExtensionModule(extensionModule);
+            if(extensionModules != null) {
+                for(IExtensionModule extensionModule : extensionModules) {
+                    RongExtensionManager.getInstance().unregisterExtensionModule(extensionModule);
+                }
             }
             RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule());
         }
