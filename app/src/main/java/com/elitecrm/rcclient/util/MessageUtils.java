@@ -1,6 +1,7 @@
 package com.elitecrm.rcclient.util;
 
 import com.elitecrm.rcclient.entity.Chat;
+import com.elitecrm.rcclient.entity.EliteMessage;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.entity.User;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
@@ -40,6 +41,21 @@ public class MessageUtils {
         InformationNotificationMessage inm = InformationNotificationMessage.obtain(requestJSON.toString());
         Message myMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, inm);
         RongIM.getInstance().sendMessage(myMessage, null, null, new EliteSendMessageCallback());
+    }
+
+    public static void sendRating(int rating, String comments) {
+        try{
+            EliteMessage eliteMessage = EliteMessage.obtain("");
+            JSONObject extraJSON = new JSONObject();
+            extraJSON.put("token", Chat.getInstance().getToken());
+            extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+            extraJSON.put("type", Constants.RequestType.RATE_SESSION);
+            extraJSON.put("rating", rating);
+            extraJSON.put("ratingComments", comments);
+            eliteMessage.setExtra(extraJSON.toString());
+            Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
+        } catch (Exception e) {}
     }
 
     /**

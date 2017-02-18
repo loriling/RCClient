@@ -1,13 +1,22 @@
 package com.elitecrm.rcclient;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.logic.EliteSendMessageListener;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.HttpUtil;
+import com.elitecrm.rcclient.util.MessageUtils;
 
 import org.json.JSONObject;
 
@@ -151,5 +160,40 @@ public class EliteChat {
                 }
             });
         }
+    }
+
+    /**
+     * 显示满意度对话框
+     */
+    public static void showRatingDialog(){
+        Activity activity = (Activity) context;
+        LayoutInflater inflater = activity.getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.rating_dialog, (ViewGroup) activity.findViewById(R.id.rating));
+        RadioGroup rg = (RadioGroup) layout.findViewById(R.id.rating_rg);
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                EditText et = (EditText) layout.findViewById(R.id.comments);
+                if(checkedId == R.id.satisfied){
+                    et.setVisibility(View.INVISIBLE);
+                } else {
+                    et.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        new AlertDialog.Builder(context).setTitle("满意度评价").setView(layout).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RadioGroup rg = (RadioGroup) layout.findViewById(R.id.rating_rg);
+                int checkedId = rg.getCheckedRadioButtonId();
+                int rating = 0;
+                if(checkedId == R.id.satisfied){
+                    rating = 1;
+                }
+                EditText et = (EditText) layout.findViewById(R.id.comments);
+                MessageUtils.sendRating(rating, et.getText().toString());
+            }
+        }).show();
     }
 }

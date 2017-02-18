@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rating"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+    <RadioGroup
+        android:id="@+id/rating_rg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp">
+
+        <RadioButton
+            android:id="@+id/satisfied"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="满意"
+            android:textSize="22dp"
+            android:checked="true"
+            android:layout_marginRight="20dp"/>
+
+        <RadioButton
+            android:id="@+id/unsatisfied"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:text="不满意"/>
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/comments"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:minLines="1"
+        android:maxLines="5"
+        android:scrollbars="vertical"
+        >
+    </EditText>
+
+</LinearLayout>
