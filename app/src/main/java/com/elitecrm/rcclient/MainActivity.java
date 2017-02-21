@@ -31,8 +31,9 @@ public class MainActivity extends Activity {
             }
         });
 
+        String icon = "https://avatars2.githubusercontent.com/u/445475?v=3&s=460";
         //初始化聊天，并启动聊天界面
-        EliteChat.initAndStart("http://192.168.2.80:8980/webchat/rcs", "000002", "000002", "https://avatars2.githubusercontent.com/u/445475?v=3&s=460", MainActivity.this,  1);
+        EliteChat.initAndStart("http://192.168.2.80:8980/webchat", "000003", "000003", icon, MainActivity.this,  1);
 
     }
 }

@@ -1,12 +1,9 @@
 package com.elitecrm.rcclient.logic;
 
-import android.net.Uri;
 import android.util.Log;
 
-import com.elitecrm.rcclient.entity.Agent;
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.EliteMessage;
-import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
 
@@ -18,12 +15,10 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
-import io.rong.imlib.model.UserInfo;
 import io.rong.message.FileMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.InformationNotificationMessage;
 import io.rong.message.LocationMessage;
-import io.rong.message.ProfileNotificationMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
 
@@ -61,14 +56,14 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     } else {
                         inm = InformationNotificationMessage.obtain(contentJSON.getString("message"));
                         if(result == Constants.Result.REQUEST_ALREADY_IN_ROULTING) {
-                            Chat.setRequestStatus(Constants.RequestStatus.WAITING);
+                            Chat.getInstance().setRequestStatus(Constants.RequestStatus.WAITING);
                         } else if(result == Constants.Result.NO_AGENT_ONLINE) {
-                            Chat.setRequestStatus(Constants.RequestStatus.NO_AGENT_ONLINE);
+                            Chat.getInstance().setRequestStatus(Constants.RequestStatus.NO_AGENT_ONLINE);
                         } else if (result == Constants.Result.NOT_IN_WORKTIME) {
-                            Chat.setRequestStatus(Constants.RequestStatus.OFF_HOUR);
+                            Chat.getInstance().setRequestStatus(Constants.RequestStatus.OFF_HOUR);
                         } else {
                             //其他情况都当做dropped
-                            Chat.setRequestStatus(Constants.RequestStatus.DROPPED);
+                            Chat.getInstance().setRequestStatus(Constants.RequestStatus.DROPPED);
                         }
                     }
                     RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, inm, null);
@@ -83,7 +78,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     // 当收到发送的消息返回session不合法时候，认为服务端会话已经关闭了，而客户端由于某些原因没能收到关闭信息
                     // 这时候也去清空会话，并且把原始消息缓存起来，同时发出聊天排队请求
                     if(result == Constants.Result.INVAILD_CHAT_SESSION_ID) {
-                        Chat.clearRequestAndSession();
+                        Chat.getInstance().clearRequestAndSession();
                         JSONObject originalMessage = contentJSON.getJSONObject("originalMessage");
                         String objectName = originalMessage.getString("objectName");
                         MessageContent messageContent = null;
@@ -100,9 +95,9 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         }
                         if(messageConetent != null){
                             Message unsendMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.PRIVATE, messageContent);
-                            Chat.addUnsendMessage(unsendMessage);
+                            Chat.getInstance().addUnsendMessage(unsendMessage);
                         }
-                        Chat.sendChatRequest();
+                        Chat.getInstance().sendChatRequest();
                     }
 
                 } else if (type == Constants.RequestType.SEND_PRE_CHAT_MESSAGE) {
@@ -111,7 +106,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                 //
                 else if (type == Constants.RequestType.CHAT_REQUEST_STATUS_UPDATE) {
                     int requestStatus = contentJSON.getInt("requestStatus");
-                    Chat.setRequestStatus(requestStatus);
+                    Chat.getInstance().setRequestStatus(requestStatus);
                     int queueLength = contentJSON.getInt("queueLength");
                     InformationNotificationMessage informationMessage = null;
                     if(requestStatus == Constants.RequestStatus.WAITING){
@@ -130,26 +125,31 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     JSONObject agentJSON = agents.getJSONObject(0);
                     String agentId = agentJSON.getString("id");
                     String name = agentJSON.getString("name");
+                    String icon = agentJSON.optString("icon");
+                    String comments = agentJSON.optString("comments");
 
                     //记录会话相关信息
-                    Session session = new Session();
-                    session.setId(sessionId);
-                    Agent agent = new Agent();
-                    agent.setId(agentId);
-                    agent.setName(name);
-                    session.addAgent(agent);
-                    Chat.getInstance().setSession(session);
+                    Chat.getInstance().initSession(sessionId, agentId, name, icon, comments);
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("坐席[" + name + "]为您服务");
                     RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
-                    Chat.sendUnsendMessages();
+                    Chat.getInstance().sendUnsendMessages();
                 } else if (type == Constants.RequestType.AGENT_PUSH_RATING) {
                     // 坐席推送满意度处理
                     ActivityUtils.showRatingDialog();
                 } else if (type == Constants.RequestType.AGENT_UPDATED) {
-                    // TODO: 2017/2/15 坐席人员变更处理
-
+                    // 坐席人员变更处理
+                    long sessionId = contentJSON.getLong("sessionId");
+                    JSONArray agentsJSON = contentJSON.getJSONArray("agents");
+                    for (int i = 0; i < agentsJSON.length(); i++) {
+                        JSONObject agentJSON = agentsJSON.getJSONObject(i);
+                        String agentId = agentJSON.getString("id");
+                        String agentName = agentJSON.getString("name");
+                        String icon = agentJSON.optString("icon");
+                        String comments = agentJSON.optString("comments");
+                        Chat.getInstance().setupAgent(agentId, agentName, icon, comments);
+                    }
                 } else if (type == Constants.RequestType.AGENT_CLOSE_SESSION) {
-                    Chat.clearRequestAndSession();
+                    Chat.getInstance().clearRequestAndSession();
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("会话结束");
                     RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
                 } else if (type == Constants.RequestType.AGENT_SEND_MESSAGE) {
@@ -165,31 +165,30 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         }
                     }
                 }
-
             } catch (Exception e) {
                 Log.e(Constants.LOG_TAG, e.getMessage());
             }
-        } else if (messageConetent instanceof ProfileNotificationMessage) {
-            ProfileNotificationMessage profileNotificationMessage = (ProfileNotificationMessage)messageConetent;
-            String data = profileNotificationMessage.getData();
-            Log.d(Constants.LOG_TAG, data);
-
         } else if (messageConetent instanceof TextMessage) {//坐席发的文字聊天消息，都作为TextMessage发送过来
             //设置一个userInfo对象到messageContent，实现后台消息提示，其中userId必须是我们的targetId: EliteCRM
-            try {
-                String extraStr = message.getExtra();
-                JSONObject extraJSON = new JSONObject(extraStr);
-                String agentName = extraJSON.getString("agentName");
-                String icon = extraJSON.optString("icon");
-                Uri iconUri = Uri.parse(icon);
-                UserInfo userInfo = new UserInfo(Constants.CHAT_TARGET_ID, agentName, iconUri);
-                messageConetent.setUserInfo(userInfo);
-            } catch (Exception e) {
-                Log.e(Constants.LOG_TAG, e.getMessage());
-            }
-            TextMessage tm = (TextMessage)messageConetent;
-            String contentStr = tm.getContent();
-            Log.d(Constants.LOG_TAG, contentStr);
+//            try {
+//                TextMessage textMessage = (TextMessage)messageConetent;
+//                String extraStr = textMessage.getExtra();
+//                JSONObject extraJSON = new JSONObject(extraStr);
+//                String agentId = extraJSON.getString("agentId");
+//                String agentName = extraJSON.getString("agentName");
+//                String icon = extraJSON.optString("icon");
+//                if(icon != null && !icon.startsWith("http://") && !icon.startsWith("https://")){
+//                    icon = EliteChat.getNgsAddr() + "/fs/get?file=" + icon;
+//                }
+//                Uri iconUri = Uri.parse(icon);
+//                UserInfo userInfo = new UserInfo(Constants.CHAT_TARGET_ID, agentName, iconUri);
+//                messageConetent.setUserInfo(userInfo);
+//            } catch (Exception e) {
+//                Log.e(Constants.LOG_TAG, e.getMessage());
+//            }
+//            TextMessage tm = (TextMessage)messageConetent;
+//            String contentStr = tm.getContent();
+//            Log.d(Constants.LOG_TAG, contentStr);
         } else if (messageConetent instanceof FileMessage) {
             FileMessage fileMessage = (FileMessage)messageConetent;
             //fileMessage.setSize(0);

@@ -10,6 +10,7 @@ import java.util.Map;
 public class Session {
     private long id;
     private Client client;
+    private Agent firstAgent;
     private Map<String, Agent> agents = new HashMap<String, Agent>();
 
     public long getId() {
@@ -34,6 +35,14 @@ public class Session {
 
     public void setAgents(Map<String, Agent> agents) {
         this.agents = agents;
+    }
+
+    public Agent getFirstAgent() {
+        return firstAgent;
+    }
+
+    public void setFirstAgent(Agent firstAgent) {
+        this.firstAgent = firstAgent;
     }
 
     /**

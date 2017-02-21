@@ -5,8 +5,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.elitecrm.rcclient.entity.EliteMessage;
-import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
 import com.elitecrm.rcclient.logic.EliteExtensionModule;
+import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
+import com.elitecrm.rcclient.logic.EliteUserInfoProvider;
 
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class App extends Application{
             RongIM.setOnReceiveMessageListener(new EliteReceiveMessageListener());
             //注册自定义消息
             RongIM.registerMessageType(EliteMessage.class);
+            //注册自定义用户信息提供者
+            RongIM.setUserInfoProvider(new EliteUserInfoProvider(), true);
 
             //注册自定义扩展模块，先去除默认扩展，再注册自定义扩展
             List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();

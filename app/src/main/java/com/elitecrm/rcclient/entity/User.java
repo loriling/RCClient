@@ -9,6 +9,14 @@ public class User {
     private String name;
     private String icon;
 
+    public User() {
+
+    }
+
+    public User(String id, String name, String icon) {
+
+    }
+
     public String getIcon() {
         return icon;
     }

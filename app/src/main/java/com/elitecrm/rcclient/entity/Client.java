@@ -5,31 +5,13 @@ package com.elitecrm.rcclient.entity;
  */
 
 public class Client extends User {
-    private String loginName;
-    private int type;
-    private String portraitUri;
+    private String loginId;
 
-    public String getPortraitUri() {
-        return portraitUri;
+    public String getLoginId() {
+        return loginId;
     }
 
-    public void setPortraitUri(String portraitUri) {
-        this.portraitUri = portraitUri;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
     }
 }

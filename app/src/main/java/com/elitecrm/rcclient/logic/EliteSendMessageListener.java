@@ -33,16 +33,15 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                         messageContent instanceof FileMessage) {
                     JSONObject messageExtraJSON = new JSONObject();
                     messageExtraJSON.put("token", Chat.getInstance().getToken());
-                    if(Chat.isSessionAvailable()){ // 有session时候
+                    if(Chat.getInstance().isSessionAvailable()){ // 有session时候
                         messageExtraJSON.put("sessionId", Chat.getInstance().getSession().getId());
-                    } else if (Chat.isRequestInWaiting()){ // 请求id合法切请求状态是等待中时候
+                    } else if (Chat.getInstance().isRequestInWaiting()){ // 请求id合法切请求状态是等待中时候
                         messageExtraJSON.put("requestId", Chat.getInstance().getRequest().getId());
                     } else {
                         //Chat.sendChatRequest();
                         //Chat.addUnsendMessage(message);
                         //return message;
                     }
-
                     if(messageContent instanceof TextMessage) {
                         TextMessage textMessage = (TextMessage) messageContent;
                         textMessage.setExtra(messageExtraJSON.toString());

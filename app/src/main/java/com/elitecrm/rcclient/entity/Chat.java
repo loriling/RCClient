@@ -1,7 +1,9 @@
 package com.elitecrm.rcclient.entity;
 
+import android.net.Uri;
 import android.util.Log;
 
+import com.elitecrm.rcclient.EliteChat;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.MessageUtils;
@@ -15,6 +17,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
+import io.rong.imlib.model.UserInfo;
 import io.rong.message.FileMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
@@ -79,22 +82,21 @@ public class Chat {
         return chat;
     }
 
-    public static void initClient(String userId, String name, String portraitUri) {
+    public void initClient(String userId, String name, String portraitUri) {
         Client client = new Client();
-        client.setLoginName(userId);
+        client.setLoginId(userId);
         client.setName(name);
-        client.setPortraitUri(portraitUri);
-        Chat.getInstance().setClient(client);
+        client.setIcon(portraitUri);
+        this.setClient(client);
     }
 
-    public static void initRequest(int queueId) {
+    public void initRequest(int queueId) {
         Request request = new Request(queueId);
         request.setStatus(Constants.RequestStatus.WAITING);
-        Chat.getInstance().setRequest(request);
+        this.setRequest(request);
     }
 
-    public static void setRequestId(long requestId) {
-        Request request = Chat.getInstance().getRequest();
+    public void setRequestId(long requestId) {
         if(request == null) {
             request = new Request();
             Chat.getInstance().setRequest(request);
@@ -102,34 +104,31 @@ public class Chat {
         request.setId(requestId);
     }
 
-    public static void setRequestStatus(int status) {
-        Request request = Chat.getInstance().getRequest();
+    public void setRequestStatus(int status) {
         request.setStatus(status);
     }
 
-    public static void addUnsendMessage(Message message) {
-        List<Message> messages = Chat.getInstance().unsendMessages;
-        if(messages.size() >= MAX_UNSEND_MESSAGES){
-            messages.remove(0);
+    public void addUnsendMessage(Message message) {
+        if(unsendMessages.size() >= MAX_UNSEND_MESSAGES){
+            unsendMessages.remove(0);
         }
-        Chat.getInstance().unsendMessages.add(message);
+        unsendMessages.add(message);
     }
 
-    public static void sendChatRequest(){
-        MessageUtils.sendChatRequest(Chat.getInstance().getRequest().getQueueId(), "APP");
+    public void sendChatRequest(){
+        MessageUtils.sendChatRequest(request.getQueueId(), "APP");
     }
 
-    public static List<Message> getUnsendMessages(){
-        return Chat.getInstance().unsendMessages;
+    public List<Message> getUnsendMessages(){
+        return unsendMessages;
     }
 
     /**
      * 发送之前未送达的消,当排队之前发出的消息,会先缓存起来，如果排上队了，就会补发这些消息
      */
-    public static void sendUnsendMessages() {
-        List<Message> messages = Chat.getInstance().unsendMessages;
-        if(messages.size() > 0) {
-            for(Message message : messages) {
+    public void sendUnsendMessages() {
+        if(unsendMessages.size() > 0) {
+            for(Message message : unsendMessages) {
                 MessageContent messageContent = message.getContent();
                 try {
                     if(messageContent instanceof TextMessage ||
@@ -181,28 +180,72 @@ public class Chat {
                     Log.e(Constants.LOG_TAG, e.getMessage());
                 }
             }
-            messages.clear();
+            unsendMessages.clear();
         }
     }
 
-    public static boolean isSessionAvailable(){
-        Session session = Chat.getInstance().getSession();
+    public boolean isSessionAvailable(){
         if(session != null && session.getId() != 0){
             return true;
         }
         return false;
     }
 
-    public static boolean isRequestInWaiting(){
-        Request request = Chat.getInstance().getRequest();
+    public boolean isRequestInWaiting(){
         if(request != null && request.getId() != 0 && request.getStatus() == Constants.RequestStatus.WAITING) {
             return true;
         }
         return false;
     }
 
-    public static void clearRequestAndSession(){
-        Chat.getInstance().getRequest().setId(0);
-        Chat.getInstance().setSession(null);
+    /**
+     * 设置请求id为0，同时清空会话对象
+     * 请求对象不能直接清空，因为请求对象中存储着排队的队列号，要供下次排队时候使用
+     */
+    public void clearRequestAndSession(){
+        request.setId(0);
+        session = null;
+    }
+
+    /**
+     * 初始化Session对象
+     * @param sessionId
+     * @param agentId
+     * @param agentName
+     * @param icon
+     * @param comments
+     */
+    public void initSession(long sessionId, String agentId, String agentName, String icon, String comments) {
+        session = new Session();
+        session.setId(sessionId);
+        setupAgent(agentId, agentName, icon, comments);
+    }
+
+    /**
+     * 装载Agent，当是第一个agent的时候，刷新UserInfo缓存（现在是单聊模式，所以坐席对应的就是全局TargetId： EliteCRM）
+     * @param agentId
+     * @param agentName
+     * @param icon
+     * @param comments
+     */
+    public void setupAgent(String agentId, String agentName, String icon, String comments){
+        if(icon != null && !icon.equals("") && !icon.startsWith("http://") && !icon.startsWith("https://")){
+            icon = EliteChat.getNgsAddr() + "/fs/get?file=" + icon;
+        }
+        Agent agent = new Agent(agentId, agentName, icon, comments);
+        if(session.getAgents().size() == 0){
+            session.setFirstAgent(agent);
+            RongIM.getInstance().refreshUserInfoCache(new UserInfo(Constants.CHAT_TARGET_ID, agent.getName(), Uri.parse(agent.getIcon())));
+        }
+        session.addAgent(agent);
+    }
+
+    /**
+     * 装载client，同时刷新UserInfo缓存
+     * @param userId
+     */
+    public void setupClient(String userId) {
+        client.setId(userId);
+        RongIM.getInstance().refreshUserInfoCache(new UserInfo(userId, client.getName(), Uri.parse(client.getIcon())));
     }
 }
