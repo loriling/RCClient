@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
-import io.rong.message.InformationNotificationMessage;
 
 /**
  * Created by ThinkPad on 2017/2/8.
@@ -29,29 +28,37 @@ public class MessageUtils {
      * @param from 来源
      */
     public static void sendChatRequest(int queueId, String from){
-        JSONObject requestJSON = new JSONObject();
         try{
+            JSONObject requestJSON = new JSONObject();
             requestJSON.put("messageId", MessageUtils.getNextMessageId());
-            requestJSON.put("type", Constants.RequestType.SEND_CHAT_REQUEST);
             requestJSON.put("queueId", queueId);
             requestJSON.put("from", from);
-            requestJSON.put("token", Chat.getInstance().getToken());
-        } catch (Exception e) {}
+            JSONObject extraJSON = new JSONObject();
+            extraJSON.put("token", Chat.getInstance().getToken());
+            extraJSON.put("type", Constants.RequestType.SEND_CHAT_REQUEST);
 
-        InformationNotificationMessage inm = InformationNotificationMessage.obtain(requestJSON.toString());
-        Message myMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, inm);
-        RongIM.getInstance().sendMessage(myMessage, null, null, new EliteSendMessageCallback());
+            EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
+            eliteMessage.setExtra(extraJSON.toString());
+            Message myMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            RongIM.getInstance().sendMessage(myMessage, null, null, new EliteSendMessageCallback());
+        } catch (Exception e) {}
     }
 
-    public static void sendRating(int rating, String comments) {
+    /**
+     * 发送满意度消息
+     * @param ratingId 满意度id
+     * @param comments 满意度comments
+     */
+    public static void sendRating(int ratingId, String comments) {
         try{
-            EliteMessage eliteMessage = EliteMessage.obtain("");
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", Chat.getInstance().getToken());
             extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
             extraJSON.put("type", Constants.RequestType.RATE_SESSION);
-            extraJSON.put("rating", rating);
-            extraJSON.put("ratingComments", comments);
+            JSONObject requestJSON = new JSONObject();
+            requestJSON.put("ratingId", ratingId);
+            requestJSON.put("ratingComments", comments);
+            EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
             eliteMessage.setExtra(extraJSON.toString());
             Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
             RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());

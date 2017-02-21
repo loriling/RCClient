@@ -3,11 +3,11 @@ package com.elitecrm.rcclient.logic;
 import android.net.Uri;
 import android.util.Log;
 
-import com.elitecrm.rcclient.EliteChat;
 import com.elitecrm.rcclient.entity.Agent;
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.EliteMessage;
 import com.elitecrm.rcclient.entity.Session;
+import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
 
 import org.json.JSONArray;
@@ -143,8 +143,8 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
                     Chat.sendUnsendMessages();
                 } else if (type == Constants.RequestType.AGENT_PUSH_RATING) {
-                    // TODO: 2017/2/15  坐席推送满意度处理
-                    EliteChat.showRatingDialog();
+                    // 坐席推送满意度处理
+                    ActivityUtils.showRatingDialog();
                 } else if (type == Constants.RequestType.AGENT_UPDATED) {
                     // TODO: 2017/2/15 坐席人员变更处理
 
@@ -192,7 +192,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
             Log.d(Constants.LOG_TAG, contentStr);
         } else if (messageConetent instanceof FileMessage) {
             FileMessage fileMessage = (FileMessage)messageConetent;
-            fileMessage.setSize(0);
+            //fileMessage.setSize(0);
         }
         return false;//这里返回true就不会有消息声音提示
     }

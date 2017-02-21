@@ -27,7 +27,7 @@ import io.rong.message.VoiceMessage;
 
 public class Chat {
     // 最大为发送消息存储量，缓存过多消息怕出问题
-    private static final int MAX_UNSEND_MESSAGES = 50;
+    private static final int MAX_UNSEND_MESSAGES = 20;
     private String token;
     private Request request;
     private Client client;
