@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.elitecrm.rcclient.entity.EliteMessage;
 import com.elitecrm.rcclient.logic.EliteExtensionModule;
 import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
@@ -47,6 +48,9 @@ public class App extends Application{
             }
             RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule());
         }
+
+        //初始化百度map
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     public static String getCurProcessName(Context context) {

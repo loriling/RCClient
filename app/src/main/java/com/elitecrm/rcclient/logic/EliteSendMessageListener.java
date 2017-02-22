@@ -51,6 +51,12 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                         voiceMessage.setExtra(messageExtraJSON.toString());
                     } else if (messageContent instanceof LocationMessage) {
                         LocationMessage locationMessage = (LocationMessage)messageContent;
+                        String extraStr = locationMessage.getExtra();
+                        if(extraStr != null) {
+                            JSONObject oExtraJSON = new JSONObject(extraStr);
+                            String map = oExtraJSON.optString("map");
+                            messageExtraJSON.put("map", map);
+                        }
                         locationMessage.setExtra(messageExtraJSON.toString());
                     } else if (messageContent instanceof ImageMessage) {
                         ImageMessage imageMessage = (ImageMessage)messageContent;

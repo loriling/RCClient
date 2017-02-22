@@ -207,6 +207,10 @@ public class Chat {
         session = null;
     }
 
+    public void clearSessionAgents(){
+        session.getAgents().clear();
+    }
+
     /**
      * 初始化Session对象
      * @param sessionId

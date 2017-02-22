@@ -146,6 +146,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         String agentName = agentJSON.getString("name");
                         String icon = agentJSON.optString("icon");
                         String comments = agentJSON.optString("comments");
+                        Chat.getInstance().clearSessionAgents();
                         Chat.getInstance().setupAgent(agentId, agentName, icon, comments);
                     }
                 } else if (type == Constants.RequestType.AGENT_CLOSE_SESSION) {

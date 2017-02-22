@@ -1,11 +1,13 @@
 package com.elitecrm.rcclient.logic;
 
+import android.util.Log;
+
+import com.elitecrm.rcclient.baidumap.BaiduLocationPlugin;
 import com.elitecrm.rcclient.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.rong.common.RLog;
 import io.rong.imkit.DefaultExtensionModule;
 import io.rong.imkit.manager.InternalModuleManager;
 import io.rong.imkit.plugin.DefaultLocationPlugin;
@@ -28,19 +30,19 @@ public class EliteExtensionModule extends DefaultExtensionModule {
         FilePlugin file = new FilePlugin();
         pluginModuleList.add(image);
 
-        String e;
-        Class cls;
         try {
-            e = "com.amap.api.netlocation.AMapNetworkLocationClient";
-            cls = Class.forName(e);
+            String amapClassName = "com.amap.api.netlocation.AMapNetworkLocationClient";
+            Class cls = Class.forName(amapClassName);
             if(cls != null) {
                 DefaultLocationPlugin locationPlugin = new DefaultLocationPlugin();
                 pluginModuleList.add(locationPlugin);
             }
-        } catch (Exception var10) {
-            RLog.i(Constants.LOG_TAG, "Not include AMap");
-            var10.printStackTrace();
+        } catch (Exception exception) {
+            Log.i(Constants.LOG_TAG, "Not include AMap");
         }
+
+        //百度地图插件
+        pluginModuleList.add(new BaiduLocationPlugin());
 
         if(conversationType.equals(Conversation.ConversationType.GROUP) || conversationType.equals(Conversation.ConversationType.DISCUSSION) || conversationType.equals(Conversation.ConversationType.PRIVATE)) {
             pluginModuleList.addAll(InternalModuleManager.getInstance().getExternalPlugins(conversationType));

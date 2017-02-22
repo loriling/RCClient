@@ -34,4 +34,5 @@
         android:layout_marginTop="18dp"
         android:layout_below="@+id/startChat"
         android:layout_alignStart="@+id/startChat" />
+
 </RelativeLayout>

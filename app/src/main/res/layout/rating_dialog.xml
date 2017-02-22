@@ -42,6 +42,7 @@
         android:minLines="1"
         android:maxLines="5"
         android:scrollbars="vertical"
+        android:hint="请输入不满意原因"
         >
     </EditText>
 
