@@ -1,16 +1,12 @@
 package com.elitecrm.rcclient.logic;
 
-import android.util.Log;
-
 import com.elitecrm.rcclient.baidumap.BaiduLocationPlugin;
-import com.elitecrm.rcclient.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.rong.imkit.DefaultExtensionModule;
 import io.rong.imkit.manager.InternalModuleManager;
-import io.rong.imkit.plugin.DefaultLocationPlugin;
 import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imkit.plugin.ImagePlugin;
 import io.rong.imkit.widget.provider.FilePlugin;
@@ -30,16 +26,17 @@ public class EliteExtensionModule extends DefaultExtensionModule {
         FilePlugin file = new FilePlugin();
         pluginModuleList.add(image);
 
-        try {
-            String amapClassName = "com.amap.api.netlocation.AMapNetworkLocationClient";
-            Class cls = Class.forName(amapClassName);
-            if(cls != null) {
-                DefaultLocationPlugin locationPlugin = new DefaultLocationPlugin();
-                pluginModuleList.add(locationPlugin);
-            }
-        } catch (Exception exception) {
-            Log.i(Constants.LOG_TAG, "Not include AMap");
-        }
+        //高德地图
+//        try {
+//            String amapClassName = "com.amap.api.netlocation.AMapNetworkLocationClient";
+//            Class cls = Class.forName(amapClassName);
+//            if(cls != null) {
+//                DefaultLocationPlugin locationPlugin = new DefaultLocationPlugin();
+//                pluginModuleList.add(locationPlugin);
+//            }
+//        } catch (Exception exception) {
+//            Log.i(Constants.LOG_TAG, "Not include AMap");
+//        }
 
         //百度地图插件
         pluginModuleList.add(new BaiduLocationPlugin());
