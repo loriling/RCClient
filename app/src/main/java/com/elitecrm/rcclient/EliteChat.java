@@ -17,12 +17,13 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
+import static com.elitecrm.rcclient.util.Constants.CHAT_TITLE;
+
 /**
  * Created by Loriling on 2017/2/13.
  */
 
 public class EliteChat {
-    private static final String CHAT_TITLE = "在线客服";
     private static Context context;
     private static boolean initialized = false;
     private static boolean startChatReady = false;
@@ -90,7 +91,7 @@ public class EliteChat {
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
-            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, CHAT_TITLE);
+            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, Constants.CHAT_TITLE);
         }
     }
 

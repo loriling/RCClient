@@ -267,11 +267,23 @@ public class BaiduLocationActivity extends AppCompatActivity {
                     return;
                 }
                 // 获取当前MapView中心屏幕坐标对应的地理坐标
-                //LatLng currentLatLng;
-                //currentLatLng = baiduMap.getProjection().fromScreenLocation(mCenterPoint);
+//                LatLng currentLatLng;
+//                currentLatLng = baiduMap.getProjection().fromScreenLocation(mCenterPoint);
                 // 发起反地理编码检索
-                //mGeoCoder.reverseGeoCode((new ReverseGeoCodeOption()).location(currentLatLng));
+                // mGeoCoder.reverseGeoCode((new ReverseGeoCodeOption()).location(currentLatLng));
+
+//                MyLocationData locData = new MyLocationData.Builder()
+//                        .direction(100).latitude(currentLatLng.latitude)
+//                        .longitude(currentLatLng.longitude).build();
+//                baiduMap.setMyLocationData(locData);    //设置定位数据
+
+//                BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromResource(R.drawable.marker_blue);
+//                MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, mCurrentMarker);
+//                baiduMap.setMyLocationConfigeration(config);
+                // 当不需要定位图层时关闭定位图层
+                //baiduMap.setMyLocationEnabled(false);
             }
+
         }
     };
 }

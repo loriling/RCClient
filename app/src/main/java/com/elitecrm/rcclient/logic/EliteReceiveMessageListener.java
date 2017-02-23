@@ -159,7 +159,11 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     int msgType = msgJSON.getInt("type");
                     if(msgType == Constants.MessageType.SYSTEM_NOTICE) {
                         int noticeType = msgJSON.getInt("noticeType");
-                        if(noticeType == Constants.NoticeMessageType.NORMAL) {
+                        if(noticeType == Constants.NoticeMessageType.NORMAL ||
+                                noticeType == Constants.NoticeMessageType.INVITE_NOTICE ||
+                                noticeType == Constants.NoticeMessageType.TRANSFER_NOTICE ||
+                                noticeType == Constants.NoticeMessageType.AFK_ELAPSED_CLOSE_SESSION ||
+                                noticeType == Constants.NoticeMessageType.AFK_ELAPSED_NOTIFY) {
                             String content = msgJSON.getString("content");
                             TextMessage textMessage = TextMessage.obtain(content);
                             RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, agentId, textMessage, null);

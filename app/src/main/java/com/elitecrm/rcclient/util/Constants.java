@@ -7,6 +7,7 @@ package com.elitecrm.rcclient.util;
 public class Constants {
     public static final String LOG_TAG = "EliteTag";
     public static final String CHAT_TARGET_ID = "EliteCRM";
+    public static final String CHAT_TITLE = "在线客服";
 
     public static final String SET_TEXT_TYPING_TITLE = "对方正在输入";
     public static final String SET_VOICE_TYPING_TITLE = "对方正在讲话";
