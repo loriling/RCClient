@@ -61,6 +61,7 @@ public class Constants {
         int RATE_SESSION = 104;//满意度评价
         int SEND_CHAT_MESSAGE = 110;//发送聊天消息
         int SEND_PRE_CHAT_MESSAGE = 111;//发送预消息（还没排完队时候的消息）
+        int SEND_CUSTOM_MESSAGE = 199;//发送自定义消息
 
         //客户接受
         int CHAT_REQUEST_STATUS_UPDATE = 201;//聊天排队状态更新

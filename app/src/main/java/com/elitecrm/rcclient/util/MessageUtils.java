@@ -1,5 +1,7 @@
 package com.elitecrm.rcclient.util;
 
+import android.util.Log;
+
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.EliteMessage;
 import com.elitecrm.rcclient.entity.Session;
@@ -63,6 +65,28 @@ public class MessageUtils {
             Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
             RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
         } catch (Exception e) {}
+    }
+
+    /**
+     * 发送自定义消息，参数message可以是任何类型字符串，坐席收到该消息后，会在前台通过消息方式发出
+     * @param message
+     * @return 发送成功还是失败
+     */
+    public static boolean sendCustomMessage(String message) {
+        try{
+            JSONObject extraJSON = new JSONObject();
+            extraJSON.put("token", Chat.getInstance().getToken());
+            extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+            extraJSON.put("type", Constants.RequestType.SEND_CUSTOM_MESSAGE);
+            EliteMessage eliteMessage = EliteMessage.obtain(message);
+            eliteMessage.setExtra(extraJSON.toString());
+            Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
+            return true;
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, e.getMessage());
+        }
+        return false;
     }
 
     /**

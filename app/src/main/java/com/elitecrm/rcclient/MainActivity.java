@@ -11,9 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends Activity {
-    private static final String serverAddr = "http://192.168.2.80:8980/webchat";
-//    private static final String serverAddr = "http://118.242.18.190/webchat";
-
     private EditText userIdEditText;
     private EditText nameEditText;
     private EditText portraitUriEditText;
@@ -47,7 +44,7 @@ public class MainActivity extends Activity {
         userIdEditText.setText(userId);
         String name = sharedPreferences.getString("name", "");
         nameEditText.setText(name);
-        String portraitUri = sharedPreferences.getString("portraitUri", "https://avatars2.githubusercontent.com/u/445475?v=3&s=460");
+        String portraitUri = sharedPreferences.getString("portraitUri", "http://www.elitecrm.com/images/favicon.ico");
         portraitUriEditText.setText(portraitUri);
         int queueId = sharedPreferences.getInt("queueId", 1);
         queueIdEditText.setText(queueId + "");
@@ -67,7 +64,7 @@ public class MainActivity extends Activity {
 
                 int queueId = Integer.parseInt(queueIdEditText.getText().toString());
                 editor.putInt("queueId", queueId);
-                EliteChat.initAndStart(serverAddr, userId, name, portraitUri, v.getContext(), queueId);
+                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, v.getContext(), queueId);
                 //RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, "在线客服");
             }
         });

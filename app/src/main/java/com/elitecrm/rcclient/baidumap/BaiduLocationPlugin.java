@@ -41,7 +41,7 @@ public class BaiduLocationPlugin implements IPluginModule {
         conversationType = extension.getConversationType();
         targetId = extension.getTargetId();
         //只有通过 extension 中的 startActivityForPluginResult 才会返回到本类中的 onActivityResult
-        extension.startActivityForPluginResult(new Intent(currentFragment.getActivity(), BaiduLocationActivity.class),5, this);
+        extension.startActivityForPluginResult(new Intent(currentFragment.getActivity(), BaiduLocationListActivity.class), 5, this);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

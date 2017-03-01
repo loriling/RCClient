@@ -71,7 +71,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.elitecrm.rcclient.baidumap.BaiduLocationActivity"></activity>
+        <!-- <activity android:name="com.elitecrm.rcclient.baidumap.BaiduLocationActivity" /> -->
+        <activity android:name="com.elitecrm.rcclient.baidumap.BaiduLocationListActivity" />
         <!--会话列表-->
         <!--
         <activity
