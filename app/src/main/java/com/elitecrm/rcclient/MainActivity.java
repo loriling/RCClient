@@ -12,11 +12,6 @@ import android.widget.EditText;
 
 import com.elitecrm.rcclient.util.MessageUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.rong.imlib.model.Message;
-
 public class MainActivity extends Activity {
     private EditText userIdEditText;
     private EditText nameEditText;
@@ -72,10 +67,8 @@ public class MainActivity extends Activity {
                 int queueId = Integer.parseInt(queueIdEditText.getText().toString());
                 editor.putInt("queueId", queueId);
 
-                Message custMessage = MessageUtils.generateCustomMessage("xxxxx");
-                List<Message> messages = new ArrayList<Message>();
-                messages.add(custMessage);
-                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, v.getContext(), queueId, messages);
+                MessageUtils.addUnsendCustomMessage("{\"name\":\"xxx\"}");
+                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, v.getContext(), queueId);
                 //RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, "在线客服");
             }
         });

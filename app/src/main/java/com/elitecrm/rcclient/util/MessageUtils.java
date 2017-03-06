@@ -69,14 +69,17 @@ public class MessageUtils {
 
     /**
      * 发送自定义消息，参数message可以是任何类型字符串，坐席收到该消息后，会在前台通过消息方式发出
+     * 注意，调用这个方法时候，需要已经建立起来聊天
      * @param message
      * @return 发送成功还是失败
      */
     public static boolean sendCustomMessage(String message) {
-        Message custMessage = generateCustomMessage(message);
-        if(custMessage != null){
-            RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
-            return true;
+        if(Chat.getInstance().isSessionAvailable()){
+            Message custMessage = generateCustomMessage(Chat.getInstance().getToken(), Chat.getInstance().getSession().getId(), message);
+            if(custMessage != null){
+                RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
+                return true;
+            }
         }
         return false;
     }
@@ -86,11 +89,11 @@ public class MessageUtils {
      * @param message
      * @return
      */
-    public static Message generateCustomMessage(String message) {
+    public static Message generateCustomMessage(String token, long sessionId, String message) {
         try{
             JSONObject extraJSON = new JSONObject();
-            extraJSON.put("token", Chat.getInstance().getToken());
-            extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+            extraJSON.put("token", token);
+            extraJSON.put("sessionId", sessionId);
             extraJSON.put("type", Constants.RequestType.SEND_CUSTOM_MESSAGE);
             EliteMessage eliteMessage = EliteMessage.obtain(message);
             eliteMessage.setExtra(extraJSON.toString());
@@ -100,6 +103,17 @@ public class MessageUtils {
             Log.e(Constants.LOG_TAG, e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * 添加自定义未读消息 在初始化之前，用于传递相关业务数据到前台，比如商品信息
+     * @param message json字符串，自己定义
+     */
+    public static void addUnsendCustomMessage (String message) {
+        Message custMessage = generateCustomMessage(null, 0, message);
+        if (custMessage != null) {
+            Chat.getInstance().addUnsendMessage(custMessage);
+        }
     }
 
     /**
