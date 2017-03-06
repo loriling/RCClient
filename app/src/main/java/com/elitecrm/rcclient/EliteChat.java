@@ -12,10 +12,12 @@ import com.elitecrm.rcclient.util.HttpUtil;
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
+import java.util.List;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
 
 import static com.elitecrm.rcclient.util.Constants.CHAT_TITLE;
 
@@ -38,13 +40,18 @@ public class EliteChat {
      * @param portraitUri 用户头像uri
      * @param context 当前上下文
      * @param queueId 排队队列号
-     * @param ngsAddr ngs服务地址
+     * @param initMessages 初始化消息
      */
-    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId, String ngsAddr) {
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId, String ngsAddr, List<Message> initMessages) {
         EliteChat.context = context;
-        EliteChat.setServerAddr(serverAddr);
+        EliteChat.initServerAddr(serverAddr);
         EliteChat.setNgsAddr(ngsAddr);
         Chat.getInstance().initRequest(queueId);
+        if(initMessages != null && initMessages.size() > 0) {
+            for (Message message : initMessages) {
+                Chat.getInstance().addUnsendMessage(message);
+            }
+        }
         startChatReady = true;
         new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri);
     }
@@ -57,13 +64,37 @@ public class EliteChat {
      * @param portraitUri 用户头像uri
      * @param context 当前上下文
      * @param queueId 排队队列号
+     * @param ngsAddr ngs服务地址
+     */
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId, String ngsAddr) {
+        initAndStart(serverAddr, userId, name, portraitUri, context, queueId, ngsAddr, null);
+    }
+
+    /**
+     * 初始化EliteChat， 并且启动聊天
+     * @param serverAddr
+     * @param userId
+     * @param name
+     * @param portraitUri
+     * @param context
+     * @param queueId
+     * @param initMessages
+     */
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId, List<Message> initMessages) {
+        initAndStart(serverAddr, userId, name, portraitUri, context, queueId, null, initMessages);
+    }
+
+    /**
+     * 初始化EliteChat， 并且启动聊天
+     * @param serverAddr
+     * @param userId
+     * @param name
+     * @param portraitUri
+     * @param context
+     * @param queueId
      */
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId) {
-        EliteChat.context = context;
-        EliteChat.initServerAddr(serverAddr);
-        Chat.getInstance().initRequest(queueId);
-        startChatReady = true;
-        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri);
+        initAndStart(serverAddr, userId, name, portraitUri, context, queueId, null, null);
     }
 
     /**

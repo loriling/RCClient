@@ -73,6 +73,20 @@ public class MessageUtils {
      * @return 发送成功还是失败
      */
     public static boolean sendCustomMessage(String message) {
+        Message custMessage = generateCustomMessage(message);
+        if(custMessage != null){
+            RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 构造一个自定义消息对象
+     * @param message
+     * @return
+     */
+    public static Message generateCustomMessage(String message) {
         try{
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", Chat.getInstance().getToken());
@@ -80,13 +94,12 @@ public class MessageUtils {
             extraJSON.put("type", Constants.RequestType.SEND_CUSTOM_MESSAGE);
             EliteMessage eliteMessage = EliteMessage.obtain(message);
             eliteMessage.setExtra(extraJSON.toString());
-            Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
-            RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
-            return true;
+            Message custMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            return custMessage;
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, e.getMessage());
         }
-        return false;
+        return null;
     }
 
     /**
