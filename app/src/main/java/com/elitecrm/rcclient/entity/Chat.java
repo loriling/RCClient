@@ -174,6 +174,19 @@ public class Chat {
                         eliteMessage.setExtra(extraJSON.toString());
                         Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
                         RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
+                    } else if (messageContent instanceof EliteMessage) { //自定义消息的预发送
+                        EliteMessage eliteMessage = (EliteMessage)messageContent;
+                        JSONObject extraJSON = null;
+                        try {
+                            extraJSON = new JSONObject(eliteMessage.getExtra());
+                        } catch (Exception e) {
+                            extraJSON = new JSONObject();
+                        }
+                        extraJSON.put("token", Chat.getInstance().getToken());
+                        extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+                        eliteMessage.setExtra(extraJSON.toString());
+                        Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+                        RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
                     }
 
                 } catch (Exception e) {
