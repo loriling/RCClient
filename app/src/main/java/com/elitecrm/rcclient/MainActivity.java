@@ -10,7 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.elitecrm.rcclient.entity.Chat;
+import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.MessageUtils;
+
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
 
 public class MainActivity extends Activity {
     private EditText userIdEditText;
@@ -67,9 +72,13 @@ public class MainActivity extends Activity {
                 int queueId = Integer.parseInt(queueIdEditText.getText().toString());
                 editor.putInt("queueId", queueId);
 
-                MessageUtils.addUnsendCustomMessage("{\"name\":\"xxx\"}");
-                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, v.getContext(), queueId);
-                //RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, "在线客服");
+                MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}");
+                MessageUtils.sendTextMessage("firstMsg");
+                if(Chat.getInstance().isTokenValid()) {
+                    RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, "在线客服");
+                } else {
+                    EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, v.getContext(), queueId);
+                }
             }
         });
 

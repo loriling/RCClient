@@ -92,6 +92,8 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             messageContent = new LocationMessage(originalMessage.getString("content").getBytes("utf-8"));
                         } else if (objectName.equals(Constants.ObjectName.VC_MSG)) {
                             messageContent = new VoiceMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        } else if (objectName.equals(Constants.ObjectName.ELITE_MSG)) {
+                            messageContent = new EliteMessage(originalMessage.getString("content").getBytes("utf-8"));
                         }
                         if(messageConetent != null){
                             Message unsendMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.PRIVATE, messageContent);

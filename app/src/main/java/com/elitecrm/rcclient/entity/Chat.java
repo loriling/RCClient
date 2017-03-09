@@ -197,6 +197,10 @@ public class Chat {
         }
     }
 
+    public boolean isTokenValid() {
+        return getToken() != null;
+    }
+
     public boolean isSessionAvailable(){
         if(session != null && session.getId() != 0){
             return true;

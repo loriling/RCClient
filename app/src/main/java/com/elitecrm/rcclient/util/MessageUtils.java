@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
+import io.rong.message.TextMessage;
 
 /**
  * Created by ThinkPad on 2017/2/8.
@@ -69,17 +70,52 @@ public class MessageUtils {
 
     /**
      * 发送自定义消息，参数message可以是任何类型字符串，坐席收到该消息后，会在前台通过消息方式发出
-     * 注意，调用这个方法时候，需要已经建立起来聊天
+     * 当会话已经建立时候，直接发送；当会话还没有建立，则通过addUnsendMessage
      * @param message
-     * @return 发送成功还是失败
+     * @return 发送(添加)成功还是失败
      */
     public static boolean sendCustomMessage(String message) {
         if(Chat.getInstance().isSessionAvailable()){
-            Message custMessage = generateCustomMessage(Chat.getInstance().getToken(), Chat.getInstance().getSession().getId(), message);
+            long sessionId = Chat.getInstance().getSession().getId();
+            Message custMessage = generateEliteMessage(Chat.getInstance().getToken(), sessionId, message, Constants.RequestType.SEND_CUSTOM_MESSAGE);
             if(custMessage != null){
                 RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
                 return true;
             }
+        } else {
+            Message custMessage = generateEliteMessage(null, 0, message, Constants.RequestType.SEND_CUSTOM_MESSAGE);
+            if (custMessage != null) {
+                Chat.getInstance().addUnsendMessage(custMessage);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 发送文字消息
+     * 当会话已经建立时候，直接发送；当会话还没有建立，则通过addUnsendMessage
+     * @param text 文字消息内容
+     * @return
+     */
+    public static boolean sendTextMessage(String text) {
+        try {
+            TextMessage textMessage = TextMessage.obtain(text);
+            if(Chat.getInstance().isSessionAvailable()){
+                JSONObject extraJSON = new JSONObject();
+                extraJSON.put("token", Chat.getInstance().getToken());
+                extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+                textMessage.setExtra(extraJSON.toString());
+                Message message = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, textMessage);
+                RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
+                return true;
+            } else {
+                Message message = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, textMessage);
+                Chat.getInstance().addUnsendMessage(message);
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, e.getMessage());
         }
         return false;
     }
@@ -89,12 +125,12 @@ public class MessageUtils {
      * @param message
      * @return
      */
-    public static Message generateCustomMessage(String token, long sessionId, String message) {
+    public static Message generateEliteMessage(String token, long sessionId, String message, int type) {
         try{
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", token);
             extraJSON.put("sessionId", sessionId);
-            extraJSON.put("type", Constants.RequestType.SEND_CUSTOM_MESSAGE);
+            extraJSON.put("type", type);
             EliteMessage eliteMessage = EliteMessage.obtain(message);
             eliteMessage.setExtra(extraJSON.toString());
             Message custMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
@@ -103,17 +139,6 @@ public class MessageUtils {
             Log.e(Constants.LOG_TAG, e.getMessage());
         }
         return null;
-    }
-
-    /**
-     * 添加自定义未读消息 在初始化之前，用于传递相关业务数据到前台，比如商品信息
-     * @param message json字符串，自己定义
-     */
-    public static void addUnsendCustomMessage (String message) {
-        Message custMessage = generateCustomMessage(null, 0, message);
-        if (custMessage != null) {
-            Chat.getInstance().addUnsendMessage(custMessage);
-        }
     }
 
     /**

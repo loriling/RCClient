@@ -140,6 +140,7 @@ public class EliteChat {
                  */
                 @Override
                 public void onTokenIncorrect() {
+                    Chat.getInstance().setToken(null);
                     Log.e(Constants.LOG_TAG, "onTokenIncorrect");
                 }
 
@@ -169,6 +170,7 @@ public class EliteChat {
                  */
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
+                    Chat.getInstance().setToken(null);
                     Log.e(Constants.LOG_TAG, "onError: " + errorCode);
                 }
             });
