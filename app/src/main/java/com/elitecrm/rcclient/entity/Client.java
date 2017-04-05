@@ -6,6 +6,7 @@ package com.elitecrm.rcclient.entity;
 
 public class Client extends User {
     private String loginId;
+    private String targetId;
 
     public String getLoginId() {
         return loginId;
@@ -13,5 +14,13 @@ public class Client extends User {
 
     public void setLoginId(String loginId) {
         this.loginId = loginId;
+    }
+
+    public String getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
     }
 }

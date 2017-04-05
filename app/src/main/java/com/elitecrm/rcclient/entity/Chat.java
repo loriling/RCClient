@@ -82,11 +82,12 @@ public class Chat {
         return chat;
     }
 
-    public void initClient(String userId, String name, String portraitUri) {
+    public void initClient(String userId, String name, String portraitUri, String targetId) {
         Client client = new Client();
         client.setLoginId(userId);
         client.setName(name);
         client.setIcon(portraitUri);
+        client.setTargetId(targetId);
         this.setClient(client);
     }
 
@@ -172,7 +173,7 @@ public class Chat {
                             extraJSON.put("messageType", Constants.MessageType.FILE);
                         }
                         eliteMessage.setExtra(extraJSON.toString());
-                        Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+                        Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
                         RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
                     } else if (messageContent instanceof EliteMessage) { //自定义消息的预发送
                         EliteMessage eliteMessage = (EliteMessage)messageContent;
@@ -185,7 +186,7 @@ public class Chat {
                         extraJSON.put("token", Chat.getInstance().getToken());
                         extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                         eliteMessage.setExtra(extraJSON.toString());
-                        Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+                        Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
                         RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
                     }
 
@@ -256,7 +257,7 @@ public class Chat {
         Agent agent = new Agent(agentId, agentName, icon, comments);
         if(session.getAgents().size() == 0){
             session.setFirstAgent(agent);
-            RongIM.getInstance().refreshUserInfoCache(new UserInfo(Constants.CHAT_TARGET_ID, agent.getName(), Uri.parse(agent.getIcon())));
+            RongIM.getInstance().refreshUserInfoCache(new UserInfo(Chat.getInstance().getClient().getTargetId(), agent.getName(), Uri.parse(agent.getIcon())));
         }
         session.addAgent(agent);
     }

@@ -42,7 +42,7 @@ public class MessageUtils {
 
             EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
             eliteMessage.setExtra(extraJSON.toString());
-            Message myMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message myMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
             RongIM.getInstance().sendMessage(myMessage, null, null, new EliteSendMessageCallback());
         } catch (Exception e) {}
     }
@@ -63,7 +63,7 @@ public class MessageUtils {
             requestJSON.put("ratingComments", comments);
             EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
             eliteMessage.setExtra(extraJSON.toString());
-            Message lastMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
             RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
         } catch (Exception e) {}
     }
@@ -106,11 +106,11 @@ public class MessageUtils {
                 extraJSON.put("token", Chat.getInstance().getToken());
                 extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                 textMessage.setExtra(extraJSON.toString());
-                Message message = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, textMessage);
+                Message message = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, textMessage);
                 RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
                 return true;
             } else {
-                Message message = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, textMessage);
+                Message message = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, textMessage);
                 Chat.getInstance().addUnsendMessage(message);
                 return true;
             }
@@ -133,7 +133,7 @@ public class MessageUtils {
             extraJSON.put("type", type);
             EliteMessage eliteMessage = EliteMessage.obtain(message);
             eliteMessage.setExtra(extraJSON.toString());
-            Message custMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message custMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
             return custMessage;
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, e.getMessage());

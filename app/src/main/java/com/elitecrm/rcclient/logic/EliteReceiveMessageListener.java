@@ -66,7 +66,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             Chat.getInstance().setRequestStatus(Constants.RequestStatus.DROPPED);
                         }
                     }
-                    RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, inm, null);
+                    RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm, null);
                 } else if (type == Constants.RequestType.CANCEL_CHAT_REQUEST) {
 
                 } else if (type == Constants.RequestType.CLOSE_SESSION) {
@@ -96,7 +96,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             messageContent = new EliteMessage(originalMessage.getString("content").getBytes("utf-8"));
                         }
                         if(messageConetent != null){
-                            Message unsendMessage = Message.obtain(Constants.CHAT_TARGET_ID, Conversation.ConversationType.PRIVATE, messageContent);
+                            Message unsendMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, messageContent);
                             Chat.getInstance().addUnsendMessage(unsendMessage);
                         }
                         Chat.getInstance().sendChatRequest();
@@ -119,7 +119,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         informationMessage = InformationNotificationMessage.obtain("请求超时");
                     }
                     if(informationMessage != null) {
-                        RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
+                        RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, null);
                     }
                 } else if (type == Constants.RequestType.CHAT_STARTED) {
                     long sessionId = contentJSON.getLong("sessionId");
@@ -133,7 +133,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     //记录会话相关信息
                     Chat.getInstance().initSession(sessionId, agentId, name, icon, comments);
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("坐席[" + name + "]为您服务");
-                    RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
+                    RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, null);
                     Chat.getInstance().sendUnsendMessages();
                 } else if (type == Constants.RequestType.AGENT_PUSH_RATING) {
                     // 坐席推送满意度处理
@@ -154,7 +154,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                 } else if (type == Constants.RequestType.AGENT_CLOSE_SESSION) {
                     Chat.getInstance().clearRequestAndSession();
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("会话结束");
-                    RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
+                    RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, null);
                 } else if (type == Constants.RequestType.AGENT_SEND_MESSAGE) {
                     String agentId = contentJSON.getString("agentId");
                     JSONObject msgJSON = contentJSON.getJSONObject("msg");
@@ -168,7 +168,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                                 noticeType == Constants.NoticeMessageType.AFK_ELAPSED_NOTIFY) {
                             String content = msgJSON.getString("content");
                             TextMessage textMessage = TextMessage.obtain(content);
-                            RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, agentId, textMessage, null);
+                            RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, textMessage, null);
                         }
                     }
                 }

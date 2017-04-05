@@ -40,7 +40,7 @@ public class EliteChat {
      * @param queueId 排队队列号
      * @param ngsAddr ngs服务地址
      */
-    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId, String ngsAddr) {
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
         EliteChat.context = context;
         EliteChat.initServerAddr(serverAddr);
         if(ngsAddr != null) {
@@ -48,7 +48,7 @@ public class EliteChat {
         }
         Chat.getInstance().initRequest(queueId);
         startChatReady = true;
-        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri);
+        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
     }
 
     /**
@@ -60,8 +60,8 @@ public class EliteChat {
      * @param context
      * @param queueId
      */
-    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, Context context, int queueId) {
-        initAndStart(serverAddr, userId, name, portraitUri, context, queueId, null);
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId) {
+        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, null);
     }
 
     /**
@@ -71,9 +71,9 @@ public class EliteChat {
      * @param name 用户名
      * @param portraitUri 用户头像uri
      */
-    public static void init(String serverAddr, String userId, String name, String portraitUri) {
+    public static void init(String serverAddr, String userId, String name, String portraitUri, String targetId) {
         EliteChat.initServerAddr(serverAddr);
-        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri);
+        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
     }
 
     /**
@@ -89,7 +89,7 @@ public class EliteChat {
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
-            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, Constants.CHAT_TITLE);
+            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
         }
     }
 
@@ -105,15 +105,17 @@ public class EliteChat {
                 String userId = params[1];
                 String name = params[2];
                 String portraitUri = params[3];
+                String targetId = params[4];
                 HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr, "application/json");
                 JSONObject requestJSON = new JSONObject();
                 requestJSON.put("action", "login");
 
-                Chat.getInstance().initClient(userId, name, portraitUri);
+                Chat.getInstance().initClient(userId, name, portraitUri, targetId);
 
                 requestJSON.put("userId", userId);
                 requestJSON.put("name", name);
                 requestJSON.put("portraitUri", portraitUri);
+                requestJSON.put("targetId", targetId);
                 String body = requestJSON.toString();
                 HttpUtil.setBodyParameter(body, conn);
 
@@ -160,7 +162,7 @@ public class EliteChat {
                         //发出聊天排队请求
                         Chat.getInstance().sendChatRequest();
                         //启动聊天会话界面
-                        RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, CHAT_TITLE);
+                        RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), CHAT_TITLE);
                     }
                 }
 

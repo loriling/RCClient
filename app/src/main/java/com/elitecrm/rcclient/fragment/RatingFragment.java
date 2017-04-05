@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.elitecrm.rcclient.R;
-import com.elitecrm.rcclient.util.Constants;
+import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.util.MessageUtils;
 
 import io.rong.imkit.RongIM;
@@ -71,7 +71,7 @@ public class RatingFragment extends DialogFragment {
 
                 //显示评价结果到聊天界面
                 InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("您的评价是【" + ratingName + "】");
-                RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Constants.CHAT_TARGET_ID, null, informationMessage, null);
+                RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, null);
             }
         }).create();
 

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Elite Chat</string>
-    <!-- <string name="app_server_addr">http://192.168.2.80:8980/webchat</string> -->
-    <string name="app_server_addr">http://118.242.18.190/webchat</string>
+    <string name="app_server_addr">http://192.168.2.80:8980/webchat</string>
+    <!-- string name="app_server_addr">http://118.242.18.190/webchat</string> -->
 </resources>
