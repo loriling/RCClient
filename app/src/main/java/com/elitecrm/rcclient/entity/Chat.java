@@ -117,6 +117,9 @@ public class Chat {
     }
 
     public void sendChatRequest(){
+        //清空老的请求id和会话对象
+        clearRequestAndSession();
+        //发出聊天请求
         MessageUtils.sendChatRequest(request.getQueueId(), "APP");
     }
 

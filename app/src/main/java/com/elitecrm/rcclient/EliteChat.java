@@ -84,7 +84,6 @@ public class EliteChat {
     public static void startChat(Context context, int queueId) {
         EliteChat.context = context;
         Chat.getInstance().initRequest(queueId);
-
         if(initialized) {
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
