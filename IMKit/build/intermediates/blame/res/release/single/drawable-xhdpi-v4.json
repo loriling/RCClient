@@ -268,6 +268,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_cs_star.png"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_ic_checkbox_full.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ic_checkbox_full.png"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\u1f4e2.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f4e2.png"
     },
@@ -584,6 +588,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_select_check_nor.png"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_ad_list_ppt_icon.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ad_list_ppt_icon.png"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\u1f3c0.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f3c0.png"
     },
@@ -626,6 +634,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_btn_open_file_selected.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_btn_open_file_selected.png"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_ad_list_pdf_icon.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ad_list_pdf_icon.png"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_read_receipt_request.png",
@@ -734,10 +746,6 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\u263a.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\u263a.png"
-    },
-    {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_unread_message_count.png",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_unread_message_count.png"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\u1f61d.png",
@@ -1020,6 +1028,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\u1f44a.png"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_file_icon_ppt.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_file_icon_ppt.png"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_default_portrait.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_default_portrait.png"
     },
@@ -1094,6 +1106,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_btn_pub_service_enter_normal.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_btn_pub_service_enter_normal.png"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_ic_checkbox_none.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_ic_checkbox_none.png"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_cs_group_uncheck.png",
@@ -1324,6 +1340,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_file_icon_audio.png"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_unread_msg_arrow.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_unread_msg_arrow.png"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\u2614.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\u2614.png"
     },
@@ -1394,6 +1414,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_receive_voice_three.png",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_receive_voice_three.png"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_file_icon_pdf.png",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable-xhdpi\\rc_file_icon_pdf.png"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\rc_send_toggle_hover.png",

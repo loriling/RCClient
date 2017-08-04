@@ -76,12 +76,12 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_ac_btn_file_download_open_button.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_voice_toggle_selector.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_voice_toggle_selector.xml"
-    },
-    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_pb_file_download_progress.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_pb_file_download_progress.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_voice_toggle_selector.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_voice_toggle_selector.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_corner_location_style.xml",
@@ -160,6 +160,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_btn_send.xml"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_message_checkbox.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_message_checkbox.xml"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_cs_corner_single_check_style.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_cs_corner_single_check_style.xml"
     },
@@ -230,6 +234,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_selector_grid_camera_mask.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_selector_grid_camera_mask.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_unread_msg_bg_style.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\bundles\\debug\\res\\drawable\\rc_unread_msg_bg_style.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\rc_ic_yes_selector.xml",

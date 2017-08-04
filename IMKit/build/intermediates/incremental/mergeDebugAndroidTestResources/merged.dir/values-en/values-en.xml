@@ -77,7 +77,7 @@
     <string name="rc_dialog_item_message_copy">Copy</string>
     <string name="rc_dialog_item_message_delete">Delete</string>
     <string name="rc_dialog_item_message_recall">Recall</string>
-    <string name="rc_dialog_ok">Ok</string>
+    <string name="rc_dialog_ok">OK</string>
     <string name="rc_discussion_nt_msg_for_add">"%1$s Invited %2$d members to join the discussion group"</string>
     <string name="rc_discussion_nt_msg_for_added">"%1$s Invited %2$s to join the discussion group"</string>
     <string name="rc_discussion_nt_msg_for_exit">"%1$s Quit the discussion group"</string>
@@ -120,6 +120,7 @@
     <string name="rc_item_created_group">%1$s created the group</string>
     <string name="rc_item_dismiss_groups">" dismissed the group"</string>
     <string name="rc_item_divided_string">、</string>
+    <string name="rc_item_etc"> and etc </string>
     <string name="rc_item_group_notification_summary">[Group Notification]</string>
     <string name="rc_item_invitation">%1$s invited %2$s to join the group</string>
     <string name="rc_item_join_group">" joined the group"</string>
@@ -135,6 +136,7 @@
     <string name="rc_location_fail">Failed to locate</string>
     <string name="rc_location_fetching">Fetching……</string>
     <string name="rc_location_sharing_ended">Real-time Location session ended.</string>
+    <string name="rc_location_sharing_exceed_max">Maximum number exceed </string>
     <string name="rc_message_content_draft">[Draft]</string>
     <string name="rc_message_content_file">[File]</string>
     <string name="rc_message_content_image">[Image]</string>
@@ -163,7 +165,7 @@
     <string name="rc_notice_enter_chatroom">Enter the chatroom</string>
     <string name="rc_notice_input_conversation_error">Activity was not created</string>
     <string name="rc_notice_load_data_fail">Failed to get the data</string>
-    <string name="rc_notice_network_unavailable">Network unavailable</string>
+    <string name="rc_notice_network_unavailable">Network unavailable, check network</string>
     <string name="rc_notice_select_one_picture_at_last">Please select at least a picture</string>
     <string name="rc_notice_tick">The account has been logged in to other devices</string>
     <string name="rc_notification_new_msg">%1$s sent %2$d messages</string>
@@ -237,6 +239,7 @@
     <string name="rc_voice_failure"> Message error!</string>
     <string name="rc_voice_rec">Slide up to cancel</string>
     <string name="rc_voice_short">Message too short</string>
+    <string name="rc_voice_too_long">Message too long</string>
     <string name="rc_voip_cpu_error">Sorry  Function temporarily does not support your models</string>
     <string name="rc_waiting">Connecting</string>
     <string name="rc_wednesday_format">Wed</string>

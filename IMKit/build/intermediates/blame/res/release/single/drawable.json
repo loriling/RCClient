@@ -168,6 +168,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_white_bg_shape.xml"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\rc_message_checkbox.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_message_checkbox.xml"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\rc_corner_popup_dialog_style.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_corner_popup_dialog_style.xml"
     },
@@ -194,6 +198,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\rc_read_receipt_request_button.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_read_receipt_request_button.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\rc_unread_msg_bg_style.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_unread_msg_bg_style.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\drawable\\rc_keyboard_selector.xml",

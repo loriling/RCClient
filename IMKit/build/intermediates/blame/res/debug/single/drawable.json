@@ -24,8 +24,16 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_selector_grid_camera_mask.xml"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_unread_msg_bg_style.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_unread_msg_bg_style.xml"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_ed_public_service_search_selector.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_ed_public_service_search_selector.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_message_checkbox.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\drawable\\rc_message_checkbox.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\drawable\\rc_emotion_toggle_selector.xml",

@@ -13,16 +13,16 @@ public final class R {
 	}
 	public static final class integer {
 		public static final int rc_audio_encoding_bit_rate = 0x7f0b0000;
-		public static final int rc_image_quality = 0x7f0b0003;
-		public static final int rc_image_size = 0x7f0b0004;
+		public static final int rc_image_quality = 0x7f0b0005;
+		public static final int rc_image_size = 0x7f0b0006;
 	}
 	public static final class string {
 		public static final int rc_init_failed = 0x7f050070;
-		public static final int rc_location_sharing_ended = 0x7f050086;
-		public static final int rc_media_message_default_save_path = 0x7f050104;
-		public static final int rc_notification_new_msg = 0x7f0500a6;
-		public static final int rc_notification_new_plural_msg = 0x7f0500a7;
-		public static final int rc_notification_ticker_text = 0x7f0500a8;
-		public static final int rc_quit_custom_service = 0x7f0500ca;
+		public static final int rc_location_sharing_ended = 0x7f050087;
+		public static final int rc_media_message_default_save_path = 0x7f050107;
+		public static final int rc_notification_new_msg = 0x7f0500a8;
+		public static final int rc_notification_new_plural_msg = 0x7f0500a9;
+		public static final int rc_notification_ticker_text = 0x7f0500aa;
+		public static final int rc_quit_custom_service = 0x7f0500cc;
 	}
 }

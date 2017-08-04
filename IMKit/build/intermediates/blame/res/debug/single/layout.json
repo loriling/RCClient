@@ -12,6 +12,10 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_fr_photo.xml"
     },
     {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_conversation_notification_container.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_conversation_notification_container.xml"
+    },
+    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_ext_extension_bar.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_ext_extension_bar.xml"
     },
@@ -30,6 +34,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_fr_dialog_alter.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_fr_dialog_alter.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_notification_realtime_location.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_notification_realtime_location.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_ext_plugin_pager.xml",
@@ -302,6 +310,10 @@
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_item_preview_fragment.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_preview_fragment.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_ac_file_preview_content.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_ac_file_preview_content.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_item_public_service_list.xml",
