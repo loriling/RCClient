@@ -1,6 +1,8 @@
 package com.elitecrm.rcclient;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -89,6 +91,24 @@ public class EliteChat {
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
             RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
+        }
+    }
+
+    /**
+     * 当收到提醒时候，onNotificationMessageClicked 方法触发，然后可以通过调用此方法来打开chat
+     * @param context
+     */
+    public static void switchToChat(Context context) {
+        if(context != null) {
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Uri.Builder builder = Uri.parse("rong://" + context.getPackageName()).buildUpon();
+            builder.appendPath("conversation").appendPath(Conversation.ConversationType.PRIVATE.getName())
+                    .appendQueryParameter("targetId", Chat.getInstance().getClient().getTargetId())
+                    .appendQueryParameter("title", Constants.CHAT_TITLE);
+            Uri uri = builder.build();
+            intent.setData(uri);
+            context.startActivity(intent);
         }
     }
 
