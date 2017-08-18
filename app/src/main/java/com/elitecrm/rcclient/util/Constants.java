@@ -12,6 +12,10 @@ public class Constants {
     public static final String SET_TEXT_TYPING_TITLE = "对方正在输入";
     public static final String SET_VOICE_TYPING_TITLE = "对方正在讲话";
 
+    public interface SecurityKey {
+        String PUBLIC_KEY = "ELITE_WEB_CHAT_1612081555";
+    }
+
     public interface RequestStatus {
         int WAITING = 0;
         int ACCEPTED = 1;

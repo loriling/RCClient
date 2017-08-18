@@ -9,6 +9,7 @@ import android.util.Log;
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.logic.EliteSendMessageListener;
 import com.elitecrm.rcclient.util.Constants;
+import com.elitecrm.rcclient.util.DigestUtils;
 import com.elitecrm.rcclient.util.HttpUtil;
 
 import org.json.JSONObject;
@@ -136,8 +137,8 @@ public class EliteChat {
                 requestJSON.put("portraitUri", portraitUri);
                 requestJSON.put("targetId", targetId);
                 String body = requestJSON.toString();
+                conn.setRequestProperty("sign", DigestUtils.md5Hex(body + Constants.SecurityKey.PUBLIC_KEY));
                 HttpUtil.setBodyParameter(body, conn);
-
                 String resultStr = HttpUtil.returnResult(conn);
                 JSONObject resultJSON = new JSONObject(resultStr);
                 if(1 == resultJSON.getInt("result")){
