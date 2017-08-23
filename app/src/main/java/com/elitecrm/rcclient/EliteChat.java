@@ -99,15 +99,17 @@ public class EliteChat {
      * 当收到提醒时候，onNotificationMessageClicked 方法触发，然后可以通过调用此方法来打开chat
      * @param context
      */
-    public static void switchToChat(Context context) {
+    public static void switchToChat(Context context, String target) {
         if(context != null) {
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             Uri.Builder builder = Uri.parse("rong://" + context.getPackageName()).buildUpon();
             builder.appendPath("conversation").appendPath(Conversation.ConversationType.PRIVATE.getName())
-                    .appendQueryParameter("targetId", Chat.getInstance().getClient().getTargetId())
+                    .appendQueryParameter("targetId", target)
                     .appendQueryParameter("title", Constants.CHAT_TITLE);
             Uri uri = builder.build();
+            Log.d(Constants.LOG_TAG, "Switch to chat: " + uri.toString());
             intent.setData(uri);
             context.startActivity(intent);
         }
@@ -146,7 +148,7 @@ public class EliteChat {
                     Chat.getInstance().setToken(token);
                 }
             } catch (Exception e) {
-                Log.e(Constants.LOG_TAG, e.getMessage());
+                Log.e(Constants.LOG_TAG, "FetchToken: " + e.getMessage());
             }
             return token;
         }
@@ -182,6 +184,7 @@ public class EliteChat {
                         //发出聊天排队请求
                         Chat.getInstance().sendChatRequest();
                         //启动聊天会话界面
+                        Log.d(Constants.LOG_TAG, "Start Conversation: " + Chat.getInstance().getClient().getTargetId());
                         RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), CHAT_TITLE);
                     }
                 }
@@ -193,7 +196,7 @@ public class EliteChat {
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
                     Chat.getInstance().setToken(null);
-                    Log.e(Constants.LOG_TAG, "onError: " + errorCode);
+                    Log.e(Constants.LOG_TAG, "RongIM.connect onError: " + errorCode);
                 }
             });
         }

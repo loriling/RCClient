@@ -67,7 +67,7 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                     }
                 }
             } catch (Exception e) {
-                Log.e(Constants.LOG_TAG, e.getMessage());
+                Log.e(Constants.LOG_TAG, "EliteSendMessageListener.onSend: " + e.getMessage());
             }
         }
         return message;

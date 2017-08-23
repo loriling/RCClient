@@ -43,8 +43,11 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     //聊天请求消息的返回
                     String mContent = contentJSON.getString("message");
                     InformationNotificationMessage inm = InformationNotificationMessage.obtain(mContent);
-                    long requestId = contentJSON.getLong("requestId");
-                    Chat.getInstance().setRequestId(requestId);
+                    long requestId = contentJSON.optLong("requestId");
+                    if (requestId > 0) {
+                        Chat.getInstance().setRequestId(requestId);
+                    }
+                    //boolean continueLastSession = contentJSON.optBoolean("continueLastSession");
                     int result = contentJSON.getInt("result");
                     if(result == Constants.Result.SUCCESS) {
                         int queueLength = contentJSON.getInt("queueLength");
@@ -173,7 +176,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     }
                 }
             } catch (Exception e) {
-                Log.e(Constants.LOG_TAG, e.getMessage());
+                Log.e(Constants.LOG_TAG, "EliteReceiveMessageListener.onReceived: " + e.getMessage());
             }
         } else if (messageConetent instanceof TextMessage) {//坐席发的文字聊天消息，都作为TextMessage发送过来
             //设置一个userInfo对象到messageContent，实现后台消息提示，其中userId必须是我们的targetId: EliteCRM

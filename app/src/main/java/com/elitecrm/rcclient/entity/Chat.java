@@ -194,7 +194,7 @@ public class Chat {
                     }
 
                 } catch (Exception e) {
-                    Log.e(Constants.LOG_TAG, e.getMessage());
+                    Log.e(Constants.LOG_TAG, "Chat.sendUnsendMessages" + e.getMessage());
                 }
             }
             unsendMessages.clear();

@@ -74,16 +74,16 @@ public class MessageUtils {
      * @param message
      * @return 发送(添加)成功还是失败
      */
-    public static boolean sendCustomMessage(String message) {
+    public static boolean sendCustomMessage(String message, String target) {
         if(Chat.getInstance().isSessionAvailable()){
             long sessionId = Chat.getInstance().getSession().getId();
-            Message custMessage = generateEliteMessage(Chat.getInstance().getToken(), sessionId, message, Constants.RequestType.SEND_CUSTOM_MESSAGE);
+            Message custMessage = generateEliteMessage(Chat.getInstance().getToken(), sessionId, message, Constants.RequestType.SEND_CUSTOM_MESSAGE, target);
             if(custMessage != null){
                 RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
                 return true;
             }
         } else {
-            Message custMessage = generateEliteMessage(null, 0, message, Constants.RequestType.SEND_CUSTOM_MESSAGE);
+            Message custMessage = generateEliteMessage(null, 0, message, Constants.RequestType.SEND_CUSTOM_MESSAGE, target);
             if (custMessage != null) {
                 Chat.getInstance().addUnsendMessage(custMessage);
                 return true;
@@ -96,9 +96,10 @@ public class MessageUtils {
      * 发送文字消息
      * 当会话已经建立时候，直接发送；当会话还没有建立，则通过addUnsendMessage
      * @param text 文字消息内容
+     * @param target 发送的目标
      * @return
      */
-    public static boolean sendTextMessage(String text) {
+    public static boolean sendTextMessage(String text, String target) {
         try {
             TextMessage textMessage = TextMessage.obtain(text);
             if(Chat.getInstance().isSessionAvailable()){
@@ -106,16 +107,16 @@ public class MessageUtils {
                 extraJSON.put("token", Chat.getInstance().getToken());
                 extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                 textMessage.setExtra(extraJSON.toString());
-                Message message = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, textMessage);
+                Message message = Message.obtain(target, Conversation.ConversationType.SYSTEM, textMessage);
                 RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
                 return true;
             } else {
-                Message message = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, textMessage);
+                Message message = Message.obtain(target, Conversation.ConversationType.SYSTEM, textMessage);
                 Chat.getInstance().addUnsendMessage(message);
                 return true;
             }
         } catch (Exception e) {
-            Log.e(Constants.LOG_TAG, e.getMessage());
+            Log.e(Constants.LOG_TAG, "MessageUtils.sendTextMessage: " + e.getMessage());
         }
         return false;
     }
@@ -125,7 +126,7 @@ public class MessageUtils {
      * @param message
      * @return
      */
-    public static Message generateEliteMessage(String token, long sessionId, String message, int type) {
+    public static Message generateEliteMessage(String token, long sessionId, String message, int type, String target) {
         try{
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", token);
@@ -133,10 +134,11 @@ public class MessageUtils {
             extraJSON.put("type", type);
             EliteMessage eliteMessage = EliteMessage.obtain(message);
             eliteMessage.setExtra(extraJSON.toString());
-            Message custMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
+
+            Message custMessage = Message.obtain(target, Conversation.ConversationType.SYSTEM, eliteMessage);
             return custMessage;
         } catch (Exception e) {
-            Log.e(Constants.LOG_TAG, e.getMessage());
+            Log.e(Constants.LOG_TAG, "MessageUtils.generateEliteMessage: " + e.getMessage());
         }
         return null;
     }
