@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
                         }
                     }
                 }
-                EliteChat.startChat(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, target, v.getContext(), queueId, null);
+                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, target, v.getContext(), queueId, null);
             }
         });
 

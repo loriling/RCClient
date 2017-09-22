@@ -34,6 +34,7 @@ public class EliteChat {
 
     /**
      * 初始化EliteChat， 获取rongcloud的token，并且启动聊天。
+     * 如果发现token已经存在，则直接进入聊天
      * @param serverAddr EliteWebChat服务地址
      * @param userId 用户登录id
      * @param name 用户名
@@ -44,13 +45,21 @@ public class EliteChat {
      */
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
         EliteChat.context = context;
-        EliteChat.initServerAddr(serverAddr);
-        if(ngsAddr != null) {
-            EliteChat.setNgsAddr(ngsAddr);
+        if (Chat.getInstance().isTokenValid()) {
+            Chat.getInstance().initRequest(queueId);
+            //发出聊天排队请求
+            Chat.getInstance().sendChatRequest();
+            //启动聊天会话界面
+            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
+        } else {
+            EliteChat.initServerAddr(serverAddr);
+            if(ngsAddr != null) {
+                EliteChat.setNgsAddr(ngsAddr);
+            }
+            Chat.getInstance().initRequest(queueId);
+            startChatOnReady = true;
+            new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
         }
-        Chat.getInstance().initRequest(queueId);
-        startChatOnReady = true;
-        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
     }
 
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId) {
@@ -67,24 +76,6 @@ public class EliteChat {
     public static void init(String serverAddr, String userId, String name, String portraitUri, String targetId) {
         EliteChat.initServerAddr(serverAddr);
         new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
-    }
-
-    /**
-     * 启动聊天，会判断当前token是否有效，如果有效则直接进入聊天，如果无效则重新获取token并进入聊天
-     * @param context 当前上下文
-     * @param queueId 排队队列号
-     */
-    public static void startChat(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
-        if (Chat.getInstance().isTokenValid()) {
-            EliteChat.context = context;
-            Chat.getInstance().initRequest(queueId);
-            //发出聊天排队请求
-            Chat.getInstance().sendChatRequest();
-            //启动聊天会话界面
-            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
-        } else {
-            initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr);
-        }
     }
 
     /**
