@@ -34,7 +34,7 @@ public class EliteChat {
 
     /**
      * 初始化EliteChat， 获取rongcloud的token，并且启动聊天。
-     * 如果发现token已经存在，则直接进入聊天
+     * 如果发现token已经存在并且融云连接状态还是连接中的，则直接进入聊天
      * @param serverAddr EliteWebChat服务地址
      * @param userId 用户登录id
      * @param name 用户名
@@ -45,7 +45,7 @@ public class EliteChat {
      */
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
         EliteChat.context = context;
-        if (Chat.getInstance().isTokenValid()) {
+        if (Chat.getInstance().isTokenValid() && RongIMClient.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
             Chat.getInstance().initRequest(queueId);
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
