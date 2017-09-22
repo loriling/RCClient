@@ -28,13 +28,12 @@ import static com.elitecrm.rcclient.util.Constants.CHAT_TITLE;
 
 public class EliteChat {
     private static Context context;
-    private static boolean initialized = false;
-    private static boolean startChatReady = false;
+    private static boolean startChatOnReady = false;
     private static String serverAddr;
     private static String ngsAddr;
 
     /**
-     * 初始化EliteChat， 并且启动聊天
+     * 初始化EliteChat， 获取rongcloud的token，并且启动聊天。
      * @param serverAddr EliteWebChat服务地址
      * @param userId 用户登录id
      * @param name 用户名
@@ -50,25 +49,16 @@ public class EliteChat {
             EliteChat.setNgsAddr(ngsAddr);
         }
         Chat.getInstance().initRequest(queueId);
-        startChatReady = true;
+        startChatOnReady = true;
         new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
     }
 
-    /**
-     * 初始化EliteChat， 并且启动聊天
-     * @param serverAddr
-     * @param userId
-     * @param name
-     * @param portraitUri
-     * @param context
-     * @param queueId
-     */
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId) {
         initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, null);
     }
 
     /**
-     * 初始化EliteChat
+     * 初始化EliteChat，获取融云token
      * @param serverAddr EliteWebChat服务地址
      * @param userId 用户登录id
      * @param name 用户名
@@ -80,18 +70,20 @@ public class EliteChat {
     }
 
     /**
-     * 启动聊天
+     * 启动聊天，会判断当前token是否有效，如果有效则直接进入聊天，如果无效则重新获取token并进入聊天
      * @param context 当前上下文
      * @param queueId 排队队列号
      */
-    public static void startChat(Context context, int queueId) {
-        EliteChat.context = context;
-        Chat.getInstance().initRequest(queueId);
-        if(initialized) {
+    public static void startChat(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
+        if (Chat.getInstance().isTokenValid()) {
+            EliteChat.context = context;
+            Chat.getInstance().initRequest(queueId);
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
             RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
+        } else {
+            initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr);
         }
     }
 
@@ -179,8 +171,7 @@ public class EliteChat {
                     Chat.getInstance().setupClient(userId);
                     //注册发送消息监听器
                     RongIM.getInstance().setSendMessageListener(new EliteSendMessageListener());
-                    initialized = true;
-                    if (startChatReady) {
+                    if (startChatOnReady) {
                         //发出聊天排队请求
                         Chat.getInstance().sendChatRequest();
                         //启动聊天会话界面
