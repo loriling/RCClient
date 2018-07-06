@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<io.rong.imkit.widget.AutoLinkTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.elitecrm.rcclient.robot.RobotAutoLinkTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="@style/RCTheme.Message.TextView"
     android:layout_width="fill_parent"

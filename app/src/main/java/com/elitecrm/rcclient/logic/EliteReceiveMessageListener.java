@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.EliteMessage;
+import com.elitecrm.rcclient.robot.RobotMessageHandler;
 import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
 
@@ -162,9 +163,9 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     String agentId = contentJSON.getString("agentId");
                     JSONObject msgJSON = contentJSON.getJSONObject("msg");
                     int msgType = msgJSON.getInt("type");
-                    if(msgType == Constants.MessageType.SYSTEM_NOTICE) {
+                    if (msgType == Constants.MessageType.SYSTEM_NOTICE) {
                         int noticeType = msgJSON.getInt("noticeType");
-                        if(noticeType == Constants.NoticeMessageType.NORMAL ||
+                        if (noticeType == Constants.NoticeMessageType.NORMAL ||
                                 noticeType == Constants.NoticeMessageType.INVITE_NOTICE ||
                                 noticeType == Constants.NoticeMessageType.TRANSFER_NOTICE ||
                                 noticeType == Constants.NoticeMessageType.AFK_ELAPSED_CLOSE_SESSION ||
@@ -174,6 +175,14 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             RongIM.getInstance().insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, textMessage, null);
                         }
                     }
+                } else if (type == Constants.RequestType.ROBOT_MESSAGE) {//机器人消息
+                    String agentId = Chat.getInstance().getSession().getAgent().getId();
+                    String content = contentJSON.getString("content");
+                    int robotType = contentJSON.getInt("robotType");
+                    content = RobotMessageHandler.handleMessage(content, robotType);
+                    TextMessage textMessage = TextMessage.obtain(content);
+                    Message.ReceivedStatus rs = new Message.ReceivedStatus(1);
+                    RongIM.getInstance().insertIncomingMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, rs, textMessage, null);
                 }
             } catch (Exception e) {
                 Log.e(Constants.LOG_TAG, "EliteReceiveMessageListener.onReceived: " + e.getMessage());

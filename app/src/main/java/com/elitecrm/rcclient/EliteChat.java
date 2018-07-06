@@ -42,11 +42,12 @@ public class EliteChat {
      * @param context 当前上下文
      * @param queueId 排队队列号
      * @param ngsAddr ngs服务地址
+     * @param from 请求来源
      */
-    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from) {
         EliteChat.context = context;
         if (Chat.getInstance().isTokenValid() && RongIMClient.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
-            Chat.getInstance().initRequest(queueId);
+            Chat.getInstance().initRequest(queueId, from);
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
@@ -56,14 +57,18 @@ public class EliteChat {
             if(ngsAddr != null) {
                 EliteChat.setNgsAddr(ngsAddr);
             }
-            Chat.getInstance().initRequest(queueId);
+            Chat.getInstance().initRequest(queueId, from);
             startChatOnReady = true;
             new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
         }
     }
 
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
+        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr, "APP");
+    }
+
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId) {
-        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, null);
+        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, null, "APP");
     }
 
     /**

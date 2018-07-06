@@ -91,10 +91,12 @@ public class Chat {
         this.setClient(client);
     }
 
-    public void initRequest(int queueId) {
+    public Request initRequest(int queueId, String from) {
         Request request = new Request(queueId);
+        request.setFrom(from);
         request.setStatus(Constants.RequestStatus.WAITING);
         this.setRequest(request);
+        return request;
     }
 
     public void setRequestId(long requestId) {
@@ -120,7 +122,7 @@ public class Chat {
         //清空老的请求id和会话对象
         clearRequestAndSession();
         //发出聊天请求
-        MessageUtils.sendChatRequest(request.getQueueId(), "APP");
+        MessageUtils.sendChatRequest(request);
     }
 
     public List<Message> getUnsendMessages(){

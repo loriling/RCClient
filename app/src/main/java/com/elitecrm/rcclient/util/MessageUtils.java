@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.EliteMessage;
+import com.elitecrm.rcclient.entity.Request;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.entity.User;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
@@ -27,15 +28,15 @@ public class MessageUtils {
 
     /**
      * 发出排队请求
-     * @param queueId 队列号
-     * @param from 来源
+     * @param request 请求对象
      */
-    public static void sendChatRequest(int queueId, String from){
+    public static void sendChatRequest(Request request){
         try{
             JSONObject requestJSON = new JSONObject();
             requestJSON.put("messageId", MessageUtils.getNextMessageId());
-            requestJSON.put("queueId", queueId);
-            requestJSON.put("from", from);
+            requestJSON.put("queueId", request.getQueueId());
+            requestJSON.put("brand", request.getBrand());
+            requestJSON.put("from", request.getFrom());
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", Chat.getInstance().getToken());
             extraJSON.put("type", Constants.RequestType.SEND_CHAT_REQUEST);

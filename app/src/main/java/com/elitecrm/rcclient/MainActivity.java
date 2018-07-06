@@ -73,16 +73,14 @@ public class MainActivity extends Activity {
 
                 String target = "1919";
                 MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
-                MessageUtils.sendTextMessage("firstMsg", target);
+                //MessageUtils.sendTextMessage("firstMsg", target);
                 if (Chat.getInstance().isSessionAvailable()) {
-                    if (userId.equals(Chat.getInstance().getSession().getAgent().getId())) {
-                        if(Chat.getInstance().isTokenValid()) {
-                            RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), "在线客服");
-                            return;
-                        }
+                    if(Chat.getInstance().isTokenValid()) {
+                        RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), "在线客服");
+                        return;
                     }
                 }
-                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, target, v.getContext(), queueId, null);
+                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, target, v.getContext(), queueId, null, "APP");
             }
         });
 
