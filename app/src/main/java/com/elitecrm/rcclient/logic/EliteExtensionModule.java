@@ -21,7 +21,7 @@ public class EliteExtensionModule extends DefaultExtensionModule {
 
     @Override
     public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {
-        ArrayList pluginModuleList = new ArrayList();
+        List<IPluginModule> pluginModuleList = new ArrayList<>();
         ImagePlugin image = new ImagePlugin();
         FilePlugin file = new FilePlugin();
         pluginModuleList.add(image);

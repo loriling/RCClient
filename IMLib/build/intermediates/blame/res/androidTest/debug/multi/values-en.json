@@ -45,8 +45,8 @@
                     "startLine": 4,
                     "startColumn": 4,
                     "startOffset": 216,
-                    "endColumn": 75,
-                    "endOffset": 287
+                    "endColumn": 69,
+                    "endOffset": 281
                 },
                 "from": {
                     "file": "H:\\androidProjects\\RCClient\\IMLib\\build\\intermediates\\bundles\\debug\\res\\values-en\\values-en.xml",
@@ -54,8 +54,8 @@
                         "startLine": 4,
                         "startColumn": 4,
                         "startOffset": 216,
-                        "endColumn": 75,
-                        "endOffset": 287
+                        "endColumn": 69,
+                        "endOffset": 281
                     }
                 }
             },
@@ -63,18 +63,18 @@
                 "to": {
                     "startLine": 5,
                     "startColumn": 4,
-                    "startOffset": 292,
-                    "endColumn": 91,
-                    "endOffset": 379
+                    "startOffset": 286,
+                    "endColumn": 75,
+                    "endOffset": 357
                 },
                 "from": {
                     "file": "H:\\androidProjects\\RCClient\\IMLib\\build\\intermediates\\bundles\\debug\\res\\values-en\\values-en.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
-                        "startOffset": 292,
-                        "endColumn": 91,
-                        "endOffset": 379
+                        "startOffset": 286,
+                        "endColumn": 75,
+                        "endOffset": 357
                     }
                 }
             },
@@ -82,18 +82,18 @@
                 "to": {
                     "startLine": 6,
                     "startColumn": 4,
-                    "startOffset": 384,
-                    "endColumn": 78,
-                    "endOffset": 458
+                    "startOffset": 362,
+                    "endColumn": 91,
+                    "endOffset": 449
                 },
                 "from": {
                     "file": "H:\\androidProjects\\RCClient\\IMLib\\build\\intermediates\\bundles\\debug\\res\\values-en\\values-en.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 384,
-                        "endColumn": 78,
-                        "endOffset": 458
+                        "startOffset": 362,
+                        "endColumn": 91,
+                        "endOffset": 449
                     }
                 }
             },
@@ -101,18 +101,37 @@
                 "to": {
                     "startLine": 7,
                     "startColumn": 4,
-                    "startOffset": 463,
-                    "endColumn": 75,
-                    "endOffset": 534
+                    "startOffset": 454,
+                    "endColumn": 78,
+                    "endOffset": 528
                 },
                 "from": {
                     "file": "H:\\androidProjects\\RCClient\\IMLib\\build\\intermediates\\bundles\\debug\\res\\values-en\\values-en.xml",
                     "position": {
                         "startLine": 7,
                         "startColumn": 4,
-                        "startOffset": 463,
+                        "startOffset": 454,
+                        "endColumn": 78,
+                        "endOffset": 528
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 533,
+                    "endColumn": 75,
+                    "endOffset": 604
+                },
+                "from": {
+                    "file": "H:\\androidProjects\\RCClient\\IMLib\\build\\intermediates\\bundles\\debug\\res\\values-en\\values-en.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 533,
                         "endColumn": 75,
-                        "endOffset": 534
+                        "endOffset": 604
                     }
                 }
             }

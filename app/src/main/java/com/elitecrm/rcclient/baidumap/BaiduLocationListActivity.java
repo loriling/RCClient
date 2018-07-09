@@ -34,6 +34,7 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.elitecrm.rcclient.R;
+import com.elitecrm.rcclient.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -155,7 +156,8 @@ public class BaiduLocationListActivity extends AppCompatActivity {
                 locationClient.start(); // 开始定位
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
+            Log.e(Constants.LOG_TAG, "BaiduLocationListActivity initview: " + e.getMessage());
         }
     }
 

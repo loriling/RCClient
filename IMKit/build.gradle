@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 25
-        versionCode 2017071815
-        versionName "2.8.14 Stable"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 2018061514
+        versionName "2.9.1 Stable"
     }
     buildTypes {
         release {
@@ -32,6 +32,13 @@ android {
 
 dependencies {
     compile fileTree(dir: 'src/main/libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
     compile project (':IMLib')
+}
+
+repositories {
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
 }

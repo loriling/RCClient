@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.rong.imlib"
-    android:versionCode="2017071921"
-    android:versionName="2.8.14 Stable" >
+    android:versionCode="2018061514"
+    android:versionName="2.9.1 Stable" >
 
     <uses-sdk
-        android:minSdkVersion="17"
-        android:targetSdkVersion="25" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -42,7 +42,8 @@
             android:process=":ipc" />
         <service
             android:name="io.rong.imlib.ReConnectService"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver
             android:name="io.rong.imlib.ConnectChangeReceiver"
@@ -55,23 +56,22 @@
 
         <!-- 必选： SDK 核心功能 -->
         <!-- 第三方相关,向第三方推送服务请求 token 的服务 -->
-        <service
-            android:name="io.rong.push.core.PushRegistrationService"
-            android:exported="false" >
-        </service>
-
         <!-- 处理 push 消息相关的服务 -->
         <service
+            android:name="io.rong.push.core.PushRegistrationService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
             android:name="io.rong.push.core.MessageHandleService"
-            android:exported="true" >
-        </service>
-
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <!-- push服务 -->
+
         <service
             android:name="io.rong.push.PushService"
             android:exported="true"
-            android:process="io.rong.push" > <!-- push进程，可以改名 -->
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process="io.rong.push" />
 
         <!-- push 相关事件接收器 -->
         <receiver
