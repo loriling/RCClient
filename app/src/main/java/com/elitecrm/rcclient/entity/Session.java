@@ -12,6 +12,7 @@ public class Session {
     private Client client;
     private Agent firstAgent;
     private Map<String, Agent> agents = new HashMap<String, Agent>();
+    private boolean robotMode = false;
 
     public long getId() {
         return id;
@@ -43,6 +44,14 @@ public class Session {
 
     public void setFirstAgent(Agent firstAgent) {
         this.firstAgent = firstAgent;
+    }
+
+    public boolean isRobotMode() {
+        return robotMode;
+    }
+
+    public void setRobotMode(boolean robotMode) {
+        this.robotMode = robotMode;
     }
 
     /**

@@ -76,6 +76,7 @@ public class Constants {
         int AGENT_SEND_MESSAGE = 210;//收到聊天消息
 
         int ROBOT_MESSAGE = 301;
+        int ROBOT_TRANSFER_MESSAGE = 302;
     }
 
     //1:文本, 2:图片, 3:文件, 4:位置, 5:语音 目前有这五种类型

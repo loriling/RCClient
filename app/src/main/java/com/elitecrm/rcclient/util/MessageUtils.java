@@ -14,6 +14,8 @@ import org.json.JSONObject;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
+import io.rong.imlib.model.MessageContent;
+import io.rong.message.InformationNotificationMessage;
 import io.rong.message.TextMessage;
 
 /**
@@ -147,7 +149,7 @@ public class MessageUtils {
     /**
      * 根据发送人id，来获取对应坐席的名字
      * @param agentId
-     * @return
+     * @return {string}
      */
     public static String getAgentNameById(String agentId) {
         Session session = Chat.getInstance().getSession();
@@ -158,5 +160,36 @@ public class MessageUtils {
             }
         }
         return "EliteCRM";
+    }
+
+    public static boolean sendTransferMessage() {
+        try {
+            if(Chat.getInstance().isSessionAvailable()){
+                Chat chat = Chat.getInstance();
+                Session session = chat.getSession();
+                if (session.isRobotMode()) {//只有在机器人模式下，才可以发出转接
+                    Message message = generateEliteMessage(chat.getToken(), chat.getSession().getId(), "转接", Constants.RequestType.ROBOT_TRANSFER_MESSAGE, chat.getClient().getTargetId());
+                    RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
+                    return true;
+                } else {
+                    InformationNotificationMessage inm = InformationNotificationMessage.obtain("已经在人工聊天中");
+                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, "MessageUtils.sendTransferMessage: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public static void insertMessage(Conversation.ConversationType type, String targetId, String senderUserId, MessageContent messageContent, long time) {
+        Message.ReceivedStatus rs = new Message.ReceivedStatus(1);
+        RongIM.getInstance().insertIncomingMessage(type, targetId, senderUserId, rs, messageContent, null);
+
+//        RongIM.getInstance().insertMessage(type, targetId, senderUserId, messageContent, null);
+    }
+
+    public static void insertMessage(Conversation.ConversationType type, String targetId, String senderUserId, MessageContent messageContent) {
+        insertMessage(type, targetId, senderUserId, messageContent, System.currentTimeMillis());
     }
 }

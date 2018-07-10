@@ -215,7 +215,7 @@ public class Chat {
     }
 
     public boolean isRequestInWaiting(){
-        if(request != null && request.getId() != 0 && request.getStatus() == Constants.RequestStatus.WAITING) {
+        if (request != null && request.getId() != 0 && request.getStatus() == Constants.RequestStatus.WAITING) {
             return true;
         }
         return false;
@@ -242,10 +242,11 @@ public class Chat {
      * @param icon
      * @param comments
      */
-    public void initSession(long sessionId, String agentId, String agentName, String icon, String comments) {
+    public Session initSession(long sessionId, String agentId, String agentName, String icon, String comments) {
         session = new Session();
         session.setId(sessionId);
         setupAgent(agentId, agentName, icon, comments);
+        return session;
     }
 
     /**

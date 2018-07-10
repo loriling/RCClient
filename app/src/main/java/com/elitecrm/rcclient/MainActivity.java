@@ -27,8 +27,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View main = findViewById(R.id.activity_main);
-        main.getBackground().setAlpha(180);
 
         userIdEditText = (EditText)findViewById(R.id.userIdEdittext);
         nameEditText = (EditText)findViewById(R.id.nameEdittext);

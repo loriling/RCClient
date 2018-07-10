@@ -28,12 +28,12 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_ext_emoji_grid_view.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_item_public_service_input_menu_item.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_public_service_input_menu_item.xml"
-    },
-    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\notification_action.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout\\notification_action.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_item_public_service_input_menu_item.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_public_service_input_menu_item.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\debug\\layout\\rc_wi_vo_popup.xml",
