@@ -20,7 +20,7 @@ public class EliteSendMessageCallback implements IRongCallback.ISendMessageCallb
 
     @Override
     public void onSuccess(Message message) {
-
+        //Log.d(Constants.LOG_TAG, message.toString());
     }
 
     @Override

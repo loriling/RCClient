@@ -50,7 +50,10 @@ public class RobotMessageHandler {
                     } else if (state == 2) {//state=2时表示问题无法进准识别。可推荐相识问题。answers为空，hot_questions为空，recommend可能非空
                         JSONArray recommendJSON = dataJSON.getJSONArray("recommend");
                         if (recommendJSON != null && recommendJSON.length() > 0) {
-                            content = recommendJSON.get(0).toString();
+                            content = "您是否想问: ";
+                            for (int i = 0; i < recommendJSON.length(); i++) {
+                                content += "\n【" + recommendJSON.get(i).toString() + "】";
+                            }
                         }
                     } else if (state == 3) {//state=3时表示问题无法识别。answers为空，recommend可能非空，hot_questions可能非空（如果配置了渠道热门问题则非空）
                         content = "问题无法识别\n【转人工】";

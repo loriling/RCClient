@@ -5,10 +5,12 @@ import android.app.Application;
 import android.content.Context;
 
 import com.baidu.mapapi.SDKInitializer;
-import com.elitecrm.rcclient.entity.EliteMessage;
 import com.elitecrm.rcclient.logic.EliteExtensionModule;
 import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
 import com.elitecrm.rcclient.logic.EliteUserInfoProvider;
+import com.elitecrm.rcclient.message.EliteMessage;
+import com.elitecrm.rcclient.message.RobotMessage;
+import com.elitecrm.rcclient.message.RobotMessageItemProvider;
 
 import java.util.List;
 
@@ -36,6 +38,8 @@ public class App extends Application{
             RongIM.setOnReceiveMessageListener(new EliteReceiveMessageListener());
             //注册自定义消息
             RongIM.registerMessageType(EliteMessage.class);
+            RongIM.registerMessageType(RobotMessage.class);
+            RongIM.registerMessageTemplate(new RobotMessageItemProvider());
             //注册自定义用户信息提供者
             RongIM.setUserInfoProvider(new EliteUserInfoProvider(), true);
 
@@ -47,6 +51,7 @@ public class App extends Application{
                 }
             }
             RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule());
+
         }
 
         //初始化百度map

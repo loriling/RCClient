@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="EliteTheme.TextView" parent="android:Widget.TextView">
+
+    </style>
+
+    <!--
+    size:32px color:#353535
+    1、TextMessage 字体
+    2、RichContentMessage 标题字体
+    3、会话列表 title
+    -->
+    <style name="EliteTheme.Message.TextView" parent="EliteTheme.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/elite_rich_title</item>
+    </style>
+
+
+</resources>

@@ -2,6 +2,7 @@ package com.elitecrm.rcclient.util;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.widget.ListView;
 
 import com.elitecrm.rcclient.fragment.RatingFragment;
 
@@ -13,6 +14,8 @@ import java.util.Map;
  */
 
 public class ActivityUtils {
+
+    public static ListView currentListView;
     /**
      * 显示满意度对话框
      */
@@ -53,5 +56,11 @@ public class ActivityUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void scrollToBottom() {
+        if (currentListView != null) {
+            currentListView.setSelection(currentListView.getAdapter().getCount());
+        }
     }
 }

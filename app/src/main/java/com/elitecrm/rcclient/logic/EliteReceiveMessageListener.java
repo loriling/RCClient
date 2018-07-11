@@ -3,8 +3,9 @@ package com.elitecrm.rcclient.logic;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
-import com.elitecrm.rcclient.entity.EliteMessage;
+import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.entity.Session;
+import com.elitecrm.rcclient.message.RobotMessage;
 import com.elitecrm.rcclient.robot.RobotMessageHandler;
 import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
@@ -84,7 +85,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     int result = contentJSON.getInt("result");
                     // 当收到发送的消息返回session不合法时候，认为服务端会话已经关闭了，而客户端由于某些原因没能收到关闭信息
                     // 这时候也去清空会话，并且把原始消息缓存起来，同时发出聊天排队请求
-                    if(result == Constants.Result.INVAILD_CHAT_SESSION_ID) {
+                    if (result == Constants.Result.INVAILD_CHAT_SESSION_ID) {
                         Chat.getInstance().clearRequestAndSession();
                         JSONObject originalMessage = contentJSON.getJSONObject("originalMessage");
                         String objectName = originalMessage.getString("objectName");
@@ -192,12 +193,12 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     int robotType = contentJSON.getInt("robotType");
                     long time = contentJSON.getLong("time");
                     content = RobotMessageHandler.handleMessage(content, robotType);
-                    TextMessage textMessage = TextMessage.obtain(content);
-                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, textMessage, time);
+                    RobotMessage robotMessage = RobotMessage.obtain(content);
+                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, robotMessage, time);
                 } else if (type == Constants.RequestType.ROBOT_TRANSFER_MESSAGE) {
                     int result = contentJSON.getInt("result");
                     InformationNotificationMessage inm = null;
-                    if(result == Constants.Result.SUCCESS){
+                    if (result == Constants.Result.SUCCESS) {
                         int queueLength = contentJSON.optInt("queueLength");
                         if (queueLength == 0) {
                             inm = InformationNotificationMessage.obtain(contentJSON.getString("message"));

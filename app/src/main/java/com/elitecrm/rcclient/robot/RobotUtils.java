@@ -11,16 +11,19 @@ import java.util.regex.Pattern;
  */
 
 public class RobotUtils {
-    private static final Pattern URL_PATTERN = Pattern.compile("【转人工】");
+    private static final Pattern TRANSFER_MANUAL_PATTERN = Pattern.compile("【转人工】");
+    private static final Pattern RECOMMED_PATTERN = Pattern.compile("【[^】]+】");
 
     public static void linkifyUrl(
-            Spannable spannable, TransferManualClickURLSpan.OnClickListener onClickListener) {
-        Matcher m = URL_PATTERN.matcher(spannable);
+            Spannable spannable, RobotMessageClickURLSpan.OnClickListener onClickListener) {
+        Matcher m = RECOMMED_PATTERN.matcher(spannable);
         while (m.find()) {
             String url = spannable.toString().substring(m.start(), m.end());
-            TransferManualClickURLSpan urlSpan = new TransferManualClickURLSpan(url);
+            RobotMessageClickURLSpan urlSpan = new RobotMessageClickURLSpan(url);
             urlSpan.setOnClickListener(onClickListener);
             spannable.setSpan(urlSpan, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
+
+
 }

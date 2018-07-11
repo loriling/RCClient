@@ -7,7 +7,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.AttributeSet;
 
-import io.rong.imkit.utils.RongLinkify;
 import io.rong.imkit.widget.AutoLinkTextView;
 
 /**
@@ -36,11 +35,10 @@ public class RobotAutoLinkTextView extends AutoLinkTextView {
     public void setText(CharSequence text, BufferType type) {
         super.setAutoLinkMask(0);
         //super.setText(text, type);
-
-        RongLinkify.addLinks(this, RongLinkify.ALL);
+        //RongLinkify.addLinks(this, RongLinkify.ALL);
 
         Spannable spannable = new SpannableString(text);
-        RobotUtils.linkifyUrl(spannable, new TransferManualClickHandler());
+        RobotUtils.linkifyUrl(spannable, new RobotMessageClickHandler());
 
         super.setText(spannable, type);
     }

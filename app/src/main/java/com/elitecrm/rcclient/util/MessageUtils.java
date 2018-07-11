@@ -3,11 +3,11 @@ package com.elitecrm.rcclient.util;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
-import com.elitecrm.rcclient.entity.EliteMessage;
 import com.elitecrm.rcclient.entity.Request;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.entity.User;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
+import com.elitecrm.rcclient.message.EliteMessage;
 
 import org.json.JSONObject;
 
@@ -105,16 +105,16 @@ public class MessageUtils {
     public static boolean sendTextMessage(String text, String target) {
         try {
             TextMessage textMessage = TextMessage.obtain(text);
-            if(Chat.getInstance().isSessionAvailable()){
+            if (Chat.getInstance().isSessionAvailable()) {
                 JSONObject extraJSON = new JSONObject();
                 extraJSON.put("token", Chat.getInstance().getToken());
                 extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                 textMessage.setExtra(extraJSON.toString());
-                Message message = Message.obtain(target, Conversation.ConversationType.SYSTEM, textMessage);
+                Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, textMessage);
                 RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
                 return true;
             } else {
-                Message message = Message.obtain(target, Conversation.ConversationType.SYSTEM, textMessage);
+                Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, textMessage);
                 Chat.getInstance().addUnsendMessage(message);
                 return true;
             }
@@ -162,6 +162,10 @@ public class MessageUtils {
         return "EliteCRM";
     }
 
+    /**
+     * 发送转人工请求
+     * @return
+     */
     public static boolean sendTransferMessage() {
         try {
             if(Chat.getInstance().isSessionAvailable()){
@@ -185,7 +189,7 @@ public class MessageUtils {
     public static void insertMessage(Conversation.ConversationType type, String targetId, String senderUserId, MessageContent messageContent, long time) {
         Message.ReceivedStatus rs = new Message.ReceivedStatus(1);
         RongIM.getInstance().insertIncomingMessage(type, targetId, senderUserId, rs, messageContent, null);
-
+        ActivityUtils.scrollToBottom();
 //        RongIM.getInstance().insertMessage(type, targetId, senderUserId, messageContent, null);
     }
 

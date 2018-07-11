@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.elitecrm.rcclient.robot.RobotAutoLinkTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@android:id/text1"
+    style="@style/EliteTheme.Message.TextView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:autoLink="web|email|phone"
+    android:gravity="center_vertical|start"
+    android:textColorLink="#2972ab"
+    app:RCMaxWidth="235dp"
+    android:paddingLeft="9dp" />

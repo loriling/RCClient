@@ -9,10 +9,10 @@ import android.view.View;
  */
 
 @SuppressLint("ParcelCreator")
-public class TransferManualClickURLSpan extends URLSpan {
+public class RobotMessageClickURLSpan extends URLSpan {
     private OnClickListener mOnClickListener;
 
-    public TransferManualClickURLSpan(String url) {
+    public RobotMessageClickURLSpan(String url) {
         super(url);
     }
 

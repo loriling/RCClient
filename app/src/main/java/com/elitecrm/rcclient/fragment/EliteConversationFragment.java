@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 
+import com.elitecrm.rcclient.R;
 import com.elitecrm.rcclient.baidumap.BaiduLocationListActivity;
+import com.elitecrm.rcclient.util.ActivityUtils;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
@@ -18,23 +21,22 @@ import io.rong.message.LocationMessage;
  * Created by Loriling on 2017/2/15.
  */
 
-public class EliteConversationFragment extends ConversationFragment implements RongIM.LocationProvider,RongIM.ConversationBehaviorListener{
+public class EliteConversationFragment extends ConversationFragment implements RongIM.LocationProvider,RongIM.ConversationClickListener{
+
+    private ListView listView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //设置地理位置监听事件
         RongIM.setLocationProvider(this);
-        RongIM.setConversationBehaviorListener(this);//设置会话界面操作的监听器。
+        RongIM.setConversationClickListener(this);//设置会话界面操作的监听器。
     }
 
     @Override
-    public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-        return false;
-    }
-
-    @Override
-    public boolean onUserPortraitLongClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo) {
-        return false;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView = (ListView) view.findViewById(R.id.rc_list);
+        ActivityUtils.currentListView = listView;
     }
 
     @Override
@@ -51,11 +53,6 @@ public class EliteConversationFragment extends ConversationFragment implements R
     }
 
     @Override
-    public boolean onMessageLinkClick(Context context, String s) {
-        return false;
-    }
-
-    @Override
     public boolean onMessageLongClick(Context context, View view, Message message) {
         return false;
     }
@@ -63,5 +60,20 @@ public class EliteConversationFragment extends ConversationFragment implements R
     @Override
     public void onStartLocation(Context context, LocationCallback locationCallback) {
 
+    }
+
+    @Override
+    public boolean onUserPortraitClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo, String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onUserPortraitLongClick(Context context, Conversation.ConversationType conversationType, UserInfo userInfo, String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onMessageLinkClick(Context context, String s, Message message) {
+        return false;
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.elitecrm.rcclient.EliteChat;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
+import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.MessageUtils;
 

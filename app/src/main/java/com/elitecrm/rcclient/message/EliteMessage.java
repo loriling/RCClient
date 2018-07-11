@@ -1,4 +1,4 @@
-package com.elitecrm.rcclient.entity;
+package com.elitecrm.rcclient.message;
 
 import android.os.Parcel;
 import android.text.TextUtils;
@@ -63,7 +63,7 @@ public class EliteMessage extends MessageContent {
         }
     }
 
-    protected EliteMessage() {
+    public EliteMessage() {
     }
 
     public static EliteMessage obtain(String message) {
