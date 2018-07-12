@@ -189,7 +189,6 @@ public class MessageUtils {
     public static void insertMessage(Conversation.ConversationType type, String targetId, String senderUserId, MessageContent messageContent, long time) {
         Message.ReceivedStatus rs = new Message.ReceivedStatus(1);
         RongIM.getInstance().insertIncomingMessage(type, targetId, senderUserId, rs, messageContent, null);
-        ActivityUtils.scrollToBottom();
 //        RongIM.getInstance().insertMessage(type, targetId, senderUserId, messageContent, null);
     }
 

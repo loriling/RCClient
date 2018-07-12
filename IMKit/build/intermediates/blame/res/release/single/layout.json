@@ -24,12 +24,12 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout\\abc_popup_menu_item_layout.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_item_group_information_notification_message.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_group_information_notification_message.xml"
-    },
-    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_ext_emoji_pager.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_ext_emoji_pager.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_item_group_information_notification_message.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_group_information_notification_message.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_cs_evaluate.xml",
@@ -40,36 +40,36 @@
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_fragment_base_setting.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_ext_emoticon_tab_item.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_ext_emoticon_tab_item.xml"
-    },
-    {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_layout_network_unavailable.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_layout_network_unavailable.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\select_dialog_multichoice_material.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout\\select_dialog_multichoice_material.xml"
-    },
-    {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_toolbar.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout\\abc_screen_toolbar.xml"
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_ext_emoticon_tab_item.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_ext_emoticon_tab_item.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_input_pager_layout.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_input_pager_layout.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_cs_single_choice_layout.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_cs_single_choice_layout.xml"
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\abc_screen_toolbar.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout\\abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\select_dialog_multichoice_material.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout\\select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_item_rich_content_message.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_rich_content_message.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_item_text_message.xml",
         "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_text_message.xml"
     },
     {
-        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_item_rich_content_message.xml",
-        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_item_rich_content_message.xml"
+        "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_cs_single_choice_layout.xml",
+        "source": "H:\\androidProjects\\RCClient\\IMKit\\src\\main\\res\\layout\\rc_cs_single_choice_layout.xml"
     },
     {
         "merged": "H:\\androidProjects\\RCClient\\IMKit\\build\\intermediates\\res\\merged\\release\\layout\\rc_base_activity_layout.xml",

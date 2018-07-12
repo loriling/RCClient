@@ -8,13 +8,14 @@ import android.widget.ListView;
 
 import com.elitecrm.rcclient.R;
 import com.elitecrm.rcclient.baidumap.BaiduLocationListActivity;
-import com.elitecrm.rcclient.util.ActivityUtils;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
+import io.rong.imlib.model.MessageContent;
 import io.rong.imlib.model.UserInfo;
+import io.rong.message.InformationNotificationMessage;
 import io.rong.message.LocationMessage;
 
 /**
@@ -36,7 +37,6 @@ public class EliteConversationFragment extends ConversationFragment implements R
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         listView = (ListView) view.findViewById(R.id.rc_list);
-        ActivityUtils.currentListView = listView;
     }
 
     @Override
@@ -75,5 +75,21 @@ public class EliteConversationFragment extends ConversationFragment implements R
     @Override
     public boolean onMessageLinkClick(Context context, String s, Message message) {
         return false;
+    }
+
+    public void onEventMainThread(io.rong.imlib.model.Message msg) {
+        super.onEventMainThread(msg);
+        MessageContent messageContent = msg.getContent();
+        //如果是InformationNotificationMessage消息，则触发滚动到底部
+        if (messageContent instanceof InformationNotificationMessage) {
+            listView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (getActivity() != null && listView != null) {
+                        listView.setSelection(listView.getAdapter().getCount());
+                    }
+                }
+            });
+        }
     }
 }
