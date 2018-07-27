@@ -56,9 +56,13 @@ public class RobotMessageHandler {
                             }
                         }
                     } else if (state == 3) {//state=3时表示问题无法识别。answers为空，recommend可能非空，hot_questions可能非空（如果配置了渠道热门问题则非空）
-                        content = "问题无法识别\n【转人工】";
+                        boolean transToHuman = dataJSON.optBoolean("trans_to_human");
+                        if (transToHuman) {
+                            content = "亲，由于这个问题暂时无法解答，给你带来不便非常抱歉，是否为您转人工服务呢！ 【转人工】";
+                        } else {
+                            content = "亲，能否重新阐述一下，这能让我更好的为您解答问题！";
+                        }
                     }
-
                 } else if (errorCode == 1) {
                     content = "其他错误";
                 } else if (errorCode == 100025) {
