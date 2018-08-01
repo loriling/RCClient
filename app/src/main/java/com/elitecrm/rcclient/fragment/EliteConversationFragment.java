@@ -87,10 +87,8 @@ public class EliteConversationFragment extends ConversationFragment implements R
                 @Override
                 public void run() {
                     if (getActivity() != null && listView != null) {
-                        //listView.setSelection(listView.getAdapter().getCount());
-                        listView.setTranscriptMode(2);
-                        listView.smoothScrollToPosition(listView.getAdapter().getCount());
-                        listView.setTranscriptMode(0);
+                        listView.setSelection(listView.getAdapter().getCount());
+                        listView.getRootView().requestLayout();
                     }
                 }
             });
