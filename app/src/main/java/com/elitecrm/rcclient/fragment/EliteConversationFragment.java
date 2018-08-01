@@ -8,6 +8,7 @@ import android.widget.ListView;
 
 import com.elitecrm.rcclient.R;
 import com.elitecrm.rcclient.baidumap.BaiduLocationListActivity;
+import com.elitecrm.rcclient.message.RobotMessage;
 
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
@@ -80,8 +81,8 @@ public class EliteConversationFragment extends ConversationFragment implements R
     public void onEventMainThread(io.rong.imlib.model.Message msg) {
         super.onEventMainThread(msg);
         MessageContent messageContent = msg.getContent();
-        //如果是InformationNotificationMessage消息，则触发滚动到底部
-        if (messageContent instanceof InformationNotificationMessage) {
+        //如果是InformationNotificationMessage或者RobotMessage消息，则触发滚动到底部
+        if (messageContent instanceof InformationNotificationMessage || messageContent instanceof RobotMessage) {
             listView.post(new Runnable() {
                 @Override
                 public void run() {
