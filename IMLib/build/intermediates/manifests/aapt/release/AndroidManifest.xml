@@ -29,7 +29,7 @@
             android:name="RONG_CLOUD_APP_KEY"
             android:value="6tnym1br6tba7" />
 
-        <!-- 118.242.18.190: pgyu6atqpg77u -->
+        <!-- dev.elitecrm.com: pgyu6atqpg77u -->
         <!--
              <meta-data
             android:name="RONG_CLOUD_APP_KEY"

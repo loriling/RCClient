@@ -32,7 +32,7 @@
         <!-- 192.168.2.80: 6tnym1br6tba7 -->
         <meta-data
             android:name="RONG_CLOUD_APP_KEY"
-            android:value="6tnym1br6tba7" /> <!-- 118.242.18.190: pgyu6atqpg77u -->
+            android:value="6tnym1br6tba7" /> <!-- dev.elitecrm.com: pgyu6atqpg77u -->
         <!--
              <meta-data
             android:name="RONG_CLOUD_APP_KEY"

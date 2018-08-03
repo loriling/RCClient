@@ -1,6 +1,8 @@
 # RCClient
 EliteWebChat与融云Android SDK app集成
 
+融云版本最新升级到了2.9.1
+
 此项目是一个完整的Android APP示例，clone下来后，按融云的文档，下载IMLib和IMKit（目前版本是2.8.14）
 1. 在IMLib的AndroidManifest.xml中配置融云APP_KEY
 2. 如果需要地图功能，在自己App的AndroidManifest.xml中配置相关地图的API_KEY
