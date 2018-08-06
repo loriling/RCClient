@@ -35,6 +35,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
     public boolean onReceived(Message message, int left) {
         String objName = message.getObjectName();
         MessageContent messageConetent = message.getContent();
+        long receivedTime = message.getReceivedTime();
 
         if(objName.equals("E:Msg")) {//所有的状态通知
             EliteMessage eliteMessage = new EliteMessage(messageConetent.encode());
@@ -74,7 +75,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         }
                     }
                     if (inm != null)
-                        insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm);
+                        insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm, receivedTime);
                 } else if (type == Constants.RequestType.CANCEL_CHAT_REQUEST) {
 
                 } else if (type == Constants.RequestType.CLOSE_SESSION) {
@@ -127,7 +128,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         informationMessage = InformationNotificationMessage.obtain("请求超时");
                     }
                     if (informationMessage != null) {
-                        insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage);
+                        insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, receivedTime);
                     }
                 } else if (type == Constants.RequestType.CHAT_STARTED) {
                     long sessionId = contentJSON.getLong("sessionId");
@@ -144,7 +145,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     session.setRobotMode(robotMode);
 
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("坐席[" + name + "]为您服务");
-                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage);
+                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, receivedTime);
                     Chat.getInstance().sendUnsendMessages();
                 } else if (type == Constants.RequestType.AGENT_PUSH_RATING) {
                     // 坐席推送满意度处理
@@ -167,7 +168,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                 } else if (type == Constants.RequestType.AGENT_CLOSE_SESSION) {
                     Chat.getInstance().clearRequestAndSession();
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("会话结束");
-                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage);
+                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, receivedTime);
                 } else if (type == Constants.RequestType.AGENT_SEND_MESSAGE) {
                     String agentId = contentJSON.getString("agentId");
                     JSONObject msgJSON = contentJSON.getJSONObject("msg");
@@ -179,7 +180,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                                 noticeType == Constants.NoticeMessageType.AFK_ELAPSED_NOTIFY) {
                             String content = msgJSON.getString("content");
                             TextMessage textMessage = TextMessage.obtain(content);
-                            insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, textMessage);
+                            insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, textMessage, receivedTime);
                         } else if (noticeType == Constants.NoticeMessageType.INVITE_NOTICE ||
                                 noticeType == Constants.NoticeMessageType.TRANSFER_NOTICE) {//转接或者邀请的消息作为通知类消息
                             //String content = msgJSON.getString("content");
@@ -191,10 +192,9 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     String agentId = Chat.getInstance().getSession().getAgent().getId();
                     String content = contentJSON.getString("content");
                     int robotType = contentJSON.getInt("robotType");
-                    long time = contentJSON.getLong("time");
                     content = RobotMessageHandler.handleMessage(content, robotType);
                     RobotMessage robotMessage = RobotMessage.obtain(content);
-                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, robotMessage, time);
+                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, robotMessage, receivedTime);
                 } else if (type == Constants.RequestType.ROBOT_TRANSFER_MESSAGE) {
                     int result = contentJSON.getInt("result");
                     InformationNotificationMessage inm = null;
@@ -208,7 +208,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     } else {
                         inm = InformationNotificationMessage.obtain(contentJSON.optString("message"));
                     }
-                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm);
+                    insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm, receivedTime);
                 }
             } catch (Exception e) {
                 Log.e(Constants.LOG_TAG, "EliteReceiveMessageListener.onReceived: " + e.getMessage());
