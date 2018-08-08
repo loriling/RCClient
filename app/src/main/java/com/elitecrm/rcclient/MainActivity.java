@@ -11,12 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.elitecrm.rcclient.entity.Chat;
-import com.elitecrm.rcclient.util.MessageUtils;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
 public class MainActivity extends Activity {
+    private EditText serverAddrEditText;
     private EditText userIdEditText;
     private EditText nameEditText;
     private EditText portraitUriEditText;
@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        serverAddrEditText = (EditText)findViewById(R.id.serverAddrEdittext);
         userIdEditText = (EditText)findViewById(R.id.userIdEdittext);
         nameEditText = (EditText)findViewById(R.id.nameEdittext);
         portraitUriEditText = (EditText)findViewById(R.id.portraitUriEdittext);
@@ -44,6 +45,8 @@ public class MainActivity extends Activity {
         });
 
         sharedPreferences = this.getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
+        String serverAddr = sharedPreferences.getString("serverAddr", "http://dev.elitecrm.com/webchat");
+        serverAddrEditText.setText(serverAddr);
         String userId = sharedPreferences.getString("userId", "");
         userIdEditText.setText(userId);
         String name = sharedPreferences.getString("name", "");
@@ -58,6 +61,8 @@ public class MainActivity extends Activity {
         startChatBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                String serverAddr = serverAddrEditText.getText().toString();
+                editor.putString("serverAddr", serverAddr);
                 String userId = userIdEditText.getText().toString();
                 editor.putString("userId", userId);
                 String name = nameEditText.getText().toString();
@@ -69,8 +74,8 @@ public class MainActivity extends Activity {
                 int queueId = Integer.parseInt(queueIdEditText.getText().toString());
                 editor.putInt("queueId", queueId);
 
-                String target = "1919";
-                MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
+                String target = "Elite";
+                //MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
                 //MessageUtils.sendTextMessage("firstMsg", target);
                 if (Chat.getInstance().isSessionAvailable()) {
                     if(Chat.getInstance().isTokenValid()) {
@@ -78,7 +83,7 @@ public class MainActivity extends Activity {
                         return;
                     }
                 }
-                EliteChat.initAndStart(getResources().getString(R.string.app_server_addr), userId, name, portraitUri, target, v.getContext(), queueId, null, "APP");
+                EliteChat.initAndStart(serverAddr, userId, name, portraitUri, target, v.getContext(), queueId, null, "APP");
             }
         });
 
