@@ -92,10 +92,11 @@ public class Chat {
         this.setClient(client);
     }
 
-    public Request initRequest(int queueId, String from) {
+    public Request initRequest(int queueId, String from, String tracks) {
         Request request = new Request(queueId);
         request.setFrom(from);
         request.setStatus(Constants.RequestStatus.WAITING);
+        request.setTracks(tracks);
         this.setRequest(request);
         return request;
     }

@@ -47,13 +47,19 @@ public class RobotMessageHandler {
                         if (answersJSON != null && answersJSON.length() > 0) {
                             content = answersJSON.get(0).toString();
                         }
+                        String question = dataJSON.optString("question");
+                        if ("转接人工".equals(question)) {
+                            content += "\n【转人工】";
+                        }
                     } else if (state == 2) {//state=2时表示问题无法进准识别。可推荐相识问题。answers为空，hot_questions为空，recommend可能非空
                         JSONArray recommendJSON = dataJSON.getJSONArray("recommend");
                         if (recommendJSON != null && recommendJSON.length() > 0) {
-                            content = "您是否想问: ";
-                            for (int i = 0; i < recommendJSON.length(); i++) {
-                                content += "\n【" + recommendJSON.get(i).toString() + "】";
+                            content = "亲，你是不是要咨询以下问题:";
+                            int i = 0;
+                            for (; i < recommendJSON.length(); i++) {
+                                content += "\n【" + (i + 1) + recommendJSON.get(i).toString() + "】";
                             }
+                            content += "\n【" + (i + 1) + "转人工】";
                         }
                     } else if (state == 3) {//state=3时表示问题无法识别。answers为空，recommend可能非空，hot_questions可能非空（如果配置了渠道热门问题则非空）
                         boolean transToHuman = dataJSON.optBoolean("trans_to_human");

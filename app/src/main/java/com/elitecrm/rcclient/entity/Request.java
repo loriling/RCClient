@@ -11,6 +11,7 @@ public class Request {
     private String brand;
     private String from;
     private int status;
+    private String tracks;
 
     public Request(){
 
@@ -66,4 +67,13 @@ public class Request {
     public void setFrom(String from) {
         this.from = from;
     }
+
+    public String getTracks() {
+        return tracks;
+    }
+
+    public void setTracks(String tracks) {
+        this.tracks = tracks;
+    }
+
 }

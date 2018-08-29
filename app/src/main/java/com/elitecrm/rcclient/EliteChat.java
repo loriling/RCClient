@@ -44,10 +44,10 @@ public class EliteChat {
      * @param ngsAddr ngs服务地址
      * @param from 请求来源
      */
-    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from) {
+    public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
         EliteChat.context = context;
         if (Chat.getInstance().isTokenValid() && RongIMClient.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
-            Chat.getInstance().initRequest(queueId, from);
+            Chat.getInstance().initRequest(queueId, from, tracks);
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
@@ -57,18 +57,18 @@ public class EliteChat {
             if(ngsAddr != null) {
                 EliteChat.setNgsAddr(ngsAddr);
             }
-            Chat.getInstance().initRequest(queueId, from);
+            Chat.getInstance().initRequest(queueId, from, tracks);
             startChatOnReady = true;
             new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
         }
     }
 
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr) {
-        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr, "APP");
+        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr, "APP", "");
     }
 
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId) {
-        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, null, "APP");
+        initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, null, "APP", "");
     }
 
     /**
