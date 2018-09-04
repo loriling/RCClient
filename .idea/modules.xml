@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/IMKit/IMKit.iml" filepath="$PROJECT_DIR$/IMKit/IMKit.iml" />
       <module fileurl="file://$PROJECT_DIR$/IMLib/IMLib.iml" filepath="$PROJECT_DIR$/IMLib/IMLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/RCClient.iml" filepath="$PROJECT_DIR$/RCClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sight/Sight.iml" filepath="$PROJECT_DIR$/Sight/Sight.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

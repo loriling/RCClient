@@ -17,6 +17,7 @@ import java.util.List;
 import io.rong.imkit.IExtensionModule;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
+import io.rong.sight.SightExtensionModule;
 
 /**
  * Created by Loriling on 2017/2/3.
@@ -32,12 +33,15 @@ public class App extends Application{
          */
         if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext())) ||
                 "io.rong.push".equals(getCurProcessName(getApplicationContext()))) {
+
+
             //初始化融云
             RongIM.init(this);
             //注册接收消息监听器
             RongIM.setOnReceiveMessageListener(new EliteReceiveMessageListener());
             //注册自定义消息
             RongIM.registerMessageType(EliteMessage.class);
+            //注册机器人消息
             RongIM.registerMessageType(RobotMessage.class);
             RongIM.registerMessageTemplate(new RobotMessageItemProvider());
             //注册自定义用户信息提供者
@@ -45,13 +49,14 @@ public class App extends Application{
 
             //注册自定义扩展模块，先去除默认扩展，再注册自定义扩展
             List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();
-            if(extensionModules != null) {
-                for(IExtensionModule extensionModule : extensionModules) {
+            if (extensionModules != null) {
+                for (IExtensionModule extensionModule : extensionModules) {
                     RongExtensionManager.getInstance().unregisterExtensionModule(extensionModule);
                 }
             }
             RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule());
-
+            //启动小视频消息，小视频消息需要额外收费，如果不需要使用则注释掉下面这句
+            RongExtensionManager.getInstance().registerExtensionModule(new SightExtensionModule());
         }
 
         //初始化百度map

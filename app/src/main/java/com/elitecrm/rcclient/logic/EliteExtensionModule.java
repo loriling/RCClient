@@ -18,10 +18,14 @@ import io.rong.imlib.model.Conversation;
  */
 
 public class EliteExtensionModule extends DefaultExtensionModule {
+    List<IPluginModule> pluginModuleList = new ArrayList<>();
+
+    public void addModule(IPluginModule module) {
+        pluginModuleList.add(module);
+    }
 
     @Override
     public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {
-        List<IPluginModule> pluginModuleList = new ArrayList<>();
         ImagePlugin image = new ImagePlugin();
         FilePlugin file = new FilePlugin();
         pluginModuleList.add(image);

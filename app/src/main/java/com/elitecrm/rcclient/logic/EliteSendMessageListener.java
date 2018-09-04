@@ -15,6 +15,7 @@ import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
+import io.rong.sight.message.SightMessage;
 
 /**
  * Created by Loriling on 2017/2/9.
@@ -30,7 +31,8 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                         messageContent instanceof VoiceMessage ||
                         messageContent instanceof LocationMessage ||
                         messageContent instanceof ImageMessage ||
-                        messageContent instanceof FileMessage) {
+                        messageContent instanceof FileMessage ||
+                        messageContent instanceof SightMessage) {
                     JSONObject messageExtraJSON = new JSONObject();
                     messageExtraJSON.put("token", Chat.getInstance().getToken());
                     if(Chat.getInstance().isSessionAvailable()){ // 有session时候
@@ -42,7 +44,7 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                         //Chat.addUnsendMessage(message);
                         //return message;
                     }
-                    if(messageContent instanceof TextMessage) {
+                    if (messageContent instanceof TextMessage) {
                         TextMessage textMessage = (TextMessage) messageContent;
                         textMessage.setExtra(messageExtraJSON.toString());
                     } else if (messageContent instanceof VoiceMessage) {
@@ -64,6 +66,9 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                     } else if (messageContent instanceof FileMessage) {
                         FileMessage fileMessage = (FileMessage)messageContent;
                         fileMessage.setExtra(messageExtraJSON.toString());
+                    } else if (messageContent instanceof SightMessage) {
+                        SightMessage sightMessage = (SightMessage) messageContent;
+                        sightMessage.setExtra(messageExtraJSON.toString());
                     }
                 }
             } catch (Exception e) {
