@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.rong.imkit.DefaultExtensionModule;
-import io.rong.imkit.manager.InternalModuleManager;
+import io.rong.imkit.RongIM;
 import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imkit.plugin.ImagePlugin;
 import io.rong.imkit.widget.provider.FilePlugin;
 import io.rong.imlib.model.Conversation;
+import io.rong.sight.SightPlugin;
+import io.rong.sight.message.SightMessage;
+import io.rong.sight.message.SightMessageItemProvider;
 
 /**
  * Created by Loriling on 2017/2/9.
@@ -18,18 +21,21 @@ import io.rong.imlib.model.Conversation;
  */
 
 public class EliteExtensionModule extends DefaultExtensionModule {
-    List<IPluginModule> pluginModuleList = new ArrayList<>();
+    List<IPluginModule> pluginModuleList;
+    private boolean enableSight;
 
-    public void addModule(IPluginModule module) {
-        pluginModuleList.add(module);
+    public EliteExtensionModule(boolean enableSight) {
+        this.enableSight = enableSight;
+        if (enableSight) {
+            RongIM.registerMessageType(SightMessage.class);
+            RongIM.registerMessageTemplate(new SightMessageItemProvider());
+        }
     }
 
     @Override
     public List<IPluginModule> getPluginModules(Conversation.ConversationType conversationType) {
-        ImagePlugin image = new ImagePlugin();
-        FilePlugin file = new FilePlugin();
-        pluginModuleList.add(image);
-
+        pluginModuleList = new ArrayList<>();
+        pluginModuleList.add(new ImagePlugin());
         //高德地图
 //        try {
 //            String amapClassName = "com.amap.api.netlocation.AMapNetworkLocationClient";
@@ -44,13 +50,11 @@ public class EliteExtensionModule extends DefaultExtensionModule {
 
         //百度地图插件
         pluginModuleList.add(new BaiduLocationPlugin());
+        pluginModuleList.add(new FilePlugin());
 
-        if(conversationType.equals(Conversation.ConversationType.GROUP) || conversationType.equals(Conversation.ConversationType.DISCUSSION) || conversationType.equals(Conversation.ConversationType.PRIVATE)) {
-            pluginModuleList.addAll(InternalModuleManager.getInstance().getExternalPlugins(conversationType));
+        if (this.enableSight) {
+            pluginModuleList.add(new SightPlugin());
         }
-
-        pluginModuleList.add(file);
-
         return pluginModuleList;
     }
 }

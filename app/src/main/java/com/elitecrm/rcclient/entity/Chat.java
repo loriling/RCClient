@@ -24,6 +24,7 @@ import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
+import io.rong.sight.message.SightMessage;
 
 /**
  * Created by Loriling on 2017/2/9.
@@ -135,15 +136,16 @@ public class Chat {
      * 发送之前未送达的消,当排队之前发出的消息,会先缓存起来，如果排上队了，就会补发这些消息
      */
     public void sendUnsendMessages() {
-        if(unsendMessages.size() > 0) {
-            for(Message message : unsendMessages) {
+        if (unsendMessages.size() > 0) {
+            for (Message message : unsendMessages) {
                 MessageContent messageContent = message.getContent();
                 try {
                     if(messageContent instanceof TextMessage ||
                             messageContent instanceof VoiceMessage ||
                             messageContent instanceof ImageMessage ||
                             messageContent instanceof FileMessage ||
-                            messageContent instanceof LocationMessage){
+                            messageContent instanceof LocationMessage ||
+                            messageContent instanceof SightMessage){
                         EliteMessage eliteMessage = new EliteMessage();
                         JSONObject extraJSON = new JSONObject();
                         extraJSON.put("token", Chat.getInstance().getToken());
@@ -178,6 +180,14 @@ public class Chat {
                             extraJSON.put("fileType", fileMessage.getType());
                             extraJSON.put("fileUrl", fileMessage.getFileUrl().toString());
                             extraJSON.put("messageType", Constants.MessageType.FILE);
+                        } else if (messageContent instanceof SightMessage) {
+                            SightMessage sightMessage = (SightMessage)messageContent;
+                            eliteMessage.setMessage(sightMessage.getBase64());
+                            extraJSON.put("name", sightMessage.getName());
+                            extraJSON.put("size", sightMessage.getSize());
+                            extraJSON.put("sightUrl", sightMessage.getMediaUrl().toString());
+                            extraJSON.put("duration", sightMessage.getDuration());
+                            extraJSON.put("messageType", Constants.MessageType.SIGHT);
                         }
                         eliteMessage.setExtra(extraJSON.toString());
                         Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);

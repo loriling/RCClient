@@ -12,6 +12,10 @@ import android.widget.EditText;
 
 import com.elitecrm.rcclient.entity.Chat;
 
+import java.util.List;
+
+import io.rong.imkit.IExtensionModule;
+import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
@@ -80,6 +84,8 @@ public class MainActivity extends Activity {
                 if (Chat.getInstance().isSessionAvailable()) {
                     if(Chat.getInstance().isTokenValid()) {
                         RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), "在线客服");
+                        List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();
+                        System.out.println(extensionModules.size());
                         return;
                     }
                 }

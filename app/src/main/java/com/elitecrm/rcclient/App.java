@@ -17,7 +17,6 @@ import java.util.List;
 import io.rong.imkit.IExtensionModule;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
-import io.rong.sight.SightExtensionModule;
 
 /**
  * Created by Loriling on 2017/2/3.
@@ -54,9 +53,8 @@ public class App extends Application{
                     RongExtensionManager.getInstance().unregisterExtensionModule(extensionModule);
                 }
             }
-            RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule());
-            //启动小视频消息，小视频消息需要额外收费，如果不需要使用则注释掉下面这句
-            RongExtensionManager.getInstance().registerExtensionModule(new SightExtensionModule());
+            //EliteExtensionModule构造中的第一个参数，是否启用小视频，如果启用则传递true
+            RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule(true));
         }
 
         //初始化百度map

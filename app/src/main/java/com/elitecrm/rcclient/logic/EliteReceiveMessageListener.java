@@ -23,6 +23,7 @@ import io.rong.message.InformationNotificationMessage;
 import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
+import io.rong.sight.message.SightMessage;
 
 import static com.elitecrm.rcclient.util.MessageUtils.insertMessage;
 
@@ -103,6 +104,8 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             messageContent = new VoiceMessage(originalMessage.getString("content").getBytes("utf-8"));
                         } else if (objectName.equals(Constants.ObjectName.ELITE_MSG)) {
                             messageContent = new EliteMessage(originalMessage.getString("content").getBytes("utf-8"));
+                        } else if (objectName.equals(Constants.ObjectName.SIGHT_MSG)) {
+                            messageContent = new SightMessage(originalMessage.getString("content").getBytes("utf-8"));
                         }
                         if (messageConetent != null) {
                             Message unsendMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, messageContent);

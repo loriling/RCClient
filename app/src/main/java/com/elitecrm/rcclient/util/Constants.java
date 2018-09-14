@@ -79,15 +79,14 @@ public class Constants {
         int ROBOT_TRANSFER_MESSAGE = 302;
     }
 
-    //1:文本, 2:图片, 3:文件, 4:位置, 5:语音 目前有这五种类型
+    //1:文本, 2:图片, 3:文件, 4:位置, 5:语音 6:小视频
     public interface MessageType {
         int TEXT = 1;
         int IMG = 2;
         int FILE = 3;
         int LOCATION = 4;
         int VOICE = 5;
-        //TODO
-        int VIDEO = 6;
+        int SIGHT = 6;
         int SYSTEM_NOTICE = 99;
     }
 
@@ -111,6 +110,7 @@ public class Constants {
         String IMG_MSG = "RC:ImgMsg";
         String FILE_MSG = "RC:FileMsg";
         String ELITE_MSG = "E:Msg";
+        String SIGHT_MSG = "RC:SightMsg";
     }
 
     public interface RobotEngine {
