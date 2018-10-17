@@ -54,12 +54,12 @@ public class EliteChat {
             RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
         } else {
             EliteChat.initServerAddr(serverAddr);
-            if(ngsAddr != null) {
+            if (ngsAddr != null) {
                 EliteChat.setNgsAddr(ngsAddr);
             }
             Chat.getInstance().initRequest(queueId, from, tracks);
             startChatOnReady = true;
-            new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
+            new FetchTokenTask().execute(serverAddr, userId, name, portraitUri, targetId);
         }
     }
 
@@ -80,7 +80,7 @@ public class EliteChat {
      */
     public static void init(String serverAddr, String userId, String name, String portraitUri, String targetId) {
         EliteChat.initServerAddr(serverAddr);
-        new FetchTokenTask().execute(serverAddr + "/rcs", userId, name, portraitUri, targetId);
+        new FetchTokenTask().execute(serverAddr, userId, name, portraitUri, targetId);
     }
 
     /**
@@ -88,7 +88,7 @@ public class EliteChat {
      * @param context
      */
     public static void switchToChat(Context context, String target) {
-        if(context != null) {
+        if (context != null) {
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -100,6 +100,37 @@ public class EliteChat {
             Log.d(Constants.LOG_TAG, "Switch to chat: " + uri.toString());
             intent.setData(uri);
             context.startActivity(intent);
+        }
+    }
+
+    public static void checkToken(String serverAddr, String token,  String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
+        EliteChat.context = context;
+        new CheckStateTask().execute(serverAddr, token, userId, name, portraitUri, targetId, queueId + "", ngsAddr, from, tracks);
+    }
+
+    /**
+     * 聊天的入口
+     * @param serverAddr
+     * @param token
+     * @param userId
+     * @param name
+     * @param portraitUri
+     * @param targetId
+     * @param context
+     * @param queueId
+     * @param ngsAddr
+     * @param from
+     * @param tracks
+     */
+    public static void startChat(String serverAddr, String token,  String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
+        //检查token是否可用，如果可用则继续之前的使用，不可用则从新init
+        if (Chat.getInstance().isSessionAvailable()) {
+            if (Chat.getInstance().isTokenValid()) {
+                EliteChat.checkToken(serverAddr, token, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
+                return;
+            }
+        } else {
+            EliteChat.initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
         }
     }
 
@@ -116,7 +147,7 @@ public class EliteChat {
                 String name = params[2];
                 String portraitUri = params[3];
                 String targetId = params[4];
-                HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr, "application/json");
+                HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr + "/rcs", "application/json");
                 JSONObject requestJSON = new JSONObject();
                 requestJSON.put("action", "login");
 
@@ -131,7 +162,7 @@ public class EliteChat {
                 HttpUtil.setBodyParameter(body, conn);
                 String resultStr = HttpUtil.returnResult(conn);
                 JSONObject resultJSON = new JSONObject(resultStr);
-                if(1 == resultJSON.getInt("result")){
+                if (1 == resultJSON.getInt("result")) {
                     token = resultJSON.getString("token");
                     Chat.getInstance().setToken(token);
                 }
@@ -186,6 +217,61 @@ public class EliteChat {
                     Log.e(Constants.LOG_TAG, "RongIM.connect onError: " + errorCode);
                 }
             });
+        }
+    }
+
+    /**
+     * 检查当前token是否合法，如果合法继续使用，如果不合法则从新登录
+     */
+    public static class CheckStateTask extends AsyncTask<String, Void, String> {
+        String serverAddr;
+        String userId;
+        String name;
+        String portraitUri;
+        String targetId;
+        int queueId;
+        String ngsAddr;
+        String from;
+        String tracks;
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                serverAddr = params[0];
+                String token = params[1];
+                userId = params[2];
+                name = params[3];
+                portraitUri = params[4];
+                targetId = params[5];
+                queueId = Integer.parseInt(params[6]);
+                ngsAddr = params[7];
+                from = params[8];
+                tracks = params[9];
+                HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr + "/rcs", "application/json");
+                JSONObject requestJSON = new JSONObject();
+                requestJSON.put("action", "check");
+                requestJSON.put("token", token);
+                String body = requestJSON.toString();
+                conn.setRequestProperty("sign", DigestUtils.md5Hex(body + Constants.SecurityKey.PUBLIC_KEY));
+                HttpUtil.setBodyParameter(body, conn);
+                String resultStr = HttpUtil.returnResult(conn);
+                JSONObject resultJSON = new JSONObject(resultStr);
+                if (1 == resultJSON.getInt("result")) {
+                    return "success";
+                }
+            } catch (Exception e) {
+                Log.e(Constants.LOG_TAG, "CheckState: " + e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if ("success".equals(result)) {
+                RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), "在线客服");
+            } else {
+                Chat.getInstance().clear();
+                initAndStart(serverAddr, userId, name, portraitUri, targetId, EliteChat.context, queueId, ngsAddr, from, tracks);
+            }
         }
     }
 

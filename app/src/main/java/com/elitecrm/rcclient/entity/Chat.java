@@ -220,7 +220,7 @@ public class Chat {
     }
 
     public boolean isSessionAvailable(){
-        if(session != null && session.getId() != 0){
+        if (session != null && session.getId() != 0){
             return true;
         }
         return false;
@@ -287,5 +287,13 @@ public class Chat {
     public void setupClient(String userId) {
         client.setId(userId);
         RongIM.getInstance().refreshUserInfoCache(new UserInfo(userId, client.getName(), Uri.parse(client.getIcon())));
+    }
+
+    /**
+     * 清空所有当前缓存
+     */
+    public void clear() {
+        this.token = null;
+        clearRequestAndSession();
     }
 }

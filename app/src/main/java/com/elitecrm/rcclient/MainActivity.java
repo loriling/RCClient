@@ -12,13 +12,6 @@ import android.widget.EditText;
 
 import com.elitecrm.rcclient.entity.Chat;
 
-import java.util.List;
-
-import io.rong.imkit.IExtensionModule;
-import io.rong.imkit.RongExtensionManager;
-import io.rong.imkit.RongIM;
-import io.rong.imlib.model.Conversation;
-
 public class MainActivity extends Activity {
     private EditText serverAddrEditText;
     private EditText userIdEditText;
@@ -81,15 +74,9 @@ public class MainActivity extends Activity {
                 String target = "Elite";
                 //MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
                 //MessageUtils.sendTextMessage("firstMsg", target);
-                if (Chat.getInstance().isSessionAvailable()) {
-                    if(Chat.getInstance().isTokenValid()) {
-                        RongIM.getInstance().startConversation(v.getContext(), Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), "在线客服");
-                        List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();
-                        System.out.println(extensionModules.size());
-                        return;
-                    }
-                }
-                EliteChat.initAndStart(serverAddr, userId, name, portraitUri, target, v.getContext(), queueId, null, "APP", "");
+
+
+                EliteChat.startChat(serverAddr, Chat.getInstance().getToken(), userId, name, portraitUri, target, v.getContext(), queueId, null, "APP", "");
             }
         });
 
