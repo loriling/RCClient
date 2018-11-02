@@ -7,6 +7,7 @@ import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.message.RobotMessage;
 import com.elitecrm.rcclient.robot.RobotMessageHandler;
+import com.elitecrm.rcclient.robot.RobotUtils;
 import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
 
@@ -186,14 +187,15 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, textMessage, receivedTime);
                         } else if (noticeType == Constants.NoticeMessageType.INVITE_NOTICE ||
                                 noticeType == Constants.NoticeMessageType.TRANSFER_NOTICE) {//转接或者邀请的消息作为通知类消息
-                            //String content = msgJSON.getString("content");
-                            //InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain(content);
-                            //insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage);
+                            String content = msgJSON.getString("content");
+                            InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain(content);
+                            insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage);
                         }
                     }
                 } else if (type == Constants.RequestType.ROBOT_MESSAGE) {//机器人消息
                     String agentId = Chat.getInstance().getSession().getAgent().getId();
                     String content = contentJSON.getString("content");
+                    Log.d("robot", "onReceived: " + content);
                     int robotType = contentJSON.getInt("robotType");
                     content = RobotMessageHandler.handleMessage(content, robotType);
                     RobotMessage robotMessage = RobotMessage.obtain(content);
