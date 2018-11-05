@@ -86,6 +86,7 @@ public class RobotMessageHandler {
                 } else {
                     content = "未定义的消息";
                 }
+
 //                int errorCode = contentJSON.getInt("error_code");
 //                if (errorCode == 0) {//success
 ////                    {
