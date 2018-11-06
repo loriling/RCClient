@@ -1,7 +1,7 @@
 # RCClient
 WebChat与融云Android SDK app集成
 
-详细文档：[https://loriling.github.io/EliteCRM/webchat-sdk-guide.html](https://loriling.github.io/EliteCRM/webchat-sdk-guide.html "https://loriling.github.io/EliteCRM/webchat-sdk-guide.html"){:target="_blank"}
+详细文档：<a href="https://loriling.github.io/EliteCRM/webchat-sdk-guide.html" target="_blank">点击这里</a>
 
 融云版本最新升级到了2.9.1
 
