@@ -49,7 +49,7 @@ public class RobotMessageHandler {
                                             robotContent += relatedQuestion.getString("title");
                                         }
                                         for (int j=0; j < relates.length(); j++) {
-                                            JSONObject relate = relates.getJSONObject(i);
+                                            JSONObject relate = relates.getJSONObject(j);
                                             robotContent += "\n" + (j + 1) + "【" + relate.getString("name") + "】";
                                         }
                                     }
