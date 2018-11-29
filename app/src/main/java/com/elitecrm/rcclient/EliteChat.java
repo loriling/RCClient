@@ -126,7 +126,12 @@ public class EliteChat {
         //检查token是否可用，如果可用则继续之前的使用，不可用则从新init
         if (Chat.getInstance().isSessionAvailable()) {
             if (Chat.getInstance().isTokenValid()) {
-                EliteChat.checkToken(serverAddr, token, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
+                if (queueId != Chat.getInstance().getRequest().getQueueId()) {//如果队列改变了，则直接结束之前会话，并开启新的会话
+                    EliteChat.closeSession(serverAddr, Chat.getInstance().getSession().getId(), userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
+                } else {
+                    // 如果队列没变化，则去检查token是否还合法，如果合法则可以直接继续聊天。如果不合法则需要重新登录
+                    EliteChat.checkToken(serverAddr, token, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
+                }
                 return;
             }
         } else {
@@ -279,6 +284,64 @@ public class EliteChat {
         setServerAddr(serverAddr);
         String ngsAddr = serverAddr.substring(0, serverAddr.lastIndexOf("/")) + "/ngs";
         setNgsAddr(ngsAddr);
+    }
+
+    public static void closeSession(String serverAddr, long sessionId,  String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
+        EliteChat.context = context;
+        new CloseSessionTask().execute(serverAddr, sessionId + "", userId, name, portraitUri, targetId, queueId + "", ngsAddr, from, tracks);
+    }
+
+    public static class CloseSessionTask extends AsyncTask<String, Void, String> {
+        String serverAddr;
+        String userId;
+        String name;
+        String portraitUri;
+        String targetId;
+        int queueId;
+        String ngsAddr;
+        String from;
+        String tracks;
+        long sessionId;
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                serverAddr = params[0];
+                sessionId = Long.parseLong(params[1]);
+                userId = params[2];
+                name = params[3];
+                portraitUri = params[4];
+                targetId = params[5];
+                queueId = Integer.parseInt(params[6]);
+                ngsAddr = params[7];
+                from = params[8];
+                tracks = params[9];
+
+                HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr + "/rcs", "application/json");
+                JSONObject requestJSON = new JSONObject();
+                requestJSON.put("action", "closeSession");
+                requestJSON.put("sessionId", sessionId);
+                String body = requestJSON.toString();
+                conn.setRequestProperty("sign", DigestUtils.md5Hex(body + Constants.SecurityKey.PUBLIC_KEY));
+                HttpUtil.setBodyParameter(body, conn);
+                String resultStr = HttpUtil.returnResult(conn);
+                JSONObject resultJSON = new JSONObject(resultStr);
+                if (1 == resultJSON.getInt("result")) {
+                    return "success";
+                }
+            } catch (Exception e) {
+                Log.e(Constants.LOG_TAG, "CloseSession: " + e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if ("success".equals(result)) {
+                Log.e(Constants.LOG_TAG, "CloseSession successful");
+                initAndStart(serverAddr, userId, name, portraitUri, targetId, EliteChat.context, queueId, ngsAddr, from, tracks);
+            }
+        }
     }
 
     public static String getNgsAddr() {
