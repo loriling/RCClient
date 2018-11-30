@@ -44,7 +44,7 @@ public class EliteCloseSessionPlugin implements IPluginModule {
         if (session != null) {
             new CloseSessionTask().execute(EliteChat.getServerAddr(), session.getId() + "");
         } else {
-            InformationNotificationMessage inm = InformationNotificationMessage.obtain("会话以结束");
+            InformationNotificationMessage inm = InformationNotificationMessage.obtain("会话已结束");
             MessageUtils.insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm);
         }
         rongExtension.collapseExtension();
@@ -80,6 +80,7 @@ public class EliteCloseSessionPlugin implements IPluginModule {
         protected void onPostExecute(String result) {
             if ("success".equals(result)) {
                 Log.e(Constants.LOG_TAG, "CloseSession successful");
+                Chat.getInstance().clearRequestAndSession();
                 InformationNotificationMessage inm = InformationNotificationMessage.obtain("会话以结束");
                 MessageUtils.insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, inm);
             }
