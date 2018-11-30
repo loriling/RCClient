@@ -53,8 +53,11 @@ public class App extends Application{
                     RongExtensionManager.getInstance().unregisterExtensionModule(extensionModule);
                 }
             }
-            //EliteExtensionModule构造中的第一个参数，是否启用小视频，如果启用则传递true
-            RongExtensionManager.getInstance().registerExtensionModule(new EliteExtensionModule(true));
+
+            EliteExtensionModule extensionModule = new EliteExtensionModule();
+            extensionModule.setEnableSight(true);// 加号按钮中，开启小视频功能
+            extensionModule.setEnableCloseSession(true);// 加号按钮中，开启客户主动结束聊天功能
+            RongExtensionManager.getInstance().registerExtensionModule(extensionModule);
         }
 
         //初始化百度map

@@ -286,7 +286,7 @@ public class EliteChat {
         setNgsAddr(ngsAddr);
     }
 
-    public static void closeSession(String serverAddr, long sessionId,  String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
+    public static void closeSession(String serverAddr, long sessionId, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
         EliteChat.context = context;
         new CloseSessionTask().execute(serverAddr, sessionId + "", userId, name, portraitUri, targetId, queueId + "", ngsAddr, from, tracks);
     }
@@ -317,14 +317,7 @@ public class EliteChat {
                 from = params[8];
                 tracks = params[9];
 
-                HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr + "/rcs", "application/json");
-                JSONObject requestJSON = new JSONObject();
-                requestJSON.put("action", "closeSession");
-                requestJSON.put("sessionId", sessionId);
-                String body = requestJSON.toString();
-                conn.setRequestProperty("sign", DigestUtils.md5Hex(body + Constants.SecurityKey.PUBLIC_KEY));
-                HttpUtil.setBodyParameter(body, conn);
-                String resultStr = HttpUtil.returnResult(conn);
+                String resultStr = doCloseSession(serverAddr, sessionId);
                 JSONObject resultJSON = new JSONObject(resultStr);
                 if (1 == resultJSON.getInt("result")) {
                     return "success";
@@ -342,6 +335,18 @@ public class EliteChat {
                 initAndStart(serverAddr, userId, name, portraitUri, targetId, EliteChat.context, queueId, ngsAddr, from, tracks);
             }
         }
+    }
+
+    public static String doCloseSession(String serverAddr, long sessionId) throws Exception {
+        HttpURLConnection conn = HttpUtil.createPostHttpConnection(serverAddr + "/rcs", "application/json");
+        JSONObject requestJSON = new JSONObject();
+        requestJSON.put("action", "closeSession");
+        requestJSON.put("sessionId", sessionId);
+        String body = requestJSON.toString();
+        conn.setRequestProperty("sign", DigestUtils.md5Hex(body + Constants.SecurityKey.PUBLIC_KEY));
+        HttpUtil.setBodyParameter(body, conn);
+        String resultStr = HttpUtil.returnResult(conn);
+        return resultStr;
     }
 
     public static String getNgsAddr() {

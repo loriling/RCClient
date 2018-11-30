@@ -23,13 +23,30 @@ import io.rong.sight.message.SightMessageItemProvider;
 public class EliteExtensionModule extends DefaultExtensionModule {
     List<IPluginModule> pluginModuleList;
     private boolean enableSight;
+    private boolean enableCloseSession;
 
-    public EliteExtensionModule(boolean enableSight) {
+    public boolean isEnableSight() {
+        return enableSight;
+    }
+
+    public void setEnableSight(boolean enableSight) {
         this.enableSight = enableSight;
         if (enableSight) {
             RongIM.registerMessageType(SightMessage.class);
             RongIM.registerMessageTemplate(new SightMessageItemProvider());
         }
+    }
+
+    public boolean isEnableCloseSession() {
+        return enableCloseSession;
+    }
+
+    public void setEnableCloseSession(boolean enableCloseSession) {
+        this.enableCloseSession = enableCloseSession;
+    }
+
+    public EliteExtensionModule() {
+
     }
 
     @Override
@@ -55,6 +72,10 @@ public class EliteExtensionModule extends DefaultExtensionModule {
         if (this.enableSight) {
             pluginModuleList.add(new SightPlugin());
         }
+        if (this.enableCloseSession) {
+            pluginModuleList.add(new EliteCloseSessionPlugin());
+        }
+
         return pluginModuleList;
     }
 }
