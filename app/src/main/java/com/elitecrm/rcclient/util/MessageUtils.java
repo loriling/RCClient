@@ -33,19 +33,23 @@ public class MessageUtils {
      * @param request 请求对象
      */
     public static void sendChatRequest(Request request){
-        try{
+        try {
+            String targetId = Chat.getInstance().getClient().getTargetId();
             JSONObject requestJSON = new JSONObject();
             requestJSON.put("messageId", MessageUtils.getNextMessageId());
             requestJSON.put("queueId", request.getQueueId());
             requestJSON.put("brand", request.getBrand());
             requestJSON.put("from", request.getFrom());
+            requestJSON.put("tracks", request.getTracks());
+
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", Chat.getInstance().getToken());
             extraJSON.put("type", Constants.RequestType.SEND_CHAT_REQUEST);
+            extraJSON.put("targetId", targetId);
 
             EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
             eliteMessage.setExtra(extraJSON.toString());
-            Message myMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message myMessage = Message.obtain(targetId, Conversation.ConversationType.SYSTEM, eliteMessage);
             RongIM.getInstance().sendMessage(myMessage, null, null, new EliteSendMessageCallback());
         } catch (Exception e) {}
     }
@@ -188,7 +192,7 @@ public class MessageUtils {
 
     public static void insertMessage(Conversation.ConversationType type, String targetId, String senderUserId, MessageContent messageContent, long time) {
         Message.ReceivedStatus rs = new Message.ReceivedStatus(1);
-        RongIM.getInstance().insertIncomingMessage(type, targetId, senderUserId, rs, messageContent, null);
+        RongIM.getInstance().insertIncomingMessage(type, targetId, senderUserId, rs, messageContent, time, null);
 //        RongIM.getInstance().insertMessage(type, targetId, senderUserId, messageContent, null);
     }
 
