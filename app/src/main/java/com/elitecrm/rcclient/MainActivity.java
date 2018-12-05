@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
     private EditText nameEditText;
     private EditText portraitUriEditText;
     private EditText queueIdEditText;
+    private EditText targetIdEditText;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -40,6 +41,7 @@ public class MainActivity extends Activity {
                 return InputType.TYPE_CLASS_PHONE;
             }
         });
+        targetIdEditText = (EditText)findViewById(R.id.targetIdEdittext);
 
         sharedPreferences = this.getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String serverAddr = sharedPreferences.getString("serverAddr", "http://dev.elitecrm.com/webchat");
@@ -52,6 +54,8 @@ public class MainActivity extends Activity {
         portraitUriEditText.setText(portraitUri);
         int queueId = sharedPreferences.getInt("queueId", 1);
         queueIdEditText.setText(queueId + "");
+        String targetId = sharedPreferences.getString("targetId", "Elite");
+        targetIdEditText.setText(targetId);
 
         Button startChatBtn = (Button) this.findViewById(R.id.startChat);
         startChatBtn.getBackground().setAlpha(150);
@@ -71,10 +75,9 @@ public class MainActivity extends Activity {
                 int queueId = Integer.parseInt(queueIdEditText.getText().toString());
                 editor.putInt("queueId", queueId);
 
-                String target = "Elite";
+                String target = targetIdEditText.getText().toString();
                 //MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
                 //MessageUtils.sendTextMessage("firstMsg", target);
-
 
                 EliteChat.startChat(serverAddr, Chat.getInstance().getToken(), userId, name, portraitUri, target, v.getContext(), queueId, null, "APP", "");
             }

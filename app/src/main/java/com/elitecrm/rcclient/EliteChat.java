@@ -47,11 +47,12 @@ public class EliteChat {
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
         EliteChat.context = context;
         if (Chat.getInstance().isTokenValid() && RongIMClient.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
+            Chat.getInstance().initClient(userId, name, portraitUri, targetId);
             Chat.getInstance().initRequest(queueId, from, tracks);
             //发出聊天排队请求
             Chat.getInstance().sendChatRequest();
             //启动聊天会话界面
-            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), Constants.CHAT_TITLE);
+            RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, targetId, Constants.CHAT_TITLE);
         } else {
             EliteChat.initServerAddr(serverAddr);
             if (ngsAddr != null) {

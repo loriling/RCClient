@@ -168,7 +168,39 @@
                 android:background="@null"
                 android:hint="队列号"
                 android:textSize="15sp" />
+
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/targetIdRel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/queueIdRel"
+            android:clickable="true"
+            android:gravity="center_vertical" >
+
+            <TextView
+                android:id="@+id/targetId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="目标号"
+                android:textColor="#000"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/targetIdEdittext"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dip"
+                android:layout_toRightOf="@id/targetId"
+                android:background="@null"
+                android:hint="目标id"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <Button
