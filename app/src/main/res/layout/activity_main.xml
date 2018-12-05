@@ -184,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="目标号"
+                android:text="房间号"
                 android:textColor="#000"
                 android:textSize="17sp" />
 
@@ -196,7 +196,7 @@
                 android:layout_marginLeft="20dip"
                 android:layout_toRightOf="@id/targetId"
                 android:background="@null"
-                android:hint="目标id"
+                android:hint="房间号"
                 android:textSize="15sp" />
 
         </RelativeLayout>
