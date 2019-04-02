@@ -13,6 +13,7 @@ public class Session {
     private Agent firstAgent;
     private Map<String, Agent> agents = new HashMap<String, Agent>();
     private boolean robotMode = false;
+    private boolean pushRating = false; //是否已经被推送过满意度
 
     public long getId() {
         return id;
@@ -52,6 +53,14 @@ public class Session {
 
     public void setRobotMode(boolean robotMode) {
         this.robotMode = robotMode;
+    }
+
+    public boolean isPushRating() {
+        return pushRating;
+    }
+
+    public void setPushRating(boolean pushRating) {
+        this.pushRating = pushRating;
     }
 
     /**

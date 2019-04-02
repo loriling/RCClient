@@ -3,6 +3,7 @@ package com.elitecrm.rcclient.util;
 import android.app.Activity;
 import android.app.DialogFragment;
 
+import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.fragment.RatingFragment;
 
 import java.lang.reflect.Field;
@@ -16,14 +17,18 @@ public class ActivityUtils {
     /**
      * 显示满意度对话框
      */
-    public static void showRatingDialog(Activity activity){
-        if(activity != null) {
-            DialogFragment ratingFragment = RatingFragment.newInstance();
+    public static void showRatingDialog(Activity activity, long sessionId){
+        if (activity != null) {
+            DialogFragment ratingFragment = RatingFragment.newInstance(sessionId);
             ratingFragment.show(activity.getFragmentManager(), "dialog");
         }
     }
+    public static void showRatingDialog(long sessionId){
+        showRatingDialog(getCurrentActivity(), sessionId);
+    }
+
     public static void showRatingDialog(){
-        showRatingDialog(getCurrentActivity());
+        showRatingDialog(getCurrentActivity(), Chat.getInstance().getSession().getId());
     }
 
     /**

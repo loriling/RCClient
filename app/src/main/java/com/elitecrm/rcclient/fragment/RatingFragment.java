@@ -27,9 +27,19 @@ import io.rong.message.InformationNotificationMessage;
  */
 
 public class RatingFragment extends DialogFragment {
+    private long sessionId;
 
-    public static RatingFragment newInstance() {
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public static RatingFragment newInstance(long sessionId) {
         RatingFragment f = new RatingFragment();
+        f.setSessionId(sessionId);
         return f;
     }
 
@@ -67,7 +77,7 @@ public class RatingFragment extends DialogFragment {
                     ratingId = 1;
                 }
                 EditText et = (EditText) layout.findViewById(R.id.comments);
-                MessageUtils.sendRating(ratingId, et.getText().toString());
+                MessageUtils.sendRating(sessionId, ratingId, et.getText().toString());
 
                 //显示评价结果到聊天界面
                 InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("您的评价是【" + ratingName + "】");

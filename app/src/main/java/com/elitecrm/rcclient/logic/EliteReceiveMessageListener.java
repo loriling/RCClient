@@ -140,6 +140,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     Chat.getInstance().sendUnsendMessages();
                 } else if (type == Constants.RequestType.AGENT_PUSH_RATING) {
                     // 坐席推送满意度处理
+                    Chat.getInstance().setPushRating(true);
                     ActivityUtils.showRatingDialog();
                 } else if (type == Constants.RequestType.AGENT_UPDATED) {
                     // 坐席人员变更处理
@@ -157,6 +158,10 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     //如果收到了坐席人员变更消息，肯定就是指转人工了，也就是不再是机器人服务了（只存在机器人转人工，不存在人工转机器人的情况）
                     Chat.getInstance().getSession().setRobotMode(false);
                 } else if (type == Constants.RequestType.AGENT_CLOSE_SESSION) {
+                    Chat chat = Chat.getInstance();
+                    if (!chat.isPushRating()) {
+                        ActivityUtils.showRatingDialog(chat.getSession().getId());
+                    }
                     Chat.getInstance().clearRequestAndSession();
                     InformationNotificationMessage informationMessage = InformationNotificationMessage.obtain("会话结束");
                     insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, receivedTime);

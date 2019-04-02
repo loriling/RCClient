@@ -243,6 +243,26 @@ public class Chat {
     }
 
     /**
+     * 设置当前会话已经推送了满意度
+     */
+    public void setPushRating(boolean pushRating) {
+        if (session != null) {
+            session.setPushRating(pushRating);
+        }
+    }
+
+    /**
+     * 查看当前会话是否已经被推送过满意度
+     * @return
+     */
+    public boolean isPushRating() {
+        if (session != null) {
+            return session.isPushRating();
+        }
+        return false;
+    }
+
+    /**
      * 设置请求id为0，同时清空会话对象
      * 请求对象不能直接清空，因为请求对象中存储着排队的队列号，要供下次排队时候使用
      */

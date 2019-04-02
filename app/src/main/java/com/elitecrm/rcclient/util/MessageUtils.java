@@ -65,14 +65,15 @@ public class MessageUtils {
 
     /**
      * 发送满意度消息
+     * @param sessionId 会话id
      * @param ratingId 满意度id
      * @param comments 满意度comments
      */
-    public static void sendRating(int ratingId, String comments) {
+    public static void sendRating(long sessionId, int ratingId, String comments) {
         try{
             JSONObject extraJSON = new JSONObject();
             extraJSON.put("token", Chat.getInstance().getToken());
-            extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
+            extraJSON.put("sessionId", sessionId);
             extraJSON.put("type", Constants.RequestType.RATE_SESSION);
             JSONObject requestJSON = new JSONObject();
             requestJSON.put("ratingId", ratingId);
