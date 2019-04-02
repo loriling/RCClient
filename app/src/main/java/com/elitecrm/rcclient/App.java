@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.logic.EliteExtensionModule;
 import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
 import com.elitecrm.rcclient.logic.EliteUserInfoProvider;
@@ -34,6 +35,8 @@ public class App extends Application{
                 "io.rong.push".equals(getCurProcessName(getApplicationContext()))) {
 
 
+            //初始化chat
+            Chat.init(this);
             //初始化融云
             RongIM.init(this);
             //注册接收消息监听器

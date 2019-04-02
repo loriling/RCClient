@@ -1,8 +1,10 @@
 package com.elitecrm.rcclient.util;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
+import com.elitecrm.rcclient.entity.MessageSO;
 import com.elitecrm.rcclient.entity.Request;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.entity.User;
@@ -11,12 +13,19 @@ import com.elitecrm.rcclient.message.EliteMessage;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
+import io.rong.message.FileMessage;
+import io.rong.message.ImageMessage;
 import io.rong.message.InformationNotificationMessage;
+import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
+import io.rong.message.VoiceMessage;
+import io.rong.sight.message.SightMessage;
 
 /**
  * Created by ThinkPad on 2017/2/8.
@@ -119,6 +128,7 @@ public class MessageUtils {
                 return true;
             } else {
                 Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, textMessage);
+                message.setObjectName(Constants.ObjectName.TXT_MSG);
                 Chat.getInstance().addUnsendMessage(message);
                 return true;
             }
@@ -143,6 +153,7 @@ public class MessageUtils {
             eliteMessage.setExtra(extraJSON.toString());
 
             Message custMessage = Message.obtain(target, Conversation.ConversationType.SYSTEM, eliteMessage);
+            custMessage.setObjectName(Constants.ObjectName.ELITE_MSG);
             return custMessage;
         } catch (Exception e) {
             Log.e(Constants.LOG_TAG, "MessageUtils.generateEliteMessage: " + e.getMessage());
@@ -198,5 +209,47 @@ public class MessageUtils {
 
     public static void insertMessage(Conversation.ConversationType type, String targetId, String senderUserId, MessageContent messageContent) {
         insertMessage(type, targetId, senderUserId, messageContent, System.currentTimeMillis());
+    }
+
+    public static MessageSO marshal(Message message) {
+        MessageSO messageSO = new MessageSO();
+        messageSO.setTargetId(message.getTargetId());
+        messageSO.setConversationType(message.getConversationType().getValue());
+        messageSO.setObjectName(message.getObjectName());
+        try {
+            messageSO.setContent(new String(message.getContent().encode(), "utf-8"));
+        } catch (UnsupportedEncodingException e) {}
+        return messageSO;
+    }
+
+    public static Message unmarshal(String targetId, int conversationType, String objectName, String content) {
+        try {
+            MessageContent messageContent = generateMessageContent(objectName, content);
+            return Message.obtain(targetId, Conversation.ConversationType.setValue(conversationType), messageContent);
+        } catch (UnsupportedEncodingException e) {}
+        return null;
+    }
+    public static Message unmarshal(MessageSO messageSO) {
+        return unmarshal(messageSO.getTargetId(), messageSO.getConversationType(), messageSO.getObjectName(), messageSO.getContent());
+    }
+
+    public static MessageContent generateMessageContent(String objectName, String content) throws UnsupportedEncodingException {
+        MessageContent messageContent = null;
+        if (objectName.equals(Constants.ObjectName.TXT_MSG)) {
+            messageContent = new TextMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.IMG_MSG)) {
+            messageContent = new ImageMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.FILE_MSG)) {
+            messageContent = new FileMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.LBS_MSG)) {
+            messageContent = new LocationMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.VC_MSG)) {
+            messageContent = new VoiceMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.ELITE_MSG)) {
+            messageContent = new EliteMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.SIGHT_MSG)) {
+            messageContent = new SightMessage(content.getBytes("utf-8"));
+        }
+        return messageContent;
     }
 }

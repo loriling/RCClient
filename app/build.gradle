@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'elite'
             keyPassword 'letmein'
-            storeFile file('H:/androidProjects/elite.jks')
+            storeFile file('E:/Android/elite.jks')
             storePassword 'letmein'
         }
     }

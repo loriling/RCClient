@@ -22,21 +22,23 @@
 
         <!-- imlib config begin -->
         <!-- 192.168.2.80: 6tnym1br6tba7 -->
-        <!--
+
         <meta-data
             android:name="RONG_CLOUD_APP_KEY"
             android:value="6tnym1br6tba7" />
-        -->
+
         <!-- demo.elitecrm.com: pgyu6atqpg77u -->
         <!--
         <meta-data
             android:name="RONG_CLOUD_APP_KEY"
             android:value="pgyu6atqpg77u" />-->
+
         <!-- dev.elitecrm.com: tdrvipkstxe95 -->
+<!--
         <meta-data
             android:name="RONG_CLOUD_APP_KEY"
             android:value="tdrvipkstxe95" />
-
+-->
         <service
             android:name="io.rong.imlib.ipc.RongService"
             android:exported="true"

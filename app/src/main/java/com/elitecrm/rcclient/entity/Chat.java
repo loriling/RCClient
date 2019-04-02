@@ -1,5 +1,6 @@
 package com.elitecrm.rcclient.entity;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
 import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.MessageUtils;
+import com.elitecrm.rcclient.util.sqlite.DBManager;
 
 import org.json.JSONObject;
 
@@ -31,13 +33,13 @@ import io.rong.sight.message.SightMessage;
  */
 
 public class Chat {
-    // 最大为发送消息存储量，缓存过多消息怕出问题
-    private static final int MAX_UNSEND_MESSAGES = 20;
+
+    private Context context;
     private String token;
     private Request request;
     private Client client;
     private Session session;
-    private List<Message> unsendMessages = new ArrayList<>();
+    private DBManager db;
 
     private static Chat chat;
 
@@ -73,14 +75,24 @@ public class Chat {
         this.token = token;
     }
 
-    private Chat() {
+    public DBManager getDb() {
+        return db;
+    }
 
+    public void setDb(DBManager db) {
+        this.db = db;
+    }
+
+    private Chat(Context context) {
+        this.context = context;
+        this.db = new DBManager(context);
+    }
+
+    public static void init(Context context) {
+        chat = new Chat(context);
     }
 
     public static Chat getInstance() {
-        if(chat == null) {
-            chat = new Chat();
-        }
         return chat;
     }
 
@@ -115,10 +127,8 @@ public class Chat {
     }
 
     public void addUnsendMessage(Message message) {
-        if(unsendMessages.size() >= MAX_UNSEND_MESSAGES){
-            unsendMessages.remove(0);
-        }
-        unsendMessages.add(message);
+        Log.d(Constants.LOG_TAG, "Add unsend message: " + message);
+        db.addMessage(message);
     }
 
     public void sendChatRequest(){
@@ -128,15 +138,14 @@ public class Chat {
         MessageUtils.sendChatRequest(request);
     }
 
-    public List<Message> getUnsendMessages(){
-        return unsendMessages;
-    }
 
     /**
      * 发送之前未送达的消,当排队之前发出的消息,会先缓存起来，如果排上队了，就会补发这些消息
      */
     public void sendUnsendMessages() {
+        List<Message> unsendMessages = db.queryMessages();
         if (unsendMessages.size() > 0) {
+            Log.d(Constants.LOG_TAG, "Send " + unsendMessages.size() + " unsend messages.");
             for (Message message : unsendMessages) {
                 MessageContent messageContent = message.getContent();
                 try {

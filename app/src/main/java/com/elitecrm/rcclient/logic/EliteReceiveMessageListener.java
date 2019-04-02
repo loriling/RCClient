@@ -10,6 +10,7 @@ import com.elitecrm.rcclient.robot.RobotMessageHandler;
 import com.elitecrm.rcclient.robot.RobotUtils;
 import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
+import com.elitecrm.rcclient.util.MessageUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -92,24 +93,10 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         Chat.getInstance().clearRequestAndSession();
                         JSONObject originalMessage = contentJSON.getJSONObject("originalMessage");
                         String objectName = originalMessage.getString("objectName");
-                        MessageContent messageContent = null;
-                        if (objectName.equals(Constants.ObjectName.TXT_MSG)) {
-                            messageContent = new TextMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        } else if (objectName.equals(Constants.ObjectName.IMG_MSG)) {
-                            messageContent = new ImageMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        } else if (objectName.equals(Constants.ObjectName.FILE_MSG)) {
-                            messageContent = new FileMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        } else if (objectName.equals(Constants.ObjectName.LBS_MSG)) {
-                            messageContent = new LocationMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        } else if (objectName.equals(Constants.ObjectName.VC_MSG)) {
-                            messageContent = new VoiceMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        } else if (objectName.equals(Constants.ObjectName.ELITE_MSG)) {
-                            messageContent = new EliteMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        } else if (objectName.equals(Constants.ObjectName.SIGHT_MSG)) {
-                            messageContent = new SightMessage(originalMessage.getString("content").getBytes("utf-8"));
-                        }
+                        MessageContent messageContent = MessageUtils.generateMessageContent(objectName, originalMessage.getString("content"));
                         if (messageConetent != null) {
                             Message unsendMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, messageContent);
+                            unsendMessage.setObjectName(objectName);
                             Chat.getInstance().addUnsendMessage(unsendMessage);
                         }
                         Chat.getInstance().sendChatRequest();
