@@ -11,6 +11,7 @@ import com.elitecrm.rcclient.EliteChat;
 import com.elitecrm.rcclient.R;
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.Session;
+import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.MessageUtils;
 
@@ -40,8 +41,13 @@ public class EliteCloseSessionPlugin implements IPluginModule {
 
     @Override
     public void onClick(Fragment fragment, RongExtension rongExtension) {
-        Session session = Chat.getInstance().getSession();
+        Chat chat = Chat.getInstance();
+        Session session = chat.getSession();
         if (session != null) {
+            if (!chat.isPushRating()) {
+                chat.setPushRating(true);
+                ActivityUtils.showRatingDialog(chat.getSession().getId());
+            }
             new CloseSessionTask().execute(EliteChat.getServerAddr(), session.getId() + "");
         } else {
             InformationNotificationMessage inm = InformationNotificationMessage.obtain("会话已结束");

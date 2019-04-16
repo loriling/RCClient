@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
+import com.elitecrm.rcclient.entity.Client;
 import com.elitecrm.rcclient.logic.EliteSendMessageListener;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.DigestUtils;
@@ -46,11 +47,14 @@ public class EliteChat {
      */
     public static void initAndStart(String serverAddr, String userId, String name, String portraitUri, String targetId, Context context, int queueId, String ngsAddr, String from, String tracks) {
         EliteChat.context = context;
-        if (Chat.getInstance().isTokenValid() && RongIMClient.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
-            Chat.getInstance().initClient(userId, name, portraitUri, targetId);
-            Chat.getInstance().initRequest(queueId, from, tracks);
+        Chat chat = Chat.getInstance();
+        Client client = chat.getClient();
+        if (client != null && client.getLoginId().equals(userId) && client.getName().equals(name) && client.getIcon().equals(portraitUri) &&
+                chat.isTokenValid() && RongIMClient.getInstance().getCurrentConnectionStatus() == RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
+            chat.initClient(userId, name, portraitUri, targetId);
+            chat.initRequest(queueId, from, tracks);
             //发出聊天排队请求
-            Chat.getInstance().sendChatRequest();
+            chat.sendChatRequest();
             //启动聊天会话界面
             RongIM.getInstance().startConversation(EliteChat.context, Conversation.ConversationType.PRIVATE, targetId, Constants.CHAT_TITLE);
         } else {
@@ -133,7 +137,8 @@ public class EliteChat {
                     // 如果队列没变化，则去检查token是否还合法，如果合法则可以直接继续聊天。如果不合法则需要重新登录
                     EliteChat.checkToken(serverAddr, token, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
                 }
-                return;
+            } else {
+                EliteChat.initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
             }
         } else {
             EliteChat.initAndStart(serverAddr, userId, name, portraitUri, targetId, context, queueId, ngsAddr, from, tracks);
