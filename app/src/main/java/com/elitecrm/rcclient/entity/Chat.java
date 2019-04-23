@@ -297,12 +297,12 @@ public class Chat {
      * @param icon
      * @param comments
      */
-    public void setupAgent(String agentId, String agentName, String icon, String comments){
-        if(icon != null && !icon.equals("") && !icon.startsWith("http://") && !icon.startsWith("https://")){
-            icon = EliteChat.getNgsAddr() + "/fs/get?file=" + icon;
+    public void setupAgent(String agentId, String agentName, String icon, String comments) {
+        if (icon != null && !icon.equals("") && !icon.startsWith("http://") && !icon.startsWith("https://")) {
+            icon = EliteChat.getServerAddr() + "/ngsIcon.do?path=" + icon + "&queue=" + Chat.getInstance().getRequest().getQueueId();
         }
         Agent agent = new Agent(agentId, agentName, icon, comments);
-        if(session.getAgents().size() == 0){
+        if (session.getAgents().size() == 0) {
             session.setFirstAgent(agent);
             RongIM.getInstance().refreshUserInfoCache(new UserInfo(Chat.getInstance().getClient().getTargetId(), agent.getName(), Uri.parse(agent.getIcon())));
         }

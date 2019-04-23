@@ -18,14 +18,15 @@ public class EliteUserInfoProvider implements UserInfoProvider {
     @Override
     public UserInfo getUserInfo(String userId) {
         User client = Chat.getInstance().getClient();
-        if(client!= null && userId.equals(client.getId())){
+        if (client != null && userId.equals(client.getId())) {
             UserInfo clientUserInfo = new UserInfo(client.getId(), client.getName(), Uri.parse(client.getIcon()));
             return clientUserInfo;
         }
 
         Session session = Chat.getInstance().getSession();
-        if(session != null) {
-            UserInfo agentUserInfo = new UserInfo(userId, session.getFirstAgent().getName(), Uri.parse(session.getFirstAgent().getIcon()));
+        if (session != null) {
+            String agentIcon = session.getFirstAgent().getIcon();
+            UserInfo agentUserInfo = new UserInfo(userId, session.getFirstAgent().getName(), Uri.parse(agentIcon));
             return agentUserInfo;
             //现在使用的单聊，坐席端统一用EliteCRM作为id，所以不区分不同坐席
 //            Map<String, Agent> agents = session.getAgents();
