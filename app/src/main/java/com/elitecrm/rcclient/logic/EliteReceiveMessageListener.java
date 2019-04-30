@@ -3,11 +3,10 @@ package com.elitecrm.rcclient.logic;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
-import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.entity.Session;
+import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.message.RobotMessage;
 import com.elitecrm.rcclient.robot.RobotMessageHandler;
-import com.elitecrm.rcclient.robot.RobotUtils;
 import com.elitecrm.rcclient.util.ActivityUtils;
 import com.elitecrm.rcclient.util.Constants;
 import com.elitecrm.rcclient.util.MessageUtils;
@@ -20,12 +19,8 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
 import io.rong.message.FileMessage;
-import io.rong.message.ImageMessage;
 import io.rong.message.InformationNotificationMessage;
-import io.rong.message.LocationMessage;
 import io.rong.message.TextMessage;
-import io.rong.message.VoiceMessage;
-import io.rong.sight.message.SightMessage;
 
 import static com.elitecrm.rcclient.util.MessageUtils.insertMessage;
 
@@ -38,7 +33,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
     public boolean onReceived(Message message, int left) {
         String objName = message.getObjectName();
         MessageContent messageConetent = message.getContent();
-        long receivedTime = message.getReceivedTime();
+        long receivedTime = message.getReceivedTime() + 3000; // 这里加3秒后消息顺序就正常了，先这样吧
 
         if(objName.equals("E:Msg")) {//所有的状态通知
             EliteMessage eliteMessage = new EliteMessage(messageConetent.encode());
@@ -107,9 +102,10 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                 }
                 //
                 else if (type == Constants.RequestType.CHAT_REQUEST_STATUS_UPDATE) {
-                    int requestStatus = contentJSON.getInt("requestStatus");
+                    JSONObject dataJSON = contentJSON.getJSONObject("data");
+                    int requestStatus = dataJSON.getInt("requestStatus");
                     Chat.getInstance().setRequestStatus(requestStatus);
-                    int queueLength = contentJSON.getInt("queueLength");
+                    int queueLength = dataJSON.getInt("queueLength");
                     InformationNotificationMessage informationMessage = null;
                     if (requestStatus == Constants.RequestStatus.WAITING) {
                         informationMessage = InformationNotificationMessage.obtain("还有" + queueLength + "位，等待中..");
@@ -117,6 +113,8 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         informationMessage = InformationNotificationMessage.obtain("请求异常丢失");
                     } else if (requestStatus == Constants.RequestStatus.TIMEOUT) {
                         informationMessage = InformationNotificationMessage.obtain("请求超时");
+                    } else {
+                        informationMessage = InformationNotificationMessage.obtain("请求异常: " + requestStatus);
                     }
                     if (informationMessage != null) {
                         insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage, receivedTime);

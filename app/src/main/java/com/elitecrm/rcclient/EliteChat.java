@@ -370,4 +370,8 @@ public class EliteChat {
     public static void setServerAddr(String serverAddr) {
         EliteChat.serverAddr = serverAddr;
     }
+
+    public static Context getContext(){
+        return EliteChat.context;
+    }
 }

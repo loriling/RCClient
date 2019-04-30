@@ -212,4 +212,22 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="140dp" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <!-- your bottom content -->
+        <TextView
+            android:id="@+id/versionView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center" />
+    </LinearLayout>
+
 </LinearLayout>

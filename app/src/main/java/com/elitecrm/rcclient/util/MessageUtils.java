@@ -1,6 +1,5 @@
 package com.elitecrm.rcclient.util;
 
-import android.util.Base64;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;

@@ -2,10 +2,12 @@ package com.elitecrm.rcclient.baidumap;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 
+import com.elitecrm.rcclient.EliteChat;
 import com.elitecrm.rcclient.R;
 
 import org.json.JSONObject;
@@ -59,5 +61,12 @@ public class BaiduLocationPlugin implements IPluginModule {
 
             RongIM.getInstance().sendLocationMessage(Message.obtain(targetId, conversationType, locationMessage), null, null, null);
         }
+    }
+
+    //判断是否有获取gps权限
+    public boolean checkLocationPermission() {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = EliteChat.getContext().checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
     }
 }

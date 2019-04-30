@@ -1,14 +1,19 @@
 package com.elitecrm.rcclient;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.text.method.NumberKeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.elitecrm.rcclient.entity.Chat;
 
@@ -25,6 +30,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView versionView = (TextView)findViewById(R.id.versionView);
+        PackageManager pm = this.getPackageManager();
+        String versionCode = "unknown";
+        PackageInfo pi = null;
+        try {
+            pi = pm.getPackageInfo(this.getPackageName(), 0);
+            versionCode = "v" + pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        versionView.setText(versionCode);
 
         serverAddrEditText = (EditText)findViewById(R.id.serverAddrEdittext);
         userIdEditText = (EditText)findViewById(R.id.userIdEdittext);
@@ -83,5 +100,23 @@ public class MainActivity extends Activity {
             }
         });
 
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+        }
     }
 }
