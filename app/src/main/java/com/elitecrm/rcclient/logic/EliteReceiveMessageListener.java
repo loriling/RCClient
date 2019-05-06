@@ -18,7 +18,6 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
-import io.rong.message.FileMessage;
 import io.rong.message.InformationNotificationMessage;
 import io.rong.message.TextMessage;
 
@@ -35,10 +34,10 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
         MessageContent messageConetent = message.getContent();
         long receivedTime = message.getReceivedTime() + 3000; // 这里加3秒后消息顺序就正常了，先这样吧
 
-        if(objName.equals("E:Msg")) {//所有的状态通知
+        if (objName.equals("E:Msg")) {//所有的状态通知
             EliteMessage eliteMessage = new EliteMessage(messageConetent.encode());
             String contentStr = eliteMessage.getMessage();
-            try{
+            try {
                 JSONObject contentJSON = new JSONObject(contentStr);
                 int type = contentJSON.getInt("type");
                 Log.d(Constants.LOG_TAG, contentStr);
@@ -52,9 +51,9 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     }
                     //boolean continueLastSession = contentJSON.optBoolean("continueLastSession");
                     int result = contentJSON.getInt("result");
-                    if(result == Constants.Result.SUCCESS) {
+                    if (result == Constants.Result.SUCCESS) {
                         int queueLength = contentJSON.getInt("queueLength");
-                        if(queueLength == 0) {
+                        if (queueLength == 0) {
                             //inm = InformationNotificationMessage.obtain(contentJSON.getString("message")); //继续之前会话;机器人会话开始  这些提示不是不是不需要显示出来了
                         } else {
                             inm = InformationNotificationMessage.obtain("当前排在第" + queueLength + "位");
@@ -95,6 +94,17 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             Chat.getInstance().addUnsendMessage(unsendMessage);
                         }
                         Chat.getInstance().sendChatRequest();
+                    } else {
+                        if (contentJSON.has("sessionId")) {
+                            long sessionId = contentJSON.getLong("sessionId");
+                            JSONArray agents = contentJSON.getJSONArray("agents");
+                            JSONObject agentJSON = agents.getJSONObject(0);
+                            String agentId = agentJSON.getString("id");
+                            String name = agentJSON.getString("name");
+                            String icon = agentJSON.optString("icon");
+                            String comments = agentJSON.optString("comments");
+                            Chat.getInstance().initSession(sessionId, agentId, name, icon, comments);
+                        }
                     }
 
                 } else if (type == Constants.RequestType.SEND_PRE_CHAT_MESSAGE) {
@@ -208,30 +218,8 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
             } catch (Exception e) {
                 Log.e(Constants.LOG_TAG, "EliteReceiveMessageListener.onReceived: " + e.getMessage());
             }
-        } else if (messageConetent instanceof TextMessage) {//坐席发的文字聊天消息，都作为TextMessage发送过来
-            //设置一个userInfo对象到messageContent，实现后台消息提示，其中userId必须是我们的targetId: EliteCRM
-//            try {
-//                TextMessage textMessage = (TextMessage)messageConetent;
-//                String extraStr = textMessage.getExtra();
-//                JSONObject extraJSON = new JSONObject(extraStr);
-//                String agentId = extraJSON.getString("agentId");
-//                String agentName = extraJSON.getString("agentName");
-//                String icon = extraJSON.optString("icon");
-//                if(icon != null && !icon.startsWith("http://") && !icon.startsWith("https://")){
-//                    icon = EliteChat.getNgsAddr() + "/fs/get?file=" + icon;
-//                }
-//                Uri iconUri = Uri.parse(icon);
-//                UserInfo userInfo = new UserInfo(Constants.CHAT_TARGET_ID, agentName, iconUri);
-//                messageConetent.setUserInfo(userInfo);
-//            } catch (Exception e) {
-//                Log.e(Constants.LOG_TAG, e.getMessage());
-//            }
-//            TextMessage tm = (TextMessage)messageConetent;
-//            String contentStr = tm.getContent();
-//            Log.d(Constants.LOG_TAG, contentStr);
-        } else if (messageConetent instanceof FileMessage) {
-            FileMessage fileMessage = (FileMessage)messageConetent;
-            //fileMessage.setSize(0);
+        } else {
+
         }
         return false;//这里返回true就不会有消息声音提示
     }
