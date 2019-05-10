@@ -52,12 +52,22 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     //boolean continueLastSession = contentJSON.optBoolean("continueLastSession");
                     int result = contentJSON.getInt("result");
                     if (result == Constants.Result.SUCCESS) {
-                        int queueLength = contentJSON.getInt("queueLength");
-                        if (queueLength == 0) {
-                            //inm = InformationNotificationMessage.obtain(contentJSON.getString("message")); //继续之前会话;机器人会话开始  这些提示不是不是不需要显示出来了
+                        if (contentJSON.has("sessionId")) {// 如果会话已经有了
+                            long sessionId = contentJSON.getLong("sessionId");
+                            String agentId = contentJSON.optString("agentId");
+                            String agentName = contentJSON.optString("agentName");
+                            String icon = contentJSON.optString("icon");
+                            String comments = contentJSON.optString("comments");
+                            Chat.getInstance().initSession(sessionId, agentId, agentName, icon, comments);
                         } else {
-                            inm = InformationNotificationMessage.obtain("当前排在第" + queueLength + "位");
+                            int queueLength = contentJSON.getInt("queueLength");
+                            if (queueLength == 0) {
+                                //inm = InformationNotificationMessage.obtain(contentJSON.getString("message")); //继续之前会话;机器人会话开始  这些提示不是不是不需要显示出来了
+                            } else {
+                                inm = InformationNotificationMessage.obtain("当前排在第" + queueLength + "位");
+                            }
                         }
+
                     } else {
                         inm = InformationNotificationMessage.obtain(contentJSON.getString("message"));
                         if(result == Constants.Result.REQUEST_ALREADY_IN_ROULTING) {
