@@ -34,7 +34,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
         MessageContent messageConetent = message.getContent();
         long receivedTime = message.getReceivedTime() + 3000; // 这里加3秒后消息顺序就正常了，先这样吧
 
-        if (objName.equals("E:Msg")) {//所有的状态通知
+        if (objName.equals(Constants.ObjectName.ELITE_MSG)) {//所有的状态通知
             EliteMessage eliteMessage = new EliteMessage(messageConetent.encode());
             String contentStr = eliteMessage.getMessage();
             try {

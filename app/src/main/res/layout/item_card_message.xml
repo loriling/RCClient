@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <io.rong.imkit.widget.AsyncImageView
+        android:id="@+id/card_img"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:paddingRight="14dp"
+        android:paddingLeft="14dp"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:text="@string/RMB"
+                android:textColor="#c0392b"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/card_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:textColor="#c0392b"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/card_price_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:textColor="#c0392b"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/card_from"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:textSize="12sp"
+            android:textColor="#bdc3c7" />
+    </LinearLayout>
+
+</LinearLayout>
+

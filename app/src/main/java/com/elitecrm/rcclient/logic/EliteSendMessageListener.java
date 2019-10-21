@@ -40,6 +40,7 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                     } else if (Chat.getInstance().isRequestInWaiting()){ // 请求id合法切请求状态是等待中时候
                         messageExtraJSON.put("requestId", Chat.getInstance().getRequest().getId());
                     } else {
+                        //这里不主动发出聊天请求，转为收到发送消息的返回后，判断了返回结果再做处理
                         //Chat.sendChatRequest();
                         //Chat.addUnsendMessage(message);
                         //return message;

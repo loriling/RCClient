@@ -9,6 +9,8 @@ import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.logic.EliteExtensionModule;
 import com.elitecrm.rcclient.logic.EliteReceiveMessageListener;
 import com.elitecrm.rcclient.logic.EliteUserInfoProvider;
+import com.elitecrm.rcclient.message.CardMessage;
+import com.elitecrm.rcclient.message.CardMessageItemProvider;
 import com.elitecrm.rcclient.message.EliteMessage;
 import com.elitecrm.rcclient.message.RobotMessage;
 import com.elitecrm.rcclient.message.RobotMessageItemProvider;
@@ -46,6 +48,9 @@ public class App extends Application{
             //注册机器人消息
             RongIM.registerMessageType(RobotMessage.class);
             RongIM.registerMessageTemplate(new RobotMessageItemProvider());
+            //注册卡片消息
+            RongIM.registerMessageType(CardMessage.class);
+            RongIM.registerMessageTemplate(new CardMessageItemProvider());
             //注册自定义用户信息提供者
             RongIM.setUserInfoProvider(new EliteUserInfoProvider(), true);
 
