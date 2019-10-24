@@ -76,7 +76,7 @@ public class RobotMessageItemProvider extends IContainerItemProvider.MessageProv
     public View newView(Context context, ViewGroup viewGroup) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_robot_message, null);
         ViewHolder holder = new ViewHolder();
-        holder.message = (RobotAutoLinkTextView) view.findViewById(android.R.id.text1);
+        holder.message = view.findViewById(android.R.id.text1);
         view.setTag(holder);
         return view;
     }

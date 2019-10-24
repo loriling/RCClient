@@ -202,7 +202,9 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                             insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), null, informationMessage);
                         }
                     }
-                } else if (type == Constants.RequestType.ROBOT_MESSAGE) {//机器人消息
+                }
+                // @Deprecated 服务端会发送真正的E:RobMsg过来，而不是再用这种发送E:Msg然后前台再自己insert的方式了
+                else if (type == Constants.RequestType.ROBOT_MESSAGE) {//机器人消息
                     String agentId = Chat.getInstance().getSession().getAgent().getId();
                     String content = contentJSON.getString("content");
                     Log.d("robot", "onReceived: " + content);
@@ -210,7 +212,8 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     content = RobotMessageHandler.handleMessage(content, robotType);
                     RobotMessage robotMessage = RobotMessage.obtain(content);
                     insertMessage(Conversation.ConversationType.PRIVATE, Chat.getInstance().getClient().getTargetId(), agentId, robotMessage, receivedTime);
-                } else if (type == Constants.RequestType.ROBOT_TRANSFER_MESSAGE) {
+                }
+                else if (type == Constants.RequestType.ROBOT_TRANSFER_MESSAGE) {
                     int result = contentJSON.getInt("result");
                     InformationNotificationMessage inm = null;
                     if (result == Constants.Result.SUCCESS) {

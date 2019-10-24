@@ -34,11 +34,11 @@ public class CardMessageItemProvider extends IContainerItemProvider.MessageProvi
     public View newView(Context context, ViewGroup group) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_card_message, null);
         ViewHolder holder = new ViewHolder();
-        holder.imageView = (AsyncImageView)view.findViewById(R.id.card_img);
-        holder.price = (TextView)view.findViewById(R.id.card_price);
-        holder.priceSub = (TextView)view.findViewById(R.id.card_price_sub);
-        holder.title = (TextView) view.findViewById(R.id.card_title);
-        holder.from = (TextView)view.findViewById(R.id.card_from);
+        holder.imageView = view.findViewById(R.id.card_img);
+        holder.price = view.findViewById(R.id.card_price);
+        holder.priceSub = view.findViewById(R.id.card_price_sub);
+        holder.title =  view.findViewById(R.id.card_title);
+        holder.from = view.findViewById(R.id.card_from);
         int w = RongUtils.getScreenWidth() - RongUtils.dip2px(32.0F);
         view.setLayoutParams(new ViewGroup.LayoutParams(w, -2));
         view.setTag(holder);
