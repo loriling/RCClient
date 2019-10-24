@@ -87,7 +87,6 @@ public class RobotMessageHandler {
                     content = "未定义的消息";
                 }
             } catch (Exception e) {
-                // 如果不是json，则直接显示（json格式已经不再使用，这里应该都是服务端解析完的直接消息字符串）
                 robotContent = content;
             }
         } else {
