@@ -32,7 +32,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
     public boolean onReceived(Message message, int left) {
         String objName = message.getObjectName();
         MessageContent messageConetent = message.getContent();
-        long receivedTime = message.getReceivedTime() + 3000; // 这里加3秒后消息顺序就正常了，先这样吧
+        long receivedTime = message.getReceivedTime();
 
         if (objName.equals(Constants.ObjectName.ELITE_MSG)) {//所有的状态通知
             EliteMessage eliteMessage = new EliteMessage(messageConetent.encode());
@@ -53,12 +53,14 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     int result = contentJSON.getInt("result");
                     if (result == Constants.Result.SUCCESS) {
                         if (contentJSON.has("sessionId")) {// 如果会话已经有了
-                            long sessionId = contentJSON.getLong("sessionId");
-                            String agentId = contentJSON.optString("agentId");
-                            String agentName = contentJSON.optString("agentName");
-                            String icon = contentJSON.optString("icon");
-                            String comments = contentJSON.optString("comments");
-                            Chat.getInstance().initSession(sessionId, agentId, agentName, icon, comments);
+                            if (contentJSON.has("perm")) {// 普通会话不需要在这里初始化session，已经有sessionId时候，都会再发一个202消息过来；只有持久会话需要
+                                long sessionId = contentJSON.getLong("sessionId");
+                                String agentId = contentJSON.optString("agentId");
+                                String agentName = contentJSON.optString("agentName");
+                                String icon = contentJSON.optString("icon");
+                                String comments = contentJSON.optString("comments");
+                                Chat.getInstance().initSession(sessionId, agentId, agentName, icon, comments);
+                            }
                         } else {
                             int queueLength = contentJSON.getInt("queueLength");
                             if (queueLength == 0) {
