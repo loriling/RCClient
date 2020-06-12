@@ -1,5 +1,8 @@
 package com.elitecrm.rcclient.util;
 
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import com.elitecrm.rcclient.entity.Chat;
@@ -7,11 +10,15 @@ import com.elitecrm.rcclient.entity.MessageSO;
 import com.elitecrm.rcclient.entity.Request;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.entity.User;
+import com.elitecrm.rcclient.logic.EliteSendImageMessgeCallback;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
 import com.elitecrm.rcclient.message.EliteMessage;
 
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import io.rong.imkit.RongIM;
@@ -22,9 +29,9 @@ import io.rong.message.FileMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.InformationNotificationMessage;
 import io.rong.message.LocationMessage;
+import io.rong.message.SightMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
-import io.rong.sight.message.SightMessage;
 
 /**
  * Created by ThinkPad on 2017/2/8.
@@ -57,7 +64,7 @@ public class MessageUtils {
 
             EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
             eliteMessage.setExtra(extraJSON.toString());
-            Message myMessage = Message.obtain(targetId, Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message myMessage = Message.obtain(targetId, Conversation.ConversationType.PRIVATE, eliteMessage);
             RongIM.getInstance().sendMessage(myMessage, null, null, new EliteSendMessageCallback());
         } catch (Exception e) {}
     }
@@ -79,7 +86,7 @@ public class MessageUtils {
             requestJSON.put("ratingComments", comments);
             EliteMessage eliteMessage = EliteMessage.obtain(requestJSON.toString());
             eliteMessage.setExtra(extraJSON.toString());
-            Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, eliteMessage);
             RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
         } catch (Exception e) {}
     }
@@ -91,26 +98,33 @@ public class MessageUtils {
      * @return 发送(添加)成功还是失败
      */
     public static boolean sendCustomMessage(String message, String target) {
-        if(Chat.getInstance().isSessionAvailable()){
-            long sessionId = Chat.getInstance().getSession().getId();
-            Message custMessage = generateEliteMessage(Chat.getInstance().getToken(), sessionId, message, Constants.RequestType.SEND_CUSTOM_MESSAGE, target);
-            if(custMessage != null){
-                RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
-                return true;
+        try {
+            if(Chat.getInstance().isTokenValid()){
+                long sessionId = 0L;
+                if (Chat.getInstance().getSession() != null) {
+                    sessionId = Chat.getInstance().getSession().getId();
+                }
+                Message custMessage = generateEliteMessage(Chat.getInstance().getToken(), sessionId, message, Constants.RequestType.SEND_CUSTOM_MESSAGE, target);
+                if(custMessage != null){
+                    RongIM.getInstance().sendMessage(custMessage, null, null, new EliteSendMessageCallback());
+                    return true;
+                }
+            } else {
+                Message custMessage = generateEliteMessage(null, 0, message, Constants.RequestType.SEND_CUSTOM_MESSAGE, target);
+                if (custMessage != null) {
+                    Chat.getInstance().addUnsendMessage(custMessage, Constants.UnsendMessageType.API);
+                    return true;
+                }
             }
-        } else {
-            Message custMessage = generateEliteMessage(null, 0, message, Constants.RequestType.SEND_CUSTOM_MESSAGE, target);
-            if (custMessage != null) {
-                Chat.getInstance().addUnsendMessage(custMessage);
-                return true;
-            }
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, "MessageUtils.sendCustomMessage: " + e.getMessage(), e);
         }
+
         return false;
     }
 
     /**
      * 发送文字消息
-     * 当会话已经建立时候，直接发送；当会话还没有建立，则通过addUnsendMessage
      * @param text 文字消息内容
      * @param target 发送的目标
      * @return
@@ -118,24 +132,70 @@ public class MessageUtils {
     public static boolean sendTextMessage(String text, String target) {
         try {
             TextMessage textMessage = TextMessage.obtain(text);
-            if (Chat.getInstance().isSessionAvailable()) {
-                JSONObject extraJSON = new JSONObject();
-                extraJSON.put("token", Chat.getInstance().getToken());
-                extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
-                textMessage.setExtra(extraJSON.toString());
-                Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, textMessage);
-                RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
+            if (Chat.getInstance().isTokenValid()) {
+                doSendTextMessage(textMessage, target);
                 return true;
             } else {
                 Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, textMessage);
                 message.setObjectName(Constants.ObjectName.TXT_MSG);
-                Chat.getInstance().addUnsendMessage(message);
+                Chat.getInstance().addUnsendMessage(message, Constants.UnsendMessageType.API);
                 return true;
             }
         } catch (Exception e) {
-            Log.e(Constants.LOG_TAG, "MessageUtils.sendTextMessage: " + e.getMessage());
+            Log.e(Constants.LOG_TAG, "MessageUtils.sendTextMessage: " + e.getMessage(), e);
         }
         return false;
+    }
+
+    public static void doSendTextMessage(TextMessage textMessage, String target) throws Exception {
+        JSONObject extraJSON = new JSONObject();
+        extraJSON.put("token", Chat.getInstance().getToken());
+        long sessionId = 0L;
+        if (Chat.getInstance().getSession() != null) {
+            sessionId = Chat.getInstance().getSession().getId();
+        }
+        extraJSON.put("sessionId", sessionId);
+        textMessage.setExtra(extraJSON.toString());
+        Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, textMessage);
+        RongIM.getInstance().sendMessage(message, null, null, new EliteSendMessageCallback());
+    }
+
+    /**
+     * 发送图片消息
+     * @param thumbUri 缩率图uri
+     * @param localUri 图片uri
+     * @param target 发送的目标
+     * @return
+     */
+    public static boolean sendImgMessage(Uri thumbUri, Uri localUri, String target) {
+        try {
+            ImageMessage imageMessage = ImageMessage.obtain(thumbUri, localUri);
+            if (Chat.getInstance().isTokenValid()) {
+                doSendImgMessage(imageMessage, target);
+                return true;
+            } else {
+                Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, imageMessage);
+                message.setObjectName(Constants.ObjectName.IMG_MSG);
+                Chat.getInstance().addUnsendMessage(message, Constants.UnsendMessageType.API);
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(Constants.LOG_TAG, "MessageUtils.sendTextMessage: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public static void doSendImgMessage(ImageMessage imageMessage, String target) throws Exception{
+        JSONObject extraJSON = new JSONObject();
+        extraJSON.put("token", Chat.getInstance().getToken());
+        long sessionId = 0L;
+        if (Chat.getInstance().getSession() != null) {
+            sessionId = Chat.getInstance().getSession().getId();
+        }
+        extraJSON.put("sessionId", sessionId);
+        imageMessage.setExtra(extraJSON.toString());
+        RongIM.getInstance().sendImageMessage(Conversation.ConversationType.PRIVATE, target, imageMessage, null,
+                null, new EliteSendImageMessgeCallback());
     }
 
     /**
@@ -152,7 +212,7 @@ public class MessageUtils {
             EliteMessage eliteMessage = EliteMessage.obtain(message);
             eliteMessage.setExtra(extraJSON.toString());
 
-            Message custMessage = Message.obtain(target, Conversation.ConversationType.SYSTEM, eliteMessage);
+            Message custMessage = Message.obtain(target, Conversation.ConversationType.PRIVATE, eliteMessage);
             custMessage.setObjectName(Constants.ObjectName.ELITE_MSG);
             return custMessage;
         } catch (Exception e) {
@@ -217,9 +277,17 @@ public class MessageUtils {
         messageSO.setConversationType(message.getConversationType().getValue());
         messageSO.setObjectName(message.getObjectName());
         try {
-            messageSO.setContent(new String(message.getContent().encode(), "utf-8"));
+            messageSO.setContent(new String(encodeMessage(message.getContent()), "utf-8"));
+
         } catch (UnsupportedEncodingException e) {}
         return messageSO;
+    }
+
+    private static byte[] encodeMessage(MessageContent messageContent) {
+        if (messageContent instanceof ImageMessage) {
+            return MessageEncodeUtils.encodeImageMessage((ImageMessage) messageContent);
+        }
+        return messageContent.encode();
     }
 
     public static Message unmarshal(String targetId, int conversationType, String objectName, String content) {
@@ -238,7 +306,7 @@ public class MessageUtils {
         if (objectName.equals(Constants.ObjectName.TXT_MSG)) {
             messageContent = new TextMessage(content.getBytes("utf-8"));
         } else if (objectName.equals(Constants.ObjectName.IMG_MSG)) {
-            messageContent = new ImageMessage(content.getBytes("utf-8"));
+            messageContent = MessageEncodeUtils.decodeImageMessage(content.getBytes("utf-8"));
         } else if (objectName.equals(Constants.ObjectName.FILE_MSG)) {
             messageContent = new FileMessage(content.getBytes("utf-8"));
         } else if (objectName.equals(Constants.ObjectName.LBS_MSG)) {
@@ -251,5 +319,35 @@ public class MessageUtils {
             messageContent = new SightMessage(content.getBytes("utf-8"));
         }
         return messageContent;
+    }
+
+    public static String imageToBase64(String path) {
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
+        InputStream is = null;
+        byte[] data = null;
+        String result = null;
+        try {
+            is = new FileInputStream(path);
+            //创建一个字符流大小的数组。
+            data = new byte[is.available()];
+            //写入数组
+            is.read(data);
+            //用默认的编码格式进行编码
+            result = Base64.encodeToString(data, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return result;
     }
 }

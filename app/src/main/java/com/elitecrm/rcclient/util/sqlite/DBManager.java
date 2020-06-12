@@ -5,7 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.elitecrm.rcclient.entity.MessageSO;
+import com.elitecrm.rcclient.entity.UnsendMessage;
 import com.elitecrm.rcclient.util.MessageUtils;
+import com.elitecrm.rcclient.util.sqlite.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,22 +26,25 @@ public class DBManager {
         db = helper.getWritableDatabase();
     }
 
-    public void addMessage(Message message) {
+    public void addMessage(UnsendMessage unsendMessage) {
+        Message message = unsendMessage.getMessage();
+        int unsendType = unsendMessage.getType();
         MessageSO messageSO = MessageUtils.marshal(message);
-        db.execSQL("INSERT INTO message VALUES(?,?,?,?,?,?)", new Object[]{UUID.randomUUID(), messageSO.getTargetId(), messageSO.getConversationType(), messageSO.getObjectName(), messageSO.getContent(), System.currentTimeMillis()});
+        db.execSQL("INSERT INTO message VALUES(?,?,?,?,?,?,?)", new Object[]{UUID.randomUUID(), messageSO.getTargetId(), messageSO.getConversationType(), messageSO.getObjectName(), messageSO.getContent(), System.currentTimeMillis(), unsendType});
     }
 
-    public List<Message> queryMessages() {
-        List<Message> messageList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select target_id, conversation_type, object_name, content  from message order by send_time", null);
+    public List<UnsendMessage> queryMessages() {
+        List<UnsendMessage> messageList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("select target_id, conversation_type, object_name, content, unsend_type  from message order by send_time", null);
         while (cursor.moveToNext()) {
             String targetId = cursor.getString(0);
             int conversationType = cursor.getInt(1);
             String objectName = cursor.getString(2);
             String content = cursor.getString(3);
             Message message = MessageUtils.unmarshal(targetId, conversationType, objectName, content);
+            int unsendType = cursor.getInt(4);
             if (message != null) {
-                messageList.add(message);
+                messageList.add(new UnsendMessage(unsendType, message));
             }
         }
         cursor.close();

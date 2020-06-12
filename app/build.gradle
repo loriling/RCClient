@@ -10,13 +10,13 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion "25.0.3"
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.elitecrm.rcclient"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 6
-        versionName "1.6.1"
+        versionCode 20200611
+        versionName "1.7.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -35,12 +35,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile project(':IMKit')
-    testCompile 'junit:junit:4.12'
-    compile project(':Sight')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation project(':IMKit')
+    testImplementation 'junit:junit:4.12'
+    implementation project(':Sight')
 }

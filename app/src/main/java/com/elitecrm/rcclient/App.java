@@ -20,6 +20,8 @@ import java.util.List;
 import io.rong.imkit.IExtensionModule;
 import io.rong.imkit.RongExtensionManager;
 import io.rong.imkit.RongIM;
+import io.rong.push.RongPushClient;
+import io.rong.push.pushconfig.PushConfig;
 
 /**
  * Created by Loriling on 2017/2/3.
@@ -39,6 +41,15 @@ public class App extends Application{
 
             //初始化chat
             Chat.init(this);
+
+            // https://www.rongcloud.cn/docs/android_push.html
+            PushConfig config = new PushConfig.Builder()
+//                    .enableHWPush(true)
+//                    .enableMiPush("小米 appId", "小米 appKey")
+//                    .enableMeiZuPush("魅族 appId", "魅族 appKey")
+//                    .enableFCM(true)
+                    .build();
+            RongPushClient.setPushConfig(config);
             //初始化融云
             RongIM.init(this);
             //注册接收消息监听器

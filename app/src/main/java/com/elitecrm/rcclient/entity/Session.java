@@ -15,6 +15,25 @@ public class Session {
     private boolean robotMode = false;
     private boolean pushRating = false; //是否已经被推送过满意度
 
+    public int getQueueId() {
+        return queueId;
+    }
+
+    public void setQueueId(int queueId) {
+        this.queueId = queueId;
+    }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
+    }
+
+    private int queueId;
+    private String queueName;
+
     public long getId() {
         return id;
     }

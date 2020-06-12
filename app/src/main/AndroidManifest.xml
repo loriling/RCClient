@@ -33,14 +33,16 @@
 
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
     <uses-feature android:name="android.hardware.location.gps" />
 
-    <!-- ⼩米 配置开始 < -->
+
+    <!-- 小米 配置开始 < -->
     <permission
-        android:name="cn.rongcloud.im.permission.MIPUSH_RECEIVE"
+        android:name="${applicationId}.permission.MIPUSH_RECEIVE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="cn.rongcloud.im.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="${applicationId}.permission.MIPUSH_RECEIVE" /> <!-- 小米 配置结束 < -->
+
+
     <!-- ⼩米 配置结束 < -->
     <!-- GCM 配置开始 < -->
     <permission
@@ -142,48 +144,52 @@
                 android:resource="@xml/rc_file_path" />
         </provider>
 
+
+
+        <!-- 小米 配置开始 < -->
+        <service android:name="com.xiaomi.push.service.XMPushService" android:enabled="true" />
+        <service android:name="com.xiaomi.mipush.sdk.PushMessageHandler" android:enabled="true" android:exported="true" />
+        <service android:name="com.xiaomi.mipush.sdk.MessageHandleService" android:enabled="true" />
+        <!--注：此service必须在2.2.5版本以后（包括2.2.5版本）加入-->
+
         <service
-            android:name="io.rong.push.PushService"
-            android:process="io.rong.push" > <!-- Waring: The name of the push process can't be changed!!! -->
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
+            android:name="com.xiaomi.push.service.XMJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!--注：此service必须在3.0.1版本以后（包括3.0.1版本）加入-->
 
-                <action android:name="io.rong.push" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name="io.rong.push.PushReceiver"
-            android:process="io.rong.push" > <!-- Waring: The name of the push process can't be changed!!! -->
-            <intent-filter>
-                <action android:name="io.rong.imlib.action.push.heartbeat" />
-            </intent-filter>
+        <receiver android:name="com.xiaomi.push.service.receivers.NetworkStatusReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-
-                <data android:scheme="package" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <receiver android:name="com.xiaomi.push.service.receivers.PingReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="com.xiaomi.push.PING_TIMER" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="io.rong.push.platform.mi.MiMessageReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR" />
+            </intent-filter>
+        </receiver>
+        <!-- 小米 配置结束 < -->
 
         <receiver
             android:exported="true"
             android:name="com.elitecrm.rcclient.EliteNotificationReceiver">
             <intent-filter>
                 <action android:name="io.rong.push.intent.MESSAGE_ARRIVED" />
-                <action android:name="io.rong.push.intent.MI_MESSAGE_ARRIVED" />
                 <action android:name="io.rong.push.intent.MESSAGE_CLICKED" />
-                <action android:name="io.rong.push.intent.MI_MESSAGE_CLICKED" />
+                <action android:name="io.rong.push.intent.THIRD_PARTY_PUSH_STATE" />
             </intent-filter>
         </receiver>
     </application>

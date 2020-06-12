@@ -11,7 +11,5 @@
     <dimen name="sight_capture_button_circle_size_outer">37dp</dimen>
     <dimen name="sight_capture_button_record_circle_size_inner">20dp</dimen>
     <dimen name="sight_capture_button_record_circle_size_outer">60dp</dimen>
-    <dimen name="sight_message_item_left_duration_margin">6dp</dimen>
-    <dimen name="sight_message_item_right_duration_margin">12dp</dimen>
     <dimen name="sight_text_size_14">14sp</dimen>
 </resources>

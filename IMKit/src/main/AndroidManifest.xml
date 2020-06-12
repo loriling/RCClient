@@ -2,38 +2,45 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.rong.imkit">
 
+    <!-- 访问相册，访问文件系统等 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 发送位置消息，实时位置共享，如果您需要定位相关的功能，可以打开以下注释 -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
+    <!-- 拍照 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 拍照等 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 网络 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 获取机型信息权限 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 录音 -->
-
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 使用ActivityManager需要 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- 适配 Android 8.0 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 保存图片，拍照等 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 新消息震动提醒 -->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application>
 
         <activity
             android:name="io.rong.imkit.plugin.location.AMapLocationActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="io.rong.imkit.plugin.location.AMapLocationActivity2D"
+            android:screenOrientation="portrait" />
 
         <activity android:name="io.rong.imkit.plugin.location.AMapPreviewActivity" />
+        <activity android:name="io.rong.imkit.plugin.location.AMapPreviewActivity2D" />
 
         <activity android:name="io.rong.imkit.plugin.location.AMapRealTimeActivity" />
+        <activity android:name="io.rong.imkit.plugin.location.AMapRealTimeActivity2D" />
 
         <activity
             android:name="io.rong.imkit.plugin.location.SearchLocationActivity"
@@ -42,6 +49,7 @@
 
         <activity
             android:name="io.rong.imkit.plugin.image.PictureSelectorActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
 
         <activity
@@ -51,9 +59,20 @@
         <!-- 开发者可以修改 RongBaseActivity 的 rc_base_activity_layout 布局文件调整 actionbar-->
         <activity
             android:name="io.rong.imkit.tools.RongWebviewActivity"
+            android:exported="false"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="io.rong.imkit.intent.action.webview" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="io.rong.imkit.tools.CombineWebViewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="io.rong.imkit.intent.action.combinewebview" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -65,6 +84,7 @@
 
         <activity
             android:name="io.rong.imkit.activity.PicturePagerActivity"
+            android:exported="false"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="io.rong.imkit.intent.action.picturepagerview" />
@@ -80,9 +100,19 @@
         <activity android:name="io.rong.imkit.activity.FileListActivity" />
         <activity
             android:name="io.rong.imkit.activity.FilePreviewActivity"
+            android:exported="false"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="io.rong.imkit.intent.action.openfile" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="io.rong.imkit.activity.WebFilePreviewActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="io.rong.imkit.intent.action.openwebfile" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -92,6 +122,17 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name="io.rong.imkit.activity.GIFPreviewActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="io.rong.imkit.intent.action.gifrview" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="io.rong.imkit.activity.SelectConversationActivity" />
         <!-- 此部分代码需要移植到您的 app 下的 manifest，并且 authorities 指定您的包名。例如：com.android.FileProvider -->
         <!-- 否则使用拍照功能时，会崩溃 -->
         <!--<provider-->

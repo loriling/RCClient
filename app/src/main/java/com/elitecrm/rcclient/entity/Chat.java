@@ -13,7 +13,6 @@ import com.elitecrm.rcclient.util.sqlite.DBManager;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.rong.imkit.RongIM;
@@ -24,9 +23,9 @@ import io.rong.imlib.model.UserInfo;
 import io.rong.message.FileMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
+import io.rong.message.SightMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
-import io.rong.sight.message.SightMessage;
 
 /**
  * Created by Loriling on 2017/2/9.
@@ -96,12 +95,13 @@ public class Chat {
         return chat;
     }
 
-    public void initClient(String userId, String name, String portraitUri, String targetId) {
+    public void initClient(String userId, String name, String portraitUri, String targetId, String title) {
         Client client = new Client();
         client.setLoginId(userId);
         client.setName(name);
         client.setIcon(portraitUri);
         client.setTargetId(targetId);
+        client.setTitle(title);
         this.setClient(client);
     }
 
@@ -126,9 +126,9 @@ public class Chat {
         request.setStatus(status);
     }
 
-    public void addUnsendMessage(Message message) {
-        Log.d(Constants.LOG_TAG, "Add unsend message: " + message);
-        db.addMessage(message);
+    public void addUnsendMessage(Message message, int type) {
+        Log.d(Constants.LOG_TAG, "Add unsend message: " + message + " type: " + type);
+        db.addMessage(new UnsendMessage(type, message));
     }
 
     public void sendChatRequest(){
@@ -143,10 +143,11 @@ public class Chat {
      * 发送之前未送达的消,当排队之前发出的消息,会先缓存起来，如果排上队了，就会补发这些消息
      */
     public void sendUnsendMessages() {
-        List<Message> unsendMessages = db.queryMessages();
+        List<UnsendMessage> unsendMessages = db.queryMessages();
         if (unsendMessages.size() > 0) {
             Log.d(Constants.LOG_TAG, "Send " + unsendMessages.size() + " unsend messages.");
-            for (Message message : unsendMessages) {
+            for (UnsendMessage unsendMessage : unsendMessages) {
+                Message message = unsendMessage.getMessage();
                 MessageContent messageContent = message.getContent();
                 try {
                     if(messageContent instanceof TextMessage ||
@@ -162,8 +163,13 @@ public class Chat {
                         extraJSON.put("type", Constants.RequestType.SEND_CHAT_MESSAGE);
                         if(messageContent instanceof TextMessage) {
                             TextMessage textMessage = (TextMessage)messageContent;
-                            eliteMessage.setMessage(textMessage.getContent());
-                            extraJSON.put("messageType", Constants.MessageType.TEXT);
+                            if (unsendMessage.getType() == Constants.UnsendMessageType.API) {
+                                MessageUtils.doSendTextMessage(textMessage, Chat.getInstance().getClient().getTargetId());
+                                continue;
+                            } else {
+                                eliteMessage.setMessage(textMessage.getContent());
+                                extraJSON.put("messageType", Constants.MessageType.TEXT);
+                            }
                         } else if (messageContent instanceof VoiceMessage) {
                             VoiceMessage voiceMessage = (VoiceMessage)messageContent;
                             eliteMessage.setMessage(voiceMessage.getBase64());
@@ -179,9 +185,14 @@ public class Chat {
                             extraJSON.put("messageType", Constants.MessageType.LOCATION);
                         } else if (messageContent instanceof ImageMessage) {
                             ImageMessage imageMessage = (ImageMessage)messageContent;
-                            eliteMessage.setMessage(imageMessage.getBase64());
-                            extraJSON.put("imageUri", imageMessage.getRemoteUri().toString());
-                            extraJSON.put("messageType", Constants.MessageType.IMG);
+                            if (unsendMessage.getType() == Constants.UnsendMessageType.API) {
+                                MessageUtils.doSendImgMessage(imageMessage, Chat.getInstance().getClient().getTargetId());
+                                continue;
+                            } else {
+                                eliteMessage.setMessage(imageMessage.getBase64());
+                                extraJSON.put("imageUri", imageMessage.getRemoteUri().toString());
+                                extraJSON.put("messageType", Constants.MessageType.IMG);
+                            }
                         } else if (messageContent instanceof FileMessage) {
                             FileMessage fileMessage = (FileMessage)messageContent;
                             extraJSON.put("fileName", fileMessage.getName());
@@ -199,7 +210,7 @@ public class Chat {
                             extraJSON.put("messageType", Constants.MessageType.SIGHT);
                         }
                         eliteMessage.setExtra(extraJSON.toString());
-                        Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
+                        Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, eliteMessage);
                         RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
                     } else if (messageContent instanceof EliteMessage) { //自定义消息的预发送
                         EliteMessage eliteMessage = (EliteMessage)messageContent;
@@ -212,7 +223,7 @@ public class Chat {
                         extraJSON.put("token", Chat.getInstance().getToken());
                         extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                         eliteMessage.setExtra(extraJSON.toString());
-                        Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.SYSTEM, eliteMessage);
+                        Message lastMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, eliteMessage);
                         RongIM.getInstance().sendMessage(lastMessage, null, null, new EliteSendMessageCallback());
                     }
 

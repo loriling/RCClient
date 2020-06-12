@@ -5,8 +5,6 @@ import com.elitecrm.rcclient.util.Constants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import io.rong.imkit.utils.StringUtils;
-
 /**
  * Created by Loriling on 2018/7/3.
  *

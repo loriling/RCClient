@@ -10,7 +10,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TAG = "DBHelper";
     public static final String DB_NAME = "database.db";
 
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     private static final String MESSAGE_CREATE_TABLE_SQL = "create table message ("
             + "id char(36) primary key,"
@@ -18,7 +18,8 @@ public class DBHelper extends SQLiteOpenHelper {
             + "conversation_type integer not null,"
             + "object_name varchar(32) not null,"
             + "content varchar(4000) not null,"
-            + "send_time long not null"
+            + "send_time long not null,"
+            + "unsend_type integer default 0"
             + ");";
 
 
@@ -40,7 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-            db.execSQL("drop table message");
+            db.execSQL("DROP TABLE IF EXISTS message");
             db.execSQL(MESSAGE_CREATE_TABLE_SQL);
             Log.d(TAG, "create table message: " + MESSAGE_CREATE_TABLE_SQL);
         } catch (SQLException e) {

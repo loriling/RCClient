@@ -10,10 +10,10 @@ import io.rong.imkit.RongIM;
 import io.rong.imkit.plugin.IPluginModule;
 import io.rong.imkit.plugin.ImagePlugin;
 import io.rong.imkit.widget.provider.FilePlugin;
+import io.rong.imkit.widget.provider.SightMessageItemProvider;
 import io.rong.imlib.model.Conversation;
+import io.rong.message.SightMessage;
 import io.rong.sight.SightPlugin;
-import io.rong.sight.message.SightMessage;
-import io.rong.sight.message.SightMessageItemProvider;
 
 /**
  * Created by Loriling on 2017/2/9.

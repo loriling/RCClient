@@ -71,7 +71,7 @@ public class Constants {
         int CHAT_REQUEST_STATUS_UPDATE = 201;//聊天排队状态更新
         int CHAT_STARTED = 202;//通知客户端可以开始聊天
         int AGENT_PUSH_RATING = 203;//坐席推送了满意度
-        int AGENT_UPDATED = 204;//坐席人员变更
+        int SESSION_UPDATED = 204;//坐席人员变更
         int AGENT_CLOSE_SESSION = 205;//坐席关闭
         int AGENT_SEND_MESSAGE = 210;//收到聊天消息
 
@@ -118,6 +118,11 @@ public class Constants {
         int ROBOT_TYPE_YIBOT = 1;
         int ROBOT_TYPE_XIAOI = 2;
         int ROBOT_TYPE_XIAODUO = 3;
+    }
+
+    public interface UnsendMessageType {
+        int NORMAL = 0;
+        int API = 1;
     }
 
 }

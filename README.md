@@ -8,7 +8,8 @@
 
 详细文档：<a href="https://loriling.github.io/EliteCRM/webchat-sdk-guide.html" target="_blank">点击这里</a>
 
-融云版本最新升级到了2.9.1
+融云版本最新升级到了2.10.4
+消息推送集成方式有所改变，具体需要看融云消息推送的文档
 
 
 ### 2019.04.30

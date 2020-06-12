@@ -2,6 +2,7 @@ package com.elitecrm.rcclient.logic;
 
 import android.util.Log;
 
+import com.elitecrm.rcclient.EliteChat;
 import com.elitecrm.rcclient.entity.Chat;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.message.EliteMessage;
@@ -103,7 +104,7 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                         if (messageConetent != null) {
                             Message unsendMessage = Message.obtain(Chat.getInstance().getClient().getTargetId(), Conversation.ConversationType.PRIVATE, messageContent);
                             unsendMessage.setObjectName(objectName);
-                            Chat.getInstance().addUnsendMessage(unsendMessage);
+                            Chat.getInstance().addUnsendMessage(unsendMessage, Constants.UnsendMessageType.NORMAL);
                         }
                         Chat.getInstance().sendChatRequest();
                     } else {
@@ -162,9 +163,16 @@ public class EliteReceiveMessageListener implements RongIMClient.OnReceiveMessag
                     // 坐席推送满意度处理
                     Chat.getInstance().setPushRating(true);
                     ActivityUtils.showRatingDialog();
-                } else if (type == Constants.RequestType.AGENT_UPDATED) {
-                    // 坐席人员变更处理
+                } else if (type == Constants.RequestType.SESSION_UPDATED) {
+                    // 会话变更处理（转接后）
                     long sessionId = contentJSON.getLong("sessionId");
+                    int queueId = contentJSON.optInt("queueId");
+                    if (queueId != 0) {// 转接后队列变更
+                        String queueName = contentJSON.optString("queueName");
+                        Chat.getInstance().getSession().setQueueId(queueId);
+                        Chat.getInstance().getSession().setQueueName(queueName);
+                    }
+
                     JSONArray agentsJSON = contentJSON.getJSONArray("agents");
                     Chat.getInstance().clearSessionAgents();
                     for (int i = 0; i < agentsJSON.length(); i++) {

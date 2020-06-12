@@ -5,7 +5,17 @@
     <application>
         <activity
             android:name="io.rong.sight.player.SightPlayerActivity"
-            android:screenOrientation="portrait" />
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="${applicationId}"
+                    android:pathPrefix="/sight/player"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="io.rong.sight.player.SightListActivity"
             android:screenOrientation="portrait" />

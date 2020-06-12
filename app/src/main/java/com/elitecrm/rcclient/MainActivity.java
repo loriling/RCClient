@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.text.method.NumberKeyListener;
@@ -16,6 +18,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.elitecrm.rcclient.entity.Chat;
+import com.elitecrm.rcclient.util.MessageUtils;
+import com.elitecrm.rcclient.util.PermissionUtils;
+
+import java.io.File;
 
 public class MainActivity extends Activity {
     private EditText serverAddrEditText;
@@ -43,11 +49,11 @@ public class MainActivity extends Activity {
         }
         versionView.setText(versionCode);
 
-        serverAddrEditText = (EditText)findViewById(R.id.serverAddrEdittext);
-        userIdEditText = (EditText)findViewById(R.id.userIdEdittext);
-        nameEditText = (EditText)findViewById(R.id.nameEdittext);
-        portraitUriEditText = (EditText)findViewById(R.id.portraitUriEdittext);
-        queueIdEditText = (EditText)findViewById(R.id.queueIdEdittext);
+        serverAddrEditText = findViewById(R.id.serverAddrEdittext);
+        userIdEditText = findViewById(R.id.userIdEdittext);
+        nameEditText = findViewById(R.id.nameEdittext);
+        portraitUriEditText = findViewById(R.id.portraitUriEdittext);
+        queueIdEditText = findViewById(R.id.queueIdEdittext);
         queueIdEditText.setKeyListener(new NumberKeyListener() {
             @Override
             protected char[] getAcceptedChars() {
@@ -58,7 +64,7 @@ public class MainActivity extends Activity {
                 return InputType.TYPE_CLASS_PHONE;
             }
         });
-        targetIdEditText = (EditText)findViewById(R.id.targetIdEdittext);
+        targetIdEditText = findViewById(R.id.targetIdEdittext);
 
         sharedPreferences = this.getSharedPreferences("loginInfo", Context.MODE_PRIVATE);
         String serverAddr = sharedPreferences.getString("serverAddr", "http://dev.elitecrm.com/webchat");
@@ -74,7 +80,7 @@ public class MainActivity extends Activity {
         String targetId = sharedPreferences.getString("targetId", "Elite");
         targetIdEditText.setText(targetId);
 
-        Button startChatBtn = (Button) this.findViewById(R.id.startChat);
+        Button startChatBtn = this.findViewById(R.id.startChat);
         startChatBtn.getBackground().setAlpha(150);
         startChatBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -93,14 +99,19 @@ public class MainActivity extends Activity {
                 editor.putInt("queueId", queueId);
 
                 String target = targetIdEditText.getText().toString();
-                //MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
-                //MessageUtils.sendTextMessage("firstMsg", target);
+                // 发自定义消息
+//                MessageUtils.sendCustomMessage("{\"name\":\"xxx\"}", target);
+                // 发文字
+//                MessageUtils.sendTextMessage("firstMsg", target);
+                // 发图片
+                String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/chat.png";
+                MessageUtils.sendImgMessage(Uri.fromFile(new File(imgPath)), Uri.fromFile(new File(imgPath)), target);
 
-                EliteChat.startChat(serverAddr, Chat.getInstance().getToken(), userId, name, portraitUri, target, v.getContext(), queueId, null, "APP", "");
+                EliteChat.startChat(serverAddr, userId, name, portraitUri, target, v.getContext(), queueId, null, "APP", "", "");
             }
         });
 
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        PermissionUtils.verifyLocationPermissions(this);
     }
 
 

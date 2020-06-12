@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import io.rong.common.ParcelUtils;
 import io.rong.imlib.MessageTag;
 import io.rong.imlib.model.MessageContent;
-import io.rong.imlib.model.UserInfo;
 
 @MessageTag(value = "E:CardMsg", flag = MessageTag.ISCOUNTED | MessageTag.ISPERSISTED)
 public class CardMessage extends MessageContent {

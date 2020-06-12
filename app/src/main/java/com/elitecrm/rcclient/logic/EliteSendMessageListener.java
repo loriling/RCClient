@@ -13,9 +13,9 @@ import io.rong.imlib.model.MessageContent;
 import io.rong.message.FileMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
+import io.rong.message.SightMessage;
 import io.rong.message.TextMessage;
 import io.rong.message.VoiceMessage;
-import io.rong.sight.message.SightMessage;
 
 /**
  * Created by Loriling on 2017/2/9.

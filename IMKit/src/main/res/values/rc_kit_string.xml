@@ -3,14 +3,20 @@
     <string name="rc_name">融云</string>
 
     <!-- discussion_notification_msg -->
+    <string name="rc_discussion_nt_msg_for_you_rename">"你修改讨论组名称为 %1$s"</string>
     <string name="rc_discussion_nt_msg_for_rename">"%1$s 修改讨论组名称为 %2$s"</string>
+    <string name="rc_discussion_nt_msg_for_you_added">"你邀请 %1$s 加入了讨论组"</string>
     <string name="rc_discussion_nt_msg_for_added">"%1$s 邀请 %2$s 加入了讨论组"</string>
+    <string name="rc_discussion_nt_msg_for_you_add">"你邀请了%1$d位成员加入了讨论组"</string>
     <string name="rc_discussion_nt_msg_for_add">"%1$s 邀请了%2$d位成员加入了讨论组"</string>
+    <string name="rc_discussion_nt_msg_for_you_exit">"你退出了讨论组"</string>
     <string name="rc_discussion_nt_msg_for_exit">"%1$s 退出了讨论组"</string>
     <string name="rc_discussion_nt_msg_for_removed">"你被 %1$s 移出了讨论组"</string>
     <string name="rc_discussion_nt_msg_for_who_removed">"%1$s 被 %2$s 移出了讨论组"</string>
     <string name="rc_discussion_nt_msg_for_you">"你"</string>
+    <string name="rc_discussion_nt_msg_for_you_is_open_invite_open">"你开放了成员邀请"</string>
     <string name="rc_discussion_nt_msg_for_is_open_invite_open">"%1$s 开放了成员邀请"</string>
+    <string name="rc_discussion_nt_msg_for_you_is_open_invite_close">"你关闭了成员邀请"</string>
     <string name="rc_discussion_nt_msg_for_is_open_invite_close">"%1$s 关闭了成员邀请"</string>
 
     <string name="rc_conversation_list_my_private_conversation">我的私人会话</string>
@@ -38,15 +44,27 @@
     <string name="rc_message_content_draft">[草稿]</string>
     <string name="rc_message_content_mentioned">[有人@我]</string>
     <string name="rc_message_content_file">[文件]</string>
+    <string name="rc_message_content_sight">[小视频]</string>
+    <string name="rc_message_content_burn">[阅后即焚]</string>
+    <string name="rc_message_content_combine">[聊天记录]</string>
+    <string name="rc_message_content_card">[个人名片]</string>
+    <string name="rc_message_content_sticker">[动态表情]</string>
+    <string name="rc_message_content_rp">[红包]</string>
+    <string name="rc_message_content_vst">[音视频通话]</string>
 
     <string name="rc_dialog_item_message_delete">删除消息</string>
     <string name="rc_dialog_item_message_copy">复制消息</string>
     <string name="rc_dialog_item_message_recall">撤回消息</string>
     <string name="rc_dialog_item_message_more">更多&#8230;</string>
+    <string name="rc_recall_success">消息已撤回</string>
     <string name="rc_recall_failed">撤回失败</string>
     <string name="rc_you_recalled_a_message">你撤回了一条消息</string>
+    <string name="rc_you_recalled_edit">重新编辑</string>
+    <string name="rc_admin_recalled_a_message">管理员撤回了一条消息</string>
     <string name="rc_recalled_a_message">&#160;撤回了一条消息</string>
+    <string name="rc_admin_recalled_message">管理员&#160;撤回了一条消息</string>
     <string name="rc_exceeded_max_limit">超出最大限制</string>
+    <string name="rc_exceeded_max_limit_100">聊天记录选择不能超过 100 条</string>
 
     <string name="rc_message_unread_count">"···"</string>
     <string name="rc_input_voice">按住 说话</string>
@@ -146,7 +164,9 @@
 
     <!-- LargePictureActivity -->
     <string name="rc_save_picture">保存图片</string>
+    <string name="rc_save_video">保存视频</string>
     <string name="rc_save_picture_at">图片保存成功</string>
+    <string name="rc_save_video_success">视频保存成功</string>
     <string name="rc_src_file_not_found">源文件不存在</string>
 
     <string name="rc_blacklist_prompt">您已被加入黑名单</string>
@@ -197,22 +217,28 @@
     <string name="rc_ac_file_download_request_permission">您需要在设置里打开读写权限</string>
     <string name="rc_ac_file_download_request_permission_sure">确定</string>
     <string name="rc_ac_file_download_request_permission_cancel">取消</string>
-    <string name="rc_read_receipt_status">%d人已读</string>
+    <string name="rc_ac_file_url_error">文件地址异常，无法下载!</string>
+    <string name="rc_read_receipt_status">%d 人已读</string>
 
-    <string name="rc_item_quit_groups">退出了群组</string>
-    <string name="rc_item_dismiss_groups">解散了群组</string>
+    <string name="rc_item_quit_groups">&#160;退出了群组</string>
+    <string name="rc_item_dismiss_groups">&#160;解散了群组</string>
     <string name="rc_item_join_group">加入了群组</string>
     <string name="rc_item_to_join_group">加入了群组</string>
 
     <string name="rc_item_remove_group_before_str">将</string>
     <string name="rc_item_remove_group_after_str">移出了群组</string>
     <string name="rc_item_create_group">创建群组</string>
-    <string name="rc_item_created_group">%1$s创建了群组</string>
-    <string name="rc_item_invitation">%1$s邀请%2$s加入群组</string>
+    <string name="rc_item_you_created_group">你创建了群组</string>
+    <string name="rc_item_created_group">%1$s 创建了群组</string>
+    <string name="rc_item_you_invitation">你邀请 %1$s 加入群组</string>
+    <string name="rc_item_invitation">%1$s 邀请 %2$s 加入群组</string>
     <string name="rc_item_etc">等</string>
-    <string name="rc_item_remove_group_member">%1$s将%2$s移出群组</string>
-    <string name="rc_item_remove_self">%1$s被%2$s移出群组</string>
-    <string name="rc_item_change_group_name">%1$s修改群名称为%2$s</string>
+    <string name="rc_item_you_remove_group_member">你将 %1$s 移出群组</string>
+    <string name="rc_item_remove_group_member">%1$s 将 %2$s 移出群组</string>
+    <string name="rc_item_you_remove_self">你被 %1$s 移出群组</string>
+    <string name="rc_item_remove_self">%1$s 被 %2$s 移出群组</string>
+    <string name="rc_item_you_change_group_name">你修改群名称为 %1$s</string>
+    <string name="rc_item_change_group_name">%1$s 修改群名称为 %2$s</string>
     <string name="rc_item_you">你</string>
     <string name="rc_item_divided_string">、</string>
     <string name="rc_item_group_notification_summary">[群组通知]</string>
@@ -228,10 +254,12 @@
     <string name="rc_android.permission.PROCESS_OUTGOING_CALLS">电话</string>
 
     <string name="rc_real_time_location_summary">我发起了位置共享</string>
+    <string name="rc_real_time_location_start">开启位置共享</string>
     <string name="rc_real_time_location_sharing">发起了位置共享</string>
     <string name="rc_dialog_button_clear">清空</string>
 
     <string name="rc_user_recalled_message">%s撤回了一条消息</string>
+    <string name="rc_recall_failed_for_network_unavailable">撤回不成功，请检查网络连接</string>
 
     <string name="rc_cs_evaluate">评价</string>
     <string name="rc_cs_evaluate_title">请对我们本次的服务进行评价</string>
@@ -247,4 +275,35 @@
     <string name="rc_cs_leave_message">留言</string>
     <string name="rc_cs_submit_message">提交留言</string>
     <string name="rc_cs_message_submited">您的留言已提交</string>
+
+    <string name="rc_new_message_divider_content">以上是历史消息</string>
+
+    <string name="rc_time_count_down">%d\'\'</string>
+    <string name="rc_toast_message_destruct">该消息已自动销毁，无法继续查看</string>
+    <string name="rc_receive_new_message">你收到一条新消息</string>
+    <string name="rc_notification_error_ssl_cert_invalid">您访问的网页证书无效。是否继续访问?</string>
+    <string name="rc_loadmore_loading">正在加载</string>
+    <string name="rc_click_to_view">点击查看</string>
+    <string name="rc_click_to_play">点击播放</string>
+    <string name="rc_got_it">知道了</string>
+    <string name="rc_burn_after_reading">阅后即焚</string>
+    <string name="rc_burn_hint">消息查看后自动销毁，消息禁止复制或转发，服务器不保留消息记录</string>
+    <string name="rc_sight">小视频</string>
+    <string name="rc_select_from_album">从相册选取</string>
+    <string name="rc_no_plugin">无可用插件</string>
+
+    <!-- 合并转发-->
+    <string name="rc_combine_stepwise_forwarding">逐条转发</string>
+    <string name="rc_combine_forwarding">合并转发</string>
+    <string name="rc_combine_chat_history">聊天记录</string>
+    <string name="rc_combine_group_chat">群聊的聊天记录</string>
+    <string name="rc_combine_the_group_chat_of">%s 的聊天记录</string>
+    <string name="rc_combine_and">和</string>
+    <string name="rc_combine_unsupported">未发送成功、红包、阅后即焚消息不支持转发</string>
+    <string name="rc_combine_webview_loading">聊天记录加载中...</string>
+    <string name="rc_combine_webview_download_failed">聊天记录加载失败</string>
+    <string name="rc_combine_history_deleted">聊天记录已被删除</string>
+
+
+
 </resources>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.elitecrm.rcclient.R;
+import com.elitecrm.rcclient.message.RobotMessage;
 import com.elitecrm.rcclient.robot.RobotAutoLinkTextView;
 
 import io.rong.imkit.model.ProviderTag;

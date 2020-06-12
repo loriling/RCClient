@@ -98,8 +98,10 @@
     <array name="rc_pdf_file_suffix">
         <item>.pdf</item>
     </array>
-    <array name="rc_other_file_suffix">
+    <array name="rc_apk_file_suffix">
         <item>.apk</item>
+    </array>
+    <array name="rc_other_file_suffix">
         <item>.doc</item>
         <item>.dot</item>
         <item>.xla</item>
@@ -112,5 +114,14 @@
         <item>.jpe</item>
         <item>.jpeg</item>
         <item>.jpg</item>
+    </array>
+    <array name="rc_key_file_suffix">
+        <item>.key</item>
+    </array>
+    <array name="rc_pages_file_suffix">
+        <item>.pages</item>
+    </array>
+    <array name="rc_numbers_file_suffix">
+        <item>.numbers</item>
     </array>
 </resources>

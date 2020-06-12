@@ -78,7 +78,7 @@ public class EliteConversationFragment extends ConversationFragment implements R
         return false;
     }
 
-    public void onEventMainThread(io.rong.imlib.model.Message msg) {
+    public void onEventMainThread(Message msg) {
         super.onEventMainThread(msg);
         MessageContent messageContent = msg.getContent();
         //如果是InformationNotificationMessage或者RobotMessage消息，则触发滚动到底部
