@@ -73,9 +73,12 @@ public class App extends Application{
                 }
             }
 
-            EliteExtensionModule extensionModule = new EliteExtensionModule();
-            extensionModule.setEnableSight(true);// 加号按钮中，开启小视频功能
-            extensionModule.setEnableCloseSession(true);// 加号按钮中，开启客户主动结束聊天功能
+            EliteExtensionModule extensionModule = EliteExtensionModule.getInstance()
+                    .enableImage(true) // 加号中开启发送图片
+                    .enableMap("baidu") // 加号中开启百度地图位置发送
+                    .enableFile(true) // 加号中开启发送文件
+                    .enableSight(true)// 加号按钮中，开启小视频功能
+                    .enableCloseSession(true);// 加号按钮中，开启客户主动结束聊天功能
             RongExtensionManager.getInstance().registerExtensionModule(extensionModule);
         }
 
