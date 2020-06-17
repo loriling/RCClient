@@ -79,7 +79,7 @@ public class Constants {
         int ROBOT_TRANSFER_MESSAGE = 302;
     }
 
-    //1:文本, 2:图片, 3:文件, 4:位置, 5:语音 6:小视频
+    //1:文本, 2:图片, 3:文件, 4:位置, 5:语音 6:小视频 11:高质量语音
     public interface MessageType {
         int TEXT = 1;
         int IMG = 2;
@@ -87,6 +87,7 @@ public class Constants {
         int LOCATION = 4;
         int VOICE = 5;
         int SIGHT = 6;
+        int HQ_VOICE = 11;
         int SYSTEM_NOTICE = 99;
     }
 
@@ -106,6 +107,7 @@ public class Constants {
         String PROFILE_NTF = "RC:ProfileNtf";
         String CS_HS = "RC:CsHs";
         String VC_MSG = "RC:VcMsg";
+        String HQVC_MSG = "RC:HQVCMsg";
         String LBS_MSG = "RC:LBSMsg";
         String IMG_MSG = "RC:ImgMsg";
         String FILE_MSG = "RC:FileMsg";

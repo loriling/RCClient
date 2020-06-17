@@ -64,6 +64,8 @@ public class App extends Application{
             RongIM.registerMessageTemplate(new CardMessageItemProvider());
             //注册自定义用户信息提供者
             RongIM.setUserInfoProvider(new EliteUserInfoProvider(), true);
+            // 设置语音消息是高质量语音（默认是普通语音）
+            // RongIM.getInstance().setVoiceMessageType(RongIM.VoiceMessageType.HighQuality);
 
             //注册自定义扩展模块，先去除默认扩展，再注册自定义扩展
             List<IExtensionModule> extensionModules = RongExtensionManager.getInstance().getExtensionModules();

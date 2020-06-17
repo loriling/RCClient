@@ -11,6 +11,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
 import io.rong.message.FileMessage;
+import io.rong.message.HQVoiceMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
 import io.rong.message.SightMessage;
@@ -32,7 +33,8 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                         messageContent instanceof LocationMessage ||
                         messageContent instanceof ImageMessage ||
                         messageContent instanceof FileMessage ||
-                        messageContent instanceof SightMessage) {
+                        messageContent instanceof SightMessage ||
+                        messageContent instanceof HQVoiceMessage) {
                     JSONObject messageExtraJSON = new JSONObject();
                     messageExtraJSON.put("token", Chat.getInstance().getToken());
                     if(Chat.getInstance().isSessionAvailable()){ // 有session时候
@@ -48,6 +50,10 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                     if (messageContent instanceof TextMessage) {
                         TextMessage textMessage = (TextMessage) messageContent;
                         textMessage.setExtra(messageExtraJSON.toString());
+                    } else if (messageContent instanceof HQVoiceMessage) {
+                        HQVoiceMessage hqVoiceMessage = (HQVoiceMessage)messageContent;
+                        messageExtraJSON.put("length", hqVoiceMessage.getDuration());
+                        hqVoiceMessage.setExtra(messageExtraJSON.toString());
                     } else if (messageContent instanceof VoiceMessage) {
                         VoiceMessage voiceMessage = (VoiceMessage)messageContent;
                         messageExtraJSON.put("length", voiceMessage.getDuration());
@@ -55,7 +61,7 @@ public class EliteSendMessageListener implements RongIM.OnSendMessageListener {
                     } else if (messageContent instanceof LocationMessage) {
                         LocationMessage locationMessage = (LocationMessage)messageContent;
                         String extraStr = locationMessage.getExtra();
-                        if(extraStr != null) {
+                        if (extraStr != null) {
                             JSONObject oExtraJSON = new JSONObject(extraStr);
                             String map = oExtraJSON.optString("map");
                             messageExtraJSON.put("map", map);

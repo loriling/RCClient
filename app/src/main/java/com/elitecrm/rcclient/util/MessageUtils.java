@@ -10,7 +10,7 @@ import com.elitecrm.rcclient.entity.MessageSO;
 import com.elitecrm.rcclient.entity.Request;
 import com.elitecrm.rcclient.entity.Session;
 import com.elitecrm.rcclient.entity.User;
-import com.elitecrm.rcclient.logic.EliteSendImageMessgeCallback;
+import com.elitecrm.rcclient.logic.EliteSendMediaMessageCallback;
 import com.elitecrm.rcclient.logic.EliteSendMessageCallback;
 import com.elitecrm.rcclient.message.EliteMessage;
 
@@ -26,6 +26,7 @@ import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
 import io.rong.message.FileMessage;
+import io.rong.message.HQVoiceMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.InformationNotificationMessage;
 import io.rong.message.LocationMessage;
@@ -194,8 +195,14 @@ public class MessageUtils {
         }
         extraJSON.put("sessionId", sessionId);
         imageMessage.setExtra(extraJSON.toString());
-        RongIM.getInstance().sendImageMessage(Conversation.ConversationType.PRIVATE, target, imageMessage, null,
-                null, new EliteSendImageMessgeCallback());
+
+        Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, imageMessage);
+        RongIM.getInstance().sendMediaMessage(message, null,null, new EliteSendMediaMessageCallback());
+    }
+
+    public static void sendHQVoiceMessage(HQVoiceMessage messageContent, String target) {
+        Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, messageContent);
+        RongIM.getInstance().sendMediaMessage(message, null, null, new EliteSendMediaMessageCallback());
     }
 
     /**
@@ -313,6 +320,8 @@ public class MessageUtils {
             messageContent = new LocationMessage(content.getBytes("utf-8"));
         } else if (objectName.equals(Constants.ObjectName.VC_MSG)) {
             messageContent = new VoiceMessage(content.getBytes("utf-8"));
+        } else if (objectName.equals(Constants.ObjectName.HQVC_MSG)) {
+            messageContent = new HQVoiceMessage(content.getBytes("utf-8"));
         } else if (objectName.equals(Constants.ObjectName.ELITE_MSG)) {
             messageContent = new EliteMessage(content.getBytes("utf-8"));
         } else if (objectName.equals(Constants.ObjectName.SIGHT_MSG)) {

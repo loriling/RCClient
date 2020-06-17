@@ -21,6 +21,7 @@ import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
 import io.rong.imlib.model.UserInfo;
 import io.rong.message.FileMessage;
+import io.rong.message.HQVoiceMessage;
 import io.rong.message.ImageMessage;
 import io.rong.message.LocationMessage;
 import io.rong.message.SightMessage;
@@ -150,19 +151,20 @@ public class Chat {
                 Message message = unsendMessage.getMessage();
                 MessageContent messageContent = message.getContent();
                 try {
-                    if(messageContent instanceof TextMessage ||
+                    if (messageContent instanceof TextMessage ||
                             messageContent instanceof VoiceMessage ||
+                            messageContent instanceof HQVoiceMessage ||
                             messageContent instanceof ImageMessage ||
                             messageContent instanceof FileMessage ||
                             messageContent instanceof LocationMessage ||
-                            messageContent instanceof SightMessage){
+                            messageContent instanceof SightMessage) {
                         EliteMessage eliteMessage = new EliteMessage();
                         JSONObject extraJSON = new JSONObject();
                         extraJSON.put("token", Chat.getInstance().getToken());
                         extraJSON.put("sessionId", Chat.getInstance().getSession().getId());
                         extraJSON.put("type", Constants.RequestType.SEND_CHAT_MESSAGE);
-                        if(messageContent instanceof TextMessage) {
-                            TextMessage textMessage = (TextMessage)messageContent;
+                        if (messageContent instanceof TextMessage) {
+                            TextMessage textMessage = (TextMessage) messageContent;
                             if (unsendMessage.getType() == Constants.UnsendMessageType.API) {
                                 MessageUtils.doSendTextMessage(textMessage, Chat.getInstance().getClient().getTargetId());
                                 continue;
@@ -171,12 +173,17 @@ public class Chat {
                                 extraJSON.put("messageType", Constants.MessageType.TEXT);
                             }
                         } else if (messageContent instanceof VoiceMessage) {
-                            VoiceMessage voiceMessage = (VoiceMessage)messageContent;
+                            VoiceMessage voiceMessage = (VoiceMessage) messageContent;
                             eliteMessage.setMessage(voiceMessage.getBase64());
                             extraJSON.put("length", voiceMessage.getDuration());
                             extraJSON.put("messageType", Constants.MessageType.VOICE);
+                        } else if (messageContent instanceof  HQVoiceMessage) {
+                            HQVoiceMessage voiceMessage = (HQVoiceMessage) messageContent;
+                            extraJSON.put("remoteUrl", voiceMessage.getFileUrl());
+                            extraJSON.put("length", voiceMessage.getDuration());
+                            extraJSON.put("messageType", Constants.MessageType.HQ_VOICE);
                         } else if (messageContent instanceof LocationMessage) {
-                            LocationMessage locationMessage = (LocationMessage)messageContent;
+                            LocationMessage locationMessage = (LocationMessage) messageContent;
                             eliteMessage.setMessage(locationMessage.getBase64());
                             extraJSON.put("latitude", locationMessage.getLat());
                             extraJSON.put("longitude", locationMessage.getLng());
@@ -184,7 +191,7 @@ public class Chat {
                             extraJSON.put("imgUri", locationMessage.getImgUri());
                             extraJSON.put("messageType", Constants.MessageType.LOCATION);
                         } else if (messageContent instanceof ImageMessage) {
-                            ImageMessage imageMessage = (ImageMessage)messageContent;
+                            ImageMessage imageMessage = (ImageMessage) messageContent;
                             if (unsendMessage.getType() == Constants.UnsendMessageType.API) {
                                 MessageUtils.doSendImgMessage(imageMessage, Chat.getInstance().getClient().getTargetId());
                                 continue;
@@ -194,14 +201,14 @@ public class Chat {
                                 extraJSON.put("messageType", Constants.MessageType.IMG);
                             }
                         } else if (messageContent instanceof FileMessage) {
-                            FileMessage fileMessage = (FileMessage)messageContent;
+                            FileMessage fileMessage = (FileMessage) messageContent;
                             extraJSON.put("fileName", fileMessage.getName());
                             extraJSON.put("fileSize", fileMessage.getSize());
                             extraJSON.put("fileType", fileMessage.getType());
                             extraJSON.put("fileUrl", fileMessage.getFileUrl().toString());
                             extraJSON.put("messageType", Constants.MessageType.FILE);
                         } else if (messageContent instanceof SightMessage) {
-                            SightMessage sightMessage = (SightMessage)messageContent;
+                            SightMessage sightMessage = (SightMessage) messageContent;
                             eliteMessage.setMessage(sightMessage.getBase64());
                             extraJSON.put("name", sightMessage.getName());
                             extraJSON.put("size", sightMessage.getSize());
