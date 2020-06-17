@@ -200,11 +200,6 @@ public class MessageUtils {
         RongIM.getInstance().sendMediaMessage(message, null,null, new EliteSendMediaMessageCallback());
     }
 
-    public static void sendHQVoiceMessage(HQVoiceMessage messageContent, String target) {
-        Message message = Message.obtain(target, Conversation.ConversationType.PRIVATE, messageContent);
-        RongIM.getInstance().sendMediaMessage(message, null, null, new EliteSendMediaMessageCallback());
-    }
-
     /**
      * 构造一个自定义消息对象
      * @param message
